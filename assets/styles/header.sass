@@ -1,0 +1,67 @@
+h1
+  color: white
+  font-family: Odibee Sans
+  font-size: 52px
+
+
+body
+  background-color: black
+  display: flex
+  flex-direction: row
+  justify-content: center
+
+.nav-cont
+  display: flex
+  flex-direction: column
+  width: 8% 
+  
+  .button
+    width: 75%
+    aspect-ratio: 1
+    background-color: white
+    border: 5px inset black
+    font-family: Odibee Sans 
+    margin: 3px
+    padding: 2px
+
+  .bottom
+    position: relative
+    display: inline-block
+
+
+
+    .help 
+      display: none
+      position: absolute
+      top: 45px
+      bottom: -155px
+      left: 45px
+      right: 0
+      background-color: white
+      min-width: 160px
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2)
+      z-index: 1  
+
+      h4
+        font-family: Odibee Sans 
+        font-size: 18px
+        margin: 5px
+
+
+    p
+      font-family: Odibee Sans 
+      color: black
+      font-size: 24px
+      margin-left: 60px
+      margin-top: 10px
+    
+    &:hover 
+      .help
+        display: block
+    
+
+
+  
+.no-show
+  display: none
+

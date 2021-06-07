@@ -1,0 +1,29 @@
+{
+  "name": "dull",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^1.4.1",
+    "grunt-compare-size": "^0.4.2",
+    "grunt-git-authors": "^3.2.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "babel-loader": "^8.2.2",
+    "chroma": "^0.0.1",
+    "jquery": "^3.6.0",
+    "jquery-color": "^2.2.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
