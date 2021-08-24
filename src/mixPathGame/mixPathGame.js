@@ -69,9 +69,10 @@ function mixTile() {
     colorTwo = rgbCMYK($.Color(colorTwo).rgba())
     count = count + 1
     debugger
-    C = C + (colorTwo[0] / count)
-    M = M + (colorTwo[1] / count)
-    Y = Y + (colorTwo[2] / count)
+    C = (C * (count - 1) + colorTwo[0]) / count
+    M = (M * (count - 1) + colorTwo[1]) / count
+    Y = (Y * (count - 1) + colorTwo[2]) / count
+
     cmykMax();
     // let rgb = mixTilesFour(colorOne, colorTwo, count)
     let rgb = cmykRGB([C, M, Y, K])
