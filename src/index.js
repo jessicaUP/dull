@@ -1,6 +1,4 @@
-import { createMatchGrid } from './matchGame/matchingGame'
 import { createMixGrid } from './mixPathGame/mixPathGame'
-import { createSnakeGrid, main } from './snake/snakeGame'
 
 
 document.addEventListener('DOMContentLoaded', () => {

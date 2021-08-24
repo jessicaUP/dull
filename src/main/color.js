@@ -9,32 +9,126 @@ export function randomColor() {
   return color;
 }
 
-export function mixColor(color1, color2) {
+export function mixColor(color1, color2) {``
   let c1 = chroma(color1);
   let c2 = chroma(color2);
   return chroma.mix(c1, c2).hex();
 
 }
 
-function avg(num1, num2) {
-  return (num1 + num2) / 2
+function black(num1, num2, step) {
+  // let check = ((num1 * (step - 1)) + num2) / step
+  let check = ((num1 / step) + (num2 / step)) * step;
+  debugger
+  // let check = (num1) + (num2);
+  if (check < 0) {
+    return 0
+  } else if (check > 1) {
+    return 1
+  } else {
+    return check
+  }
+  // if (check > 255) {
+  //   return 255
+  // } else if (check < 0) {
+  //   return 0
+  // } else {
+  //   return check
+  // }
 }
+function avg(num1, num2, step) {
+  // let check = num2 - (num1);
+  // if (check > 255) {
+  //   return 255
+  // } else if (check < 0) {
+  //   return 0
+  // } else {
+  //   return check
+  // }
+
+  return ((num1 * (step - 1)) + num2) / step
+  // let check = (num1 / step) + (num2 / step);
+  // // let check = (num1) + (num2);
+  // if (check > 100) {
+  //   return 100
+  // } else {
+  //   return check
+  // }
+}
+
 
 export function mixTilesTwo(hex1, hex2) {
   let color1 = $.Color(hex1).rgba();
   let color2 = $.Color(hex2).rgba();
 
-  let r = avg(color1[0], color2[0])
+  let r = color1[0] + color2[0]
   let g = avg(color1[1], color2[1])
   let b = avg(color1[2], color2[2])
 
 
-  let rgb = `rgb(${r}, ${g}, ${b})`
+  // let rgb = `rgb(${r}, ${g}, ${b})`
 
 
   return rgb
 
 }
+
+export function rgbCMYK(rgb) {
+  let red = (rgb[0] / 255);
+  let green = (rgb[1] / 255);
+  let blue = (rgb[2] / 255);
+
+  let k = (1 - Math.max(red, green, blue));
+  let c = (1 - (red - k)) / (1 - k);
+  let m = (1 - (green - k)) / (1 - k);
+  let y = (1 - (blue - k)) / (1 - k);
+  return [c, m, y, k]
+}
+
+export function cmykRGB(cmyk) {
+  let r = 255 * (1 - cmyk[0]) * (1 - cmyk[3]);
+  let g = 255 * (1 - cmyk[1]) * (1 - cmyk[3]);
+  let b = 255 * (1 - cmyk[2]) * (1 - cmyk[3]);
+  return [r, g, b]
+}
+
+export function mixTilesThree(c1, c2, step) {
+  let color1 = rgbCMYK($.Color(c1).rgba());
+  let color2 = rgbCMYK($.Color(c2).rgba());
+  debugger
+
+  let c = avg(color1[0], color2[0], step)
+  let m = avg(color1[1], color2[1], step)
+  let y = avg(color1[2], color2[2], step)
+  let k = black(color1[3], color2[3], step)
+
+  let rgb = cmykRGB([c, m, y, k])
+  let rgbStr = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+
+
+  return rgbStr
+
+}
+
+export function mixTilesFour(c1, c2, step) {
+  let color1 = rgbCMYK($.Color(c1).rgba());
+  let color2 = rgbCMYK($.Color(c2).rgba());
+  debugger
+
+  C = C + (color2[0] / step)
+  M = M + (color2[1] / step)
+  Y = Y + (color2[2] / step)
+
+  // let a = 1
+
+  let rgb = cmykRGB([C, M, Y, K])
+  let rgbStr = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+
+
+  return rgbStr
+
+}
+
 
 
 
