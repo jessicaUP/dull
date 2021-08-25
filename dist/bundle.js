@@ -19,7 +19,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "mixTilesThree": () => (/* binding */ mixTilesThree),
 /* harmony export */   "mixTilesFour": () => (/* binding */ mixTilesFour)
 /* harmony export */ });
-var COLORS = ['#990033', '#993333', '#b30000', '#ff0000', '#cc2900', '#b35900', '#cca300', '#cccc00', '#999900', '#558000', '#b30059', '#b30000', '#ff7733', '#ff6600', '#ff9933', '#ffd633', '#ffcc00', '#e6e600', '#99cc00', '#666633', '#cc0066', '#ff3333', '#ff944d', '#ff9933', '#ffcc00', '#ffff00', '#ffff66', '#ccff33', '#669900', '#336600', '#ff0066', '#ff5050', '#ff6666', '#ff9966', '#ffcc66', '#ffff99', '#ccff66', '#99ff66', '#33cc33', '#339933', '#cc3399', '#ff3399', '#ff6699', '#ff9999', '#ffcc99', '#ffffcc', '#ccff99', '#99ff99', '#66ff66', '#00cc66', '#cc00cc', '#ff66ff', '#ff99ff', '#ffb3d1', '#ffe6f0', '#ffffff', '#ccffcc', '#99ffcc', '#00ff99', '#339966', '#993399', '#b300b3', '#d966ff', '#e6ccff', '#f2e6ff', '#e6f2ff', '#e6ffff', '#66ffff', '#00cc99', '#009999', '#9900cc', '#cc33ff', '#cc66ff', '#cc99ff', '#e6ccff', '#b3d7ff', '#b3ffff', '#00e6e6', '#00b3b3', '#336699', '#6600cc', '#9933ff', '#9966ff', '#9999ff', '#b3b3ff', '#90c0f0', '#80ccff', '#73b4fa', '#4d4dff', '#003d99', '#4d0099', '#7a00cc', '#a366ff', '#6666ff', '#8080ff', '#007bff', '#0099ff', '#007acc', '#0000cc', '#000080'];
+var COLORS = ['rgb(153, 0, 51)', 'rgb(153, 51, 51)', 'rgb(179, 0, 0)', 'rgb(255, 0, 0)', 'rgb(204, 41, 0)', 'rgb(179, 89, 0)', 'rgb(204, 163, 0)', 'rgb(204, 204, 0)', 'rgb(153, 153, 0)', 'rgb(85, 128, 0)', 'rgb(179, 0, 89)', 'rgb(179, 0, 0)', 'rgb(255, 119, 51)', 'rgb(255, 102, 0)', 'rgb(255, 153, 51)', 'rgb(255, 214, 51)', 'rgb(255, 204, 0)', 'rgb(230, 230, 0)', 'rgb(153, 204, 0)', 'rgb(102, 102, 51)', 'rgb(204, 0, 102)', 'rgb(255, 51, 51)', 'rgb(255, 148, 77)', 'rgb(255, 153, 51)', 'rgb(255, 204, 0)', 'rgb(255, 255, 0)', 'rgb(255, 255, 102)', 'rgb(204, 255, 51)', 'rgb(102, 153, 0)', 'rgb(51, 102, 0)', 'rgb(255, 0, 102)', 'rgb(255, 80, 80)', 'rgb(255, 102, 102)', 'rgb(255, 153, 102)', 'rgb(255, 204, 102)', 'rgb(255, 255, 153)', 'rgb(204, 255, 102)', 'rgb(153, 255, 102)', 'rgb(51, 204, 51)', 'rgb(51, 153, 51)', 'rgb(204, 51, 153)', 'rgb(255, 51, 153)', 'rgb(255, 102, 153)', 'rgb(255, 153, 153)', 'rgb(255, 204, 153)', 'rgb(255, 255, 204)', 'rgb(204, 255, 153)', 'rgb(153, 255, 153)', 'rgb(102, 255, 102)', 'rgb(0, 204, 102)', 'rgb(204, 0, 204)', 'rgb(255, 102, 255)', 'rgb(255, 153, 255)', 'rgb(255, 179, 209)', 'rgb(255, 230, 240)', 'rgb(255, 255, 255)', 'rgb(204, 255, 204)', 'rgb(153, 255, 204)', 'rgb(0, 255, 153)', 'rgb(51, 153, 102)', 'rgb(153, 51, 153)', 'rgb(179, 0, 179)', 'rgb(217, 102, 255)', 'rgb(230, 204, 255)', 'rgb(242, 230, 255)', 'rgb(230, 242, 255)', 'rgb(230, 255, 255)', 'rgb(102, 255, 255)', 'rgb(0, 204, 153)', 'rgb(0, 153, 153)', 'rgb(153, 0, 204)', 'rgb(204, 51, 255)', 'rgb(204, 102, 255)', 'rgb(204, 153, 255)', 'rgb(230, 204, 255)', 'rgb(179, 215, 255)', 'rgb(179, 255, 255)', 'rgb(0, 230, 230)', 'rgb(0, 179, 179)', 'rgb(51, 102, 153)', 'rgb(102, 0, 204)', 'rgb(153, 51, 255)', 'rgb(153, 102, 255)', 'rgb(153, 153, 255)', 'rgb(179, 179, 255)', 'rgb(144, 192, 240)', 'rgb(128, 204, 255)', 'rgb(115, 180, 250)', 'rgb(77, 77, 255)', 'rgb(0, 61, 153)', 'rgb(77, 0, 153)', 'rgb(122, 0, 204)', 'rgb(163, 102, 255)', 'rgb(102, 102, 255)', 'rgb(128, 128, 255)', 'rgb(0, 123, 255)', 'rgb(0, 153, 255)', 'rgb(0, 122, 204)', 'rgb(0, 0, 204)', 'rgb(0, 0, 128)']; // export const COLORS = ['#990033', '#993333', '#b30000', '#ff0000', '#cc2900', '#b35900', '#cca300', '#cccc00', '#999900', '#558000', '#b30059', '#b30000', '#ff7733', '#ff6600', '#ff9933', '#ffd633', '#ffcc00', '#e6e600', '#99cc00', '#666633', '#cc0066', '#ff3333', '#ff944d', '#ff9933', '#ffcc00', '#ffff00', '#ffff66', '#ccff33', '#669900', '#336600', '#ff0066', '#ff5050', '#ff6666', '#ff9966', '#ffcc66', '#ffff99', '#ccff66', '#99ff66', '#33cc33', '#339933', '#cc3399', '#ff3399', '#ff6699', '#ff9999', '#ffcc99', '#ffffcc', '#ccff99', '#99ff99', '#66ff66', '#00cc66', '#cc00cc', '#ff66ff', '#ff99ff', '#ffb3d1', '#ffe6f0', '#ffffff', '#ccffcc', '#99ffcc', '#00ff99', '#339966', '#993399', '#b300b3', '#d966ff', '#e6ccff', '#f2e6ff', '#e6f2ff', '#e6ffff', '#66ffff', '#00cc99', '#009999', '#9900cc', '#cc33ff', '#cc66ff', '#cc99ff', '#e6ccff', '#b3d7ff', '#b3ffff', '#00e6e6', '#00b3b3', '#336699', '#6600cc', '#9933ff', '#9966ff', '#9999ff', '#b3b3ff', '#90c0f0', '#80ccff', '#73b4fa', '#4d4dff', '#003d99', '#4d0099', '#7a00cc', '#a366ff', '#6666ff', '#8080ff', '#007bff', '#0099ff', '#007acc', '#0000cc', '#000080']
+
 function randomColor() {
   var num = Math.floor(Math.random() * 100);
   var color = COLORS[num];
@@ -34,8 +35,7 @@ function mixColor(color1, color2) {
 
 function black(num1, num2, step) {
   // let check = ((num1 * (step - 1)) + num2) / step
-  var check = (num1 / step + num2 / step) * step;
-  debugger; // let check = (num1) + (num2);
+  var check = (num1 / step + num2 / step) * step; // let check = (num1) + (num2);
 
   if (check < 0) {
     return 0;
@@ -99,7 +99,6 @@ function cmykRGB(cmyk) {
 function mixTilesThree(c1, c2, step) {
   var color1 = rgbCMYK($.Color(c1).rgba());
   var color2 = rgbCMYK($.Color(c2).rgba());
-  debugger;
   var c = avg(color1[0], color2[0], step);
   var m = avg(color1[1], color2[1], step);
   var y = avg(color1[2], color2[2], step);
@@ -111,7 +110,6 @@ function mixTilesThree(c1, c2, step) {
 function mixTilesFour(c1, c2, step) {
   var color1 = rgbCMYK($.Color(c1).rgba());
   var color2 = rgbCMYK($.Color(c2).rgba());
-  debugger;
   C = C + color2[0] / step;
   M = M + color2[1] / step;
   Y = Y + color2[2] / step; // let a = 1
@@ -134,30 +132,74 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createMixGrid": () => (/* binding */ createMixGrid)
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
+ // BOARD
 
 var tileGrid;
-var count = 1;
-var selectedTiles = [];
-var optionTiles = [];
-var mixedTiles = [];
-var currentTile;
 var allTiles = {};
-var checkColor = true;
-var currentColor;
+var checkColor = true; // GAMEPLAY
+
+var OPTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+var selectedTiles = [];
+var startTile;
+var targetColor;
+var level = 5;
+var lives = 3; // CURRENT MOVE
+
+var currentTile;
+var count = 1;
+var optionTiles = [];
 var C,
     M,
     Y,
-    K = 0;
+    K = 0; // let mixedTiles = [];
 
-function randomPos() {
-  var x = Math.floor(Math.random() * 10) + 1;
-  var y = Math.floor(Math.random() * 10) + 1;
+var currentColor;
+
+function randomNum(num) {
+  return Math.floor(Math.random() * num) + 1;
+}
+
+function findPath() {
+  var mixedColor;
+  setFirstColor(currentColor);
+
+  while (count - 1 <= level) {
+    optionTiles = nextMoveOptions(false);
+    var next = optionTiles.indexOf(randomNum(optionTiles.length)); // return next = `${newX}-${newY}`
+
+    selectedTiles.push(next);
+    var nextColor = allTiles[next].ele.getAttribute('colorId');
+    mixedColor = addColor(nextColor);
+    currentTile = posObject(next);
+    count + 1;
+  }
+
+  targetColor = mixedColor; // RESET VARIABLES FOR GAMEPLAY
+
+  currentTile = startTile;
+  count = 1;
+  optionTiles = [];
+  C, M, Y, K = 0;
+}
+
+function setPath() {
+  // FIRST POSITION
+  var x = randomNum(10);
+  var y = randomNum(10);
   var coor = "".concat(x, "-").concat(y);
-  return {
+  var coorObj = {
     coor: coor,
     x: x,
     y: y
   };
+  currentTile = coorObj;
+  startTile = coorObj;
+  selectedTiles.push(coor);
+  debugger;
+  currentColor = allTiles[coor].ele.getAttribute('colorId'); // FIND PATH
+
+  findPath(); // RETURN START TILE
+  // return coorObj;
 }
 
 function posObject(coor) {
@@ -169,13 +211,21 @@ function posObject(coor) {
   };
 }
 
-function setFirstColor(hex1) {
-  var step = $.Color(hex1).rgba();
+function colorArr(rgbColor) {
+  // 'rgb(r, g, b)'
+  debugger;
+  var step = rgbColor.split('(')[1].split(')')[0].split(', ');
+  return step;
+}
+
+function setFirstColor(rgbColor) {
+  // let step = $.Color(hex1).rgba();
+  // MAKE INTO ARRAY OF VALUES R-G-B
+  var step = colorArr(rgbColor);
   var color = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.rgbCMYK)(step);
   C = color[0];
   M = color[1];
   Y = color[2];
-  debugger;
   currentColor = step;
 }
 
@@ -185,8 +235,17 @@ function cmykMax() {
   if (Y > 1) Y = 1;
 }
 
+function addColor(rgbColor) {
+  var cmykColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.rgbCMYK)(colorArr(rgbColor));
+  count = count + 1;
+  C = (C * (count - 1) + cmykColor[0]) / count;
+  Y = (Y * (count - 1) + cmykColor[2]) / count;
+  M = (M * (count - 1) + cmykColor[1]) / count;
+  cmykMax();
+  return (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.cmykRGB)([C, M, Y, K]);
+}
+
 function mixTile() {
-  debugger;
   var clickedCoor = this.getAttribute('coor');
   var check = optionTiles.some(function (coor) {
     return coor === clickedCoor;
@@ -201,35 +260,10 @@ function mixTile() {
       checkColor = false;
     }
 
-    var colorTwo = this.getAttribute('colorId');
-    colorTwo = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.rgbCMYK)($.Color(colorTwo).rgba());
-    count = count + 1;
-    debugger;
-    C = (C * (count - 1) + colorTwo[0]) / count;
-    M = (M * (count - 1) + colorTwo[1]) / count;
-    Y = (Y * (count - 1) + colorTwo[2]) / count;
-    cmykMax(); // let rgb = mixTilesFour(colorOne, colorTwo, count)
+    var colorTwo = this.getAttribute('colorId'); // ADD COLOR RETURN MIXED RGB
 
-    var rgb = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.cmykRGB)([C, M, Y, K]);
-    var rgbStr = "rgb(".concat(rgb[0], ", ").concat(rgb[1], ", ").concat(rgb[2], ")"); //current tile
-    // let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
-    // let color1 = $.Color(colorOne);
-    // console.log(`COLOR1  ${color1}`);
-    // //clickedtile
-    // let color2 = $.Color(this.getAttribute('colorId'));
-    // console.log(`COLOR2 ALPHA  ${color2.toHexString()}`);
-    // //set color alpha value
-    // color1 = color1.alpha(color1.alpha());
-    // color2 = color2.alpha(1/count);
-    // //Mixing colors by parts
-    // let finalColor = Color_mixer.mix(color1, color2);
-    // // for ( let i = 1; i <= count; i++ ) {
-    // //   finalColor = finalColor.alpha(finalColor.alpha());
-    // //   finalColor = Color_mixer.mix(color1, finalColor)
-    // // }
-    // console.log(count)
-    // count += 1;
-    // //set background color to result color
+    var rgb = addColor(colorTwo);
+    var rgbStr = "rgb(".concat(rgb[0], ", ").concat(rgb[1], ", ").concat(rgb[2], ")"); // SET NEW COLOR & MARK NEXT OPTIONS
 
     this.style['background-color'] = rgbStr;
     currentTile = posObject(this.getAttribute('coor'));
@@ -245,21 +279,29 @@ function createMixGrid() {
     for (var y = 1; y <= 10; y++) {
       var colorId = _main_color__WEBPACK_IMPORTED_MODULE_0__.COLORS[colorCount];
       var coor = "".concat(x, "-").concat(y);
-      var tile = document.createElement('div');
-      tile.setAttribute('id', colorCount);
-      tile.setAttribute('colorId', colorId);
-      tile.setAttribute('coor', coor);
-      tile.setAttribute('class', 'mix-tile');
-      tile.style['background-color'] = colorId;
-      tile.style['aspect-ratio'] = 1;
-      tile.addEventListener('click', mixTile);
+
+      var _tile = document.createElement('div');
+
+      _tile.setAttribute('id', colorCount);
+
+      _tile.setAttribute('colorId', colorId);
+
+      _tile.setAttribute('coor', coor);
+
+      _tile.setAttribute('class', 'mix-tile');
+
+      _tile.style['background-color'] = colorId;
+      _tile.style['aspect-ratio'] = 1;
+
+      _tile.addEventListener('click', mixTile);
+
       var info = {
-        ele: tile,
+        ele: _tile,
         x: x,
         y: y
       };
       allTiles[coor] = info;
-      tileGrid.appendChild(tile);
+      tileGrid.appendChild(_tile);
       colorCount++;
     }
   }
@@ -267,31 +309,35 @@ function createMixGrid() {
   ;
   tileGrid.style.display = 'tile-grid';
   tileGrid.style['grid-gap'] = '2px';
-  tileGrid.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
-  currentTile = randomPos();
-  console.log(currentTile);
+  tileGrid.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
+
+  setPath();
   markOptions();
-  console.log(allTiles);
 }
-var OPTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 function markOptions() {
   var tile = allTiles[currentTile.coor];
-  console.log(tile);
   tile.ele.style.border = '8px inset white';
+  optionTiles = nextMoveOptions(true);
+}
+
+function nextMoveOptions(styleCheck) {
   var newOptionTiles = [];
   OPTIONS.forEach(function (pos) {
     var newX = pos[0] + tile.x;
     var newY = pos[1] + tile.y;
+    var newCoor = "".concat(newX, "-").concat(newY);
 
-    if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0) {
-      var newCoor = "".concat(newX, "-").concat(newY);
+    if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
       newOptionTiles.push(newCoor);
-      var optionTile = allTiles[newCoor].ele;
-      optionTile.style.border = '1px solid white';
+
+      if (styleCheck) {
+        var optionTile = allTiles[newCoor].ele;
+        optionTile.style.border = '1px solid white';
+      }
     }
   });
-  optionTiles = newOptionTiles;
+  return newOptionTiles;
 }
 
 function clearStyle() {
@@ -300,8 +346,6 @@ function clearStyle() {
     oldTile.style.border = 'none';
   });
 }
-
-function getTilePosition() {}
 
 /***/ })
 
