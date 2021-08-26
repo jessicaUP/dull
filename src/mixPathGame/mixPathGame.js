@@ -2,15 +2,18 @@ import { COLORS, mixTilesFour, rgbCMYK, cmykRGB } from '../main/color'
 
 // BOARD
 let tileGrid;
+let body;
 let allTiles = {};
 let checkColor = true;
 
 // GAMEPLAY
 const OPTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 let selectedTiles = [];
+let path;
 let startTile;
+let finishTile;
 let targetColor;
-let level = 5;
+let level = 3;
 let lives = 3;
 
 // CURRENT MOVE
@@ -18,43 +21,64 @@ let currentTile;
 let count = 1;
 let optionTiles = [];
 let C, M, Y, K = 0;
+let direction;
+
+
+const up = [-1, 0];
+const down = [1, 0];
+const left = [0, -1];
+const right = [0, 1];
 
 // let mixedTiles = [];
 
 let currentColor;
 
 function randomNum(num) {
-  return Math.floor(Math.random() * num) + 1
+  return Math.floor(Math.random() * num) 
 }
 
 function findPath() {
   let mixedColor;
   setFirstColor(currentColor);
-  while ((count - 1) <= level) {
+  while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
-    let next = optionTiles.indexOf(randomNum(optionTiles.length));
+    let next = optionTiles[randomNum(optionTiles.length)];
     // return next = `${newX}-${newY}`
     selectedTiles.push(next);
+    
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     mixedColor = addColor(nextColor);
     currentTile = posObject(next);
     count + 1;
   }
-  targetColor = mixedColor;
+  debugger
+
+  targetColor = `rgb(${parseInt(mixedColor[0])}, ${parseInt(mixedColor[1])}, ${parseInt(mixedColor[2])})`;
+  finishTile = currentTile.coor;
+  let finishEle = allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  finishEle.style.border = 'none'
+  let body = document.querySelector('body');
+  body.style['background-color'] = targetColor;
 
   // RESET VARIABLES FOR GAMEPLAY
   currentTile = startTile;
   count = 1
-  optionTiles = [];
-  C, M, Y, K = 0;
+  optionTiles = [startTile];
+  path = selectedTiles;
+  selectedTiles = [currentTile.coor];
+  C = 0;
+  M = 0;
+  Y = 0;
+  debugger
 }
 
 
 
 function setPath() {
   // FIRST POSITION
-  let x = randomNum(10);
-  let y = randomNum(10);
+  let x = randomNum(10) + 1;
+  let y = randomNum(10) + 1;
   let coor = `${x}-${y}`;
   let coorObj = {
       coor,
@@ -64,11 +88,11 @@ function setPath() {
   currentTile = coorObj;
   startTile = coorObj;
   selectedTiles.push(coor);
-  debugger
   currentColor = allTiles[coor].ele.getAttribute('colorId');
 
   // FIND PATH
     findPath();
+
 
   // RETURN START TILE
   // return coorObj;
@@ -85,9 +109,9 @@ function posObject(coor) {
 
 function colorArr(rgbColor) {
   // 'rgb(r, g, b)'
-  debugger
   let step = rgbColor.split('(')[1].split(')')[0].split(', ');
-  return step;
+
+  return step.map(num => parseInt(num));
 }
 
 function setFirstColor(rgbColor) {
@@ -120,13 +144,36 @@ function addColor(rgbColor) {
   return cmykRGB([C, M, Y, K])
 }
 
+function checkWinLose(color) {
+  if ( targetColor === color && count - 1 === level ) {
+    Object.values(allTiles).forEach(tile => {
+      let { coor, ele } = tile;
+      if (!selectedTiles.includes(coor)) {
+        ele.style.border = 'none';
+        ele.style['background-color'] = color;
+      }
+    })
+    level = level + 1;
+    lives = lives + 2;
+    selectedTiles = [];
+    count = 1;
+    createMixGrid();
+
+    return true;
+  }
+  return false;
+}
+
 
 function mixTile() {
   let clickedCoor = this.getAttribute('coor');
+
+
+
   let check = optionTiles.some(coor => coor === clickedCoor)
   if (check) {
-    clearStyle();
-
+    clearStyle(optionTiles, true);
+    selectedTiles.push(clickedCoor);
     let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
     if (checkColor) {
       setFirstColor(colorOne);
@@ -136,20 +183,34 @@ function mixTile() {
 
     // ADD COLOR RETURN MIXED RGB
     let rgb = addColor(colorTwo);
-    let rgbStr = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+    let rgbStr = `rgb(${parseInt(rgb[0])}, ${parseInt(rgb[1])}, ${parseInt(rgb[2])})`
+  
   
 
     // SET NEW COLOR & MARK NEXT OPTIONS
     this.style['background-color'] = rgbStr;
-    currentTile = posObject(this.getAttribute('coor'))
-    markOptions();
+
+    // CHECK WIN or LOSE
+    if ( !checkWinLose(rgbStr) ) {
+      currentTile = posObject(this.getAttribute('coor'))
+      markOptions();
+
+    }
+
   }
-  }
+}
 
 
 
 export function createMixGrid() {
-  tileGrid = document.querySelector('.tile-grid');
+  body = document.querySelector('body');
+  // tileGrid = document.querySelector('.tile-grid');
+
+  let cont = document.createElement('div')
+  body.appendChild(cont)
+  // tileGrid.appendChild(cont)
+  cont.setAttribute('class', 'tile-grid');
+  cont.setAttribute('id', level);
   let colorCount = 0;
 
   for (let x = 1; x <= 10; x++) {
@@ -162,21 +223,23 @@ export function createMixGrid() {
       tile.setAttribute('coor', coor)
       tile.setAttribute('class', 'mix-tile')
       tile.style['background-color'] = colorId;
-      tile.style['aspect-ratio'] = 1
+      tile.style.border = '1px solid black';
+      tile.style['aspect-ratio'] = 1;
       tile.addEventListener('click', mixTile)
       let info = {
         ele: tile,
+        coor: coor,
         x, 
         y 
       }
       allTiles[coor] = info;
-      tileGrid.appendChild(tile)
+      cont.appendChild(tile)
       colorCount++
     }
   };
-  tileGrid.style.display = 'tile-grid';
-  tileGrid.style['grid-gap'] = '2px';
-  tileGrid.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
+  cont.style.display = 'tile-grid';
+  cont.style['grid-gap'] = '4px';
+  cont.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
   // SET START TILE 
   setPath();
   markOptions();
@@ -187,24 +250,44 @@ export function createMixGrid() {
 
 function markOptions() {
   let tile = allTiles[currentTile.coor];
-  tile.ele.style.border = '8px inset white';
+  tile.ele.style['border-radius'] = '100%'
+  // tile.ele.style.border = '8px inset white';
   optionTiles = nextMoveOptions(true)
 }
 
 function nextMoveOptions(styleCheck) {
   let newOptionTiles = [];
+  let tile = allTiles[currentTile.coor];
 
   OPTIONS.forEach(pos => {
     let newX = pos[0] + tile.x;
     let newY = pos[1] + tile.y;
     let newCoor = `${newX}-${newY}`
-    if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
-      newOptionTiles.push(newCoor);
-      if (styleCheck) {
+    if (newX <= 10 && 
+        newX > 0 && 
+        newY <= 10 && 
+        newY > 0  &&
+        !selectedTiles.includes(newCoor)) {
+      if (!styleCheck) {
+        newOptionTiles.push(newCoor);
+      } else if (newCoor !== finishTile) {
+        newOptionTiles.push(newCoor);
         let optionTile = allTiles[newCoor].ele;
-        optionTile.style.border = '1px solid white'
+        // [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        let radiusStr = optionStyle(pos);
+        // let arrow = <i class="fas fa-caret-up"></i>
+
+        optionTile.style['border-radius'] = radiusStr;
+        optionTile.style.border = 'none';
+        // optionTile.style.border = '1px solid white'
+      } else if (count === level && newCoor === finishTile) {
+        clearStyle(newOptionTiles);
+        newOptionTiles = [newCoor];
+        let optionTile = allTiles[newCoor].ele;
+        optionTile.style.border = '2px solid black';
         
       }
+    
     }
   });
   return newOptionTiles
@@ -212,10 +295,62 @@ function nextMoveOptions(styleCheck) {
 
 
 
-function clearStyle() {
-  optionTiles.forEach(coor => {
+function clearStyle(tiles, updateCheck = false) {
+  tiles.forEach(coor => {
     let oldTile = allTiles[coor].ele;
-    oldTile.style.border = 'none'
+    oldTile.style.border = 'none';
+    oldTile.style['border-radius'] = '0 0 0 0';
   })
+  if (updateCheck) {
+    let prev = allTiles[currentTile.coor].ele;
+    prev.style['border-radius'] = '100%';
+  }
+  // prev.style.width = '80%';
+  // prev.style.margin = 'auto';
+  // switch (direction) {
+  //   case up:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-top'] = 'none';
+  //     break;
+  //   case down:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-bottom'] = 'none';
+  //     break;
+  //   case right:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-right'] = 'none';
+  //     break;
+  //   case left:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-left'] = 'none';
+  //     break;
+
+  // }
+  // prev.style.border = 'none';
+  // prev.style.border = '2px solid white';
+
 }
 
+function optionStyle(coor) {
+  let radiusStr;
+
+  if (sameArray(coor, up)) {
+    radiusStr = '100% 100% 0 0';
+    direction = up;
+  } else if (sameArray(coor, right)) {
+    radiusStr = '0 100% 100% 0';
+    direction = right;
+  } else if (sameArray(coor, down)) {
+    radiusStr = '0 0 100% 100%';
+    direction = down;
+  } else if (sameArray(coor, left)) {
+    radiusStr = '100% 0 0 100%';
+    direction = left;
+  }
+
+  return radiusStr;
+}
+
+function sameArray(arr1, arr2) {
+  return arr1.every((val, index) => val === arr2[index])
+}

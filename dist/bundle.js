@@ -135,14 +135,17 @@ __webpack_require__.r(__webpack_exports__);
  // BOARD
 
 var tileGrid;
+var body;
 var allTiles = {};
 var checkColor = true; // GAMEPLAY
 
 var OPTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 var selectedTiles = [];
+var path;
 var startTile;
+var finishTile;
 var targetColor;
-var level = 5;
+var level = 3;
 var lives = 3; // CURRENT MOVE
 
 var currentTile;
@@ -151,21 +154,26 @@ var optionTiles = [];
 var C,
     M,
     Y,
-    K = 0; // let mixedTiles = [];
+    K = 0;
+var direction;
+var up = [-1, 0];
+var down = [1, 0];
+var left = [0, -1];
+var right = [0, 1]; // let mixedTiles = [];
 
 var currentColor;
 
 function randomNum(num) {
-  return Math.floor(Math.random() * num) + 1;
+  return Math.floor(Math.random() * num);
 }
 
 function findPath() {
   var mixedColor;
   setFirstColor(currentColor);
 
-  while (count - 1 <= level) {
+  while (count <= level) {
     optionTiles = nextMoveOptions(false);
-    var next = optionTiles.indexOf(randomNum(optionTiles.length)); // return next = `${newX}-${newY}`
+    var next = optionTiles[randomNum(optionTiles.length)]; // return next = `${newX}-${newY}`
 
     selectedTiles.push(next);
     var nextColor = allTiles[next].ele.getAttribute('colorId');
@@ -174,18 +182,30 @@ function findPath() {
     count + 1;
   }
 
-  targetColor = mixedColor; // RESET VARIABLES FOR GAMEPLAY
+  debugger;
+  targetColor = "rgb(".concat(parseInt(mixedColor[0]), ", ").concat(parseInt(mixedColor[1]), ", ").concat(parseInt(mixedColor[2]), ")");
+  finishTile = currentTile.coor;
+  var finishEle = allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  finishEle.style.border = 'none';
+  var body = document.querySelector('body');
+  body.style['background-color'] = targetColor; // RESET VARIABLES FOR GAMEPLAY
 
   currentTile = startTile;
   count = 1;
-  optionTiles = [];
-  C, M, Y, K = 0;
+  optionTiles = [startTile];
+  path = selectedTiles;
+  selectedTiles = [currentTile.coor];
+  C = 0;
+  M = 0;
+  Y = 0;
+  debugger;
 }
 
 function setPath() {
   // FIRST POSITION
-  var x = randomNum(10);
-  var y = randomNum(10);
+  var x = randomNum(10) + 1;
+  var y = randomNum(10) + 1;
   var coor = "".concat(x, "-").concat(y);
   var coorObj = {
     coor: coor,
@@ -195,7 +215,6 @@ function setPath() {
   currentTile = coorObj;
   startTile = coorObj;
   selectedTiles.push(coor);
-  debugger;
   currentColor = allTiles[coor].ele.getAttribute('colorId'); // FIND PATH
 
   findPath(); // RETURN START TILE
@@ -213,9 +232,10 @@ function posObject(coor) {
 
 function colorArr(rgbColor) {
   // 'rgb(r, g, b)'
-  debugger;
   var step = rgbColor.split('(')[1].split(')')[0].split(', ');
-  return step;
+  return step.map(function (num) {
+    return parseInt(num);
+  });
 }
 
 function setFirstColor(rgbColor) {
@@ -245,6 +265,28 @@ function addColor(rgbColor) {
   return (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.cmykRGB)([C, M, Y, K]);
 }
 
+function checkWinLose(color) {
+  if (targetColor === color && count - 1 === level) {
+    Object.values(allTiles).forEach(function (tile) {
+      var coor = tile.coor,
+          ele = tile.ele;
+
+      if (!selectedTiles.includes(coor)) {
+        ele.style.border = 'none';
+        ele.style['background-color'] = color;
+      }
+    });
+    level = level + 1;
+    lives = lives + 2;
+    selectedTiles = [];
+    count = 1;
+    createMixGrid();
+    return true;
+  }
+
+  return false;
+}
+
 function mixTile() {
   var clickedCoor = this.getAttribute('coor');
   var check = optionTiles.some(function (coor) {
@@ -252,7 +294,8 @@ function mixTile() {
   });
 
   if (check) {
-    clearStyle();
+    clearStyle(optionTiles, true);
+    selectedTiles.push(clickedCoor);
     var colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId');
 
     if (checkColor) {
@@ -263,53 +306,56 @@ function mixTile() {
     var colorTwo = this.getAttribute('colorId'); // ADD COLOR RETURN MIXED RGB
 
     var rgb = addColor(colorTwo);
-    var rgbStr = "rgb(".concat(rgb[0], ", ").concat(rgb[1], ", ").concat(rgb[2], ")"); // SET NEW COLOR & MARK NEXT OPTIONS
+    var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")"); // SET NEW COLOR & MARK NEXT OPTIONS
 
-    this.style['background-color'] = rgbStr;
-    currentTile = posObject(this.getAttribute('coor'));
-    markOptions();
+    this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
+
+    if (!checkWinLose(rgbStr)) {
+      currentTile = posObject(this.getAttribute('coor'));
+      markOptions();
+    }
   }
 }
 
 function createMixGrid() {
-  tileGrid = document.querySelector('.tile-grid');
+  body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
+
+  var cont = document.createElement('div');
+  body.appendChild(cont); // tileGrid.appendChild(cont)
+
+  cont.setAttribute('class', 'tile-grid');
+  cont.setAttribute('id', level);
   var colorCount = 0;
 
   for (var x = 1; x <= 10; x++) {
     for (var y = 1; y <= 10; y++) {
       var colorId = _main_color__WEBPACK_IMPORTED_MODULE_0__.COLORS[colorCount];
       var coor = "".concat(x, "-").concat(y);
-
-      var _tile = document.createElement('div');
-
-      _tile.setAttribute('id', colorCount);
-
-      _tile.setAttribute('colorId', colorId);
-
-      _tile.setAttribute('coor', coor);
-
-      _tile.setAttribute('class', 'mix-tile');
-
-      _tile.style['background-color'] = colorId;
-      _tile.style['aspect-ratio'] = 1;
-
-      _tile.addEventListener('click', mixTile);
-
+      var tile = document.createElement('div');
+      tile.setAttribute('id', colorCount);
+      tile.setAttribute('colorId', colorId);
+      tile.setAttribute('coor', coor);
+      tile.setAttribute('class', 'mix-tile');
+      tile.style['background-color'] = colorId;
+      tile.style.border = '1px solid black';
+      tile.style['aspect-ratio'] = 1;
+      tile.addEventListener('click', mixTile);
       var info = {
-        ele: _tile,
+        ele: tile,
+        coor: coor,
         x: x,
         y: y
       };
       allTiles[coor] = info;
-      tileGrid.appendChild(_tile);
+      cont.appendChild(tile);
       colorCount++;
     }
   }
 
   ;
-  tileGrid.style.display = 'tile-grid';
-  tileGrid.style['grid-gap'] = '2px';
-  tileGrid.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
+  cont.style.display = 'tile-grid';
+  cont.style['grid-gap'] = '4px';
+  cont.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
 
   setPath();
   markOptions();
@@ -317,33 +363,100 @@ function createMixGrid() {
 
 function markOptions() {
   var tile = allTiles[currentTile.coor];
-  tile.ele.style.border = '8px inset white';
+  tile.ele.style['border-radius'] = '100%'; // tile.ele.style.border = '8px inset white';
+
   optionTiles = nextMoveOptions(true);
 }
 
 function nextMoveOptions(styleCheck) {
   var newOptionTiles = [];
+  var tile = allTiles[currentTile.coor];
   OPTIONS.forEach(function (pos) {
     var newX = pos[0] + tile.x;
     var newY = pos[1] + tile.y;
     var newCoor = "".concat(newX, "-").concat(newY);
 
     if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
-      newOptionTiles.push(newCoor);
+      if (!styleCheck) {
+        newOptionTiles.push(newCoor);
+      } else if (newCoor !== finishTile) {
+        newOptionTiles.push(newCoor);
+        var optionTile = allTiles[newCoor].ele; // [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-      if (styleCheck) {
-        var optionTile = allTiles[newCoor].ele;
-        optionTile.style.border = '1px solid white';
+        var radiusStr = optionStyle(pos); // let arrow = <i class="fas fa-caret-up"></i>
+
+        optionTile.style['border-radius'] = radiusStr;
+        optionTile.style.border = 'none'; // optionTile.style.border = '1px solid white'
+      } else if (count === level && newCoor === finishTile) {
+        clearStyle(newOptionTiles);
+        newOptionTiles = [newCoor];
+        var _optionTile = allTiles[newCoor].ele;
+        _optionTile.style.border = '2px solid black';
       }
     }
   });
   return newOptionTiles;
 }
 
-function clearStyle() {
-  optionTiles.forEach(function (coor) {
+function clearStyle(tiles) {
+  var updateCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  tiles.forEach(function (coor) {
     var oldTile = allTiles[coor].ele;
     oldTile.style.border = 'none';
+    oldTile.style['border-radius'] = '0 0 0 0';
+  });
+
+  if (updateCheck) {
+    var prev = allTiles[currentTile.coor].ele;
+    prev.style['border-radius'] = '100%';
+  } // prev.style.width = '80%';
+  // prev.style.margin = 'auto';
+  // switch (direction) {
+  //   case up:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-top'] = 'none';
+  //     break;
+  //   case down:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-bottom'] = 'none';
+  //     break;
+  //   case right:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-right'] = 'none';
+  //     break;
+  //   case left:
+  //     prev.style.border = `3px solid rgb(${targetColor[0]}, ${targetColor[1]}, ${targetColor[2]})`
+  //     prev.style['border-left'] = 'none';
+  //     break;
+  // }
+  // prev.style.border = 'none';
+  // prev.style.border = '2px solid white';
+
+}
+
+function optionStyle(coor) {
+  var radiusStr;
+
+  if (sameArray(coor, up)) {
+    radiusStr = '100% 100% 0 0';
+    direction = up;
+  } else if (sameArray(coor, right)) {
+    radiusStr = '0 100% 100% 0';
+    direction = right;
+  } else if (sameArray(coor, down)) {
+    radiusStr = '0 0 100% 100%';
+    direction = down;
+  } else if (sameArray(coor, left)) {
+    radiusStr = '100% 0 0 100%';
+    direction = left;
+  }
+
+  return radiusStr;
+}
+
+function sameArray(arr1, arr2) {
+  return arr1.every(function (val, index) {
+    return val === arr2[index];
   });
 }
 

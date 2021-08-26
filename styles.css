@@ -8,7 +8,8 @@ div.tile-grid {
 
 .tile-grid {
   width: 55%;
-  aspect-ratio: 1; }
+  aspect-ratio: 1;
+  margin-left: 200px; }
 
 h1 {
   color: white;
@@ -18,10 +19,13 @@ h1 {
 body {
   background-color: black;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center; }
 
 .nav-cont {
+  position: fixed;
+  top: 50px;
+  left: 50px;
   display: flex;
   flex-direction: column;
   width: 8%; }
