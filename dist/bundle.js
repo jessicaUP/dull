@@ -129,7 +129,8 @@ function mixTilesFour(c1, c2, step) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createMixGrid": () => (/* binding */ createMixGrid)
+/* harmony export */   "setNewGrid": () => (/* binding */ setNewGrid),
+/* harmony export */   "resetGrid": () => (/* binding */ resetGrid)
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
  // BOARD
@@ -139,7 +140,19 @@ var body;
 var allTiles = {};
 var checkColor = true; // GAMEPLAY
 
-var OPTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+var OPTIONS = [{
+  dir: [-1, 0],
+  name: 'up'
+}, {
+  dir: [1, 0],
+  name: 'down'
+}, {
+  dir: [0, -1],
+  name: 'left'
+}, {
+  dir: [0, 1],
+  name: 'right'
+}];
 var selectedTiles = [];
 var path;
 var startTile;
@@ -182,24 +195,24 @@ function findPath() {
     count + 1;
   }
 
-  debugger;
   targetColor = "rgb(".concat(parseInt(mixedColor[0]), ", ").concat(parseInt(mixedColor[1]), ", ").concat(parseInt(mixedColor[2]), ")");
-  finishTile = currentTile.coor;
-  var finishEle = allTiles[finishTile].ele;
-  finishEle.style['border-radius'] = '100%';
-  finishEle.style.border = 'none';
+  finishTile = currentTile.coor; // let finishEle = allTiles[finishTile].ele;
+  // finishEle.style['border-radius'] = '100%';
+  // finishEle.style.border = 'none'
+
   var body = document.querySelector('body');
   body.style['background-color'] = targetColor; // RESET VARIABLES FOR GAMEPLAY
+  // currentTile = startTile;
+  // count = 1
+  // optionTiles = [startTile];
 
-  currentTile = startTile;
-  count = 1;
-  optionTiles = [startTile];
-  path = selectedTiles;
-  selectedTiles = [currentTile.coor];
-  C = 0;
-  M = 0;
-  Y = 0;
+  path = selectedTiles; // selectedTiles = [currentTile.coor];
+  // C = 0;
+  // M = 0;
+  // Y = 0;
+
   debugger;
+  resetVariables();
 }
 
 function setPath() {
@@ -280,7 +293,10 @@ function checkWinLose(color) {
     lives = lives + 2;
     selectedTiles = [];
     count = 1;
-    createMixGrid();
+    setNewGrid();
+    document.querySelector("#group-".concat(level)).scrollIntoView({
+      behavior: 'smooth'
+    });
     return true;
   }
 
@@ -310,6 +326,16 @@ function mixTile() {
 
     this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
 
+    optionTiles.forEach(function (coor) {
+      var oldOption = allTiles[coor].ele;
+
+      if (coor !== currentTile) {
+        oldOption.style.border = '1px solid black';
+      } else {
+        oldOption.style.border = 'none';
+      }
+    });
+
     if (!checkWinLose(rgbStr)) {
       currentTile = posObject(this.getAttribute('coor'));
       markOptions();
@@ -324,7 +350,7 @@ function createMixGrid() {
   body.appendChild(cont); // tileGrid.appendChild(cont)
 
   cont.setAttribute('class', 'tile-grid');
-  cont.setAttribute('id', level);
+  cont.setAttribute('id', "group-".concat(level));
   var colorCount = 0;
 
   for (var x = 1; x <= 10; x++) {
@@ -356,9 +382,44 @@ function createMixGrid() {
   cont.style.display = 'tile-grid';
   cont.style['grid-gap'] = '4px';
   cont.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
+  // setPath();
+  // markOptions();
+}
 
+function setNewGrid() {
+  createMixGrid();
   setPath();
+  resetVariables();
   markOptions();
+}
+;
+function resetGrid() {
+  var prev = document.querySelector("#group-".concat(level));
+  prev.remove();
+  createMixGrid();
+  resetVariables();
+  markOptions(); // console.log('clicked')
+}
+
+function resetVariables() {
+  currentTile = startTile;
+  count = 1; // optionTiles = [startTile];
+
+  path = selectedTiles;
+  selectedTiles = [currentTile.coor];
+  C = 0;
+  M = 0;
+  Y = 0;
+  styleFinish();
+}
+
+function styleFinish() {
+  var finishEle = allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%'; // finishEle.style.border = 'none';
+
+  finishEle.setAttribute('class', 'blink'); // setInterval(function() {
+  //   $(`${}`)
+  // })
 }
 
 function markOptions() {
@@ -371,10 +432,15 @@ function markOptions() {
 function nextMoveOptions(styleCheck) {
   var newOptionTiles = [];
   var tile = allTiles[currentTile.coor];
-  OPTIONS.forEach(function (pos) {
-    var newX = pos[0] + tile.x;
-    var newY = pos[1] + tile.y;
-    var newCoor = "".concat(newX, "-").concat(newY);
+  Object.values(OPTIONS).forEach(function (pos) {
+    var newX = pos.dir[0] + tile.x;
+    var newY = pos.dir[1] + tile.y;
+    var newCoor = "".concat(newX, "-").concat(newY); // SHOULD CREATE ARROW INSTEAD
+    // let arrow = document.querySelector(`#${pos.name}`);
+
+    var arrow = document.createElement('DIV');
+    arrow.setAttribute('id', "".concat(pos.name));
+    arrow.setAttribute('class', 'arrow-icons');
 
     if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
       if (!styleCheck) {
@@ -383,7 +449,10 @@ function nextMoveOptions(styleCheck) {
         newOptionTiles.push(newCoor);
         var optionTile = allTiles[newCoor].ele; // [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-        var radiusStr = optionStyle(pos); // let arrow = <i class="fas fa-caret-up"></i>
+        var radiusStr = optionStyle(pos.dir); // let arrow = <i class="fas fa-caret-up"></i>
+
+        optionTile.appendChild(arrow);
+        arrow.style.display = 'flex'; // arrow.style['color'] = targetColor;
 
         optionTile.style['border-radius'] = radiusStr;
         optionTile.style.border = 'none'; // optionTile.style.border = '1px solid white'
@@ -402,6 +471,11 @@ function clearStyle(tiles) {
   var updateCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   tiles.forEach(function (coor) {
     var oldTile = allTiles[coor].ele;
+
+    if (oldTile.firstChild) {
+      oldTile.removeChild(oldTile.firstChild);
+    }
+
     oldTile.style.border = 'none';
     oldTile.style['border-radius'] = '0 0 0 0';
   });
@@ -532,7 +606,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // let blue = chroma('#00C2FF')
   // let final = chroma.mix(yellow, blue)
   // console.log(final)
-  (0,_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.createMixGrid)(); // createSnakeGrid();
+  (0,_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.setNewGrid)();
+  var reset = document.querySelector('.reset');
+  reset.addEventListener('click', _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.resetGrid); // createSnakeGrid();
   // createMatchGrid();
   // window.requestAnimationFrame(main);
 });

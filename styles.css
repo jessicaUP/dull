@@ -1,15 +1,32 @@
 div.tile-grid {
   display: grid;
-  height: 75%;
+  width: 50%;
   grid-gap: 2px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; }
   div.tile-grid .tile {
     aspect-ratio: 1; }
+  div.tile-grid .mix-tile {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+
+@keyframes blink {
+  50% {
+    border-color: white; } }
+.blink {
+  border-width: 3px;
+  animation: blink 1s step-end infinite alternate; }
 
 .tile-grid {
   width: 55%;
+  max-height: 90%;
   aspect-ratio: 1;
-  margin-left: 200px; }
+  margin: 20px;
+  margin-left: 10%; }
+
+.mix-tile {
+  position: relative; }
 
 h1 {
   color: white;
@@ -20,7 +37,10 @@ body {
   background-color: black;
   display: flex;
   flex-direction: column;
-  justify-content: center; }
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center; }
 
 .nav-cont {
   position: fixed;
@@ -70,5 +90,40 @@ body {
 
 .button {
   display: none; }
+
+.arrow-icons {
+  width: 0;
+  height: 0;
+  position: relative;
+  margin: 5px;
+  z-index: 3; }
+
+#up {
+  position: absolute;
+  bottom: 1px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid black; }
+
+#down {
+  position: absolute;
+  top: 1px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid black; }
+
+#right {
+  position: absolute;
+  left: 1px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 15px solid black; }
+
+#left {
+  position: absolute;
+  right: 1px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 15px solid black; }
 
 /*# sourceMappingURL=styles.css.map */

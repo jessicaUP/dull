@@ -4,10 +4,25 @@
   
 div.tile-grid
   display: grid
-  // width: 75%
-  height: 75%
+  width: 50%
+  // height: 75%
   grid-gap: 2px
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
   
   .tile 
     aspect-ratio: 1
+
+  .mix-tile
+    position: relative
+    display: flex
+    justify-content: center
+    align-items: center
+
+@keyframes blink 
+  50%
+    border-color: white 
+
+
+.blink
+  border-width: 3px
+  animation: blink 1s step-end infinite alternate

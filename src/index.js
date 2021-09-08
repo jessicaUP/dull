@@ -1,4 +1,4 @@
-import { createMixGrid } from './mixPathGame/mixPathGame'
+import { setNewGrid, resetGrid } from './mixPathGame/mixPathGame'
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // console.log(final)
   
 
-  createMixGrid();
+  setNewGrid();
+  const reset = document.querySelector('.reset');
+  reset.addEventListener('click', resetGrid);
   // createSnakeGrid();
   // createMatchGrid();
   // window.requestAnimationFrame(main);
