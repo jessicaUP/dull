@@ -290,8 +290,8 @@ function checkWinLose(color) {
       }
     });
     level = level + 1;
-    lives = lives + 2;
-    selectedTiles = [];
+    lives = lives + 2; // selectedTiles = [];
+
     count = 1;
     setNewGrid();
     document.querySelector("#group-".concat(level)).scrollIntoView({
@@ -403,13 +403,15 @@ function resetGrid() {
 
 function resetVariables() {
   currentTile = startTile;
-  count = 1; // optionTiles = [startTile];
+  count = 1; // path = selectedTiles;
+  // selectedTiles = [startTile];
 
-  path = selectedTiles;
   selectedTiles = [currentTile.coor];
   C = 0;
   M = 0;
   Y = 0;
+  var color = allTiles[currentTile.coor].ele.getAttribute('colorId');
+  setFirstColor(color);
   styleFinish();
 }
 

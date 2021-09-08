@@ -163,7 +163,7 @@ function checkWinLose(color) {
     })
     level = level + 1;
     lives = lives + 2;
-    selectedTiles = [];
+    // selectedTiles = [];
     count = 1;
     setNewGrid();
     document.querySelector(`#group-${level}`).scrollIntoView({
@@ -281,12 +281,14 @@ export function resetGrid() {
 function resetVariables() {
   currentTile = startTile;
   count = 1
-  // optionTiles = [startTile];
-  path = selectedTiles;
+  // path = selectedTiles;
+  // selectedTiles = [startTile];
   selectedTiles = [currentTile.coor];
   C = 0;
   M = 0;
   Y = 0;
+  let color = allTiles[currentTile.coor].ele.getAttribute('colorId');
+  setFirstColor(color);
   styleFinish();
 }
 
