@@ -290,7 +290,7 @@ function checkWinLose(color) {
       }
     });
     level = level + 1;
-    lives = lives + 2; // selectedTiles = [];
+    lives = lives + 1; // selectedTiles = [];
 
     count = 1;
     setNewGrid();
