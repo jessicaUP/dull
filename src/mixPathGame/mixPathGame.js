@@ -87,7 +87,7 @@ function createMixGrid() {
       tile.setAttribute('coor', coor)
       tile.setAttribute('class', 'mix-tile')
       tile.style['background-color'] = colorId;
-      tile.style.border = '1px solid black';
+      // tile.style.border = '1px solid black';
       tile.style['aspect-ratio'] = 1;
       tile.addEventListener('click', mixTile)
       let info = {
@@ -199,8 +199,11 @@ function checkWinLose(color) {
     });
 
     return true;
+  } else if ( targetColor !== color && count - 1 === level ) {
+    debugger
+    allTiles[currentTile.coor].innerHTML = 'x'
+    return false;
   }
-  return false;
 }
 
 
@@ -230,7 +233,7 @@ function mixTile() {
     optionTiles.forEach(coor => {
       let oldOption = allTiles[coor].ele;
       if (coor !== currentTile) {
-        oldOption.style.border = '1px solid black'
+        // oldOption.style.border = '1px solid black'
       } else {
         oldOption.style.border = 'none'
       }
@@ -315,7 +318,7 @@ function nextMoveOptions(styleCheck) {
         // newOptionTiles = [newCoor];
         let optionTile = allTiles[newCoor].ele;
 
-        optionTile.style.border = '3px solid black';
+        // optionTile.style.border = '1px solid transparent';
         optionTile.style['border-radius'] = '100%';
         let star = document.createElement('DIV');
         star.innerHTML = '★';

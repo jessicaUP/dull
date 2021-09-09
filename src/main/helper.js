@@ -40,6 +40,7 @@ export function sameArray(arr1, arr2) {
 
 export function styleFinish(finishTile) {
   let finishEle = allTiles[finishTile].ele;
+  finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
   finishEle.setAttribute('class', 'blink')
 
@@ -50,11 +51,10 @@ export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) 
     tiles.forEach(coor => {
       let oldTile = allTiles[coor].ele;
       if (coor !== finishTile) {
-        debugger
         if (oldTile.firstChild) {
           oldTile.removeChild(oldTile.firstChild)
         }
-        oldTile.style.border = '1px solid black';
+        // oldTile.style.border = '1px solid black';
         oldTile.style['border-radius'] = '0';
 
       }
@@ -83,7 +83,7 @@ export function optionStyle(coor) {
       radiusStr = '100% 0 0 100%';
       // direction = left;
     }
-    // radiusStr = '0'
+    radiusStr = '0'
     return radiusStr;
   }
 

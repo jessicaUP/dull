@@ -127,6 +127,7 @@ function sameArray(arr1, arr2) {
 
 function styleFinish(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
   finishEle.setAttribute('class', 'blink');
 }
@@ -136,13 +137,11 @@ function clearStyle(tiles, currentTile, finishTile) {
     var oldTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
 
     if (coor !== finishTile) {
-      debugger;
-
       if (oldTile.firstChild) {
         oldTile.removeChild(oldTile.firstChild);
-      }
+      } // oldTile.style.border = '1px solid black';
 
-      oldTile.style.border = '1px solid black';
+
       oldTile.style['border-radius'] = '0';
     }
   });
@@ -163,9 +162,9 @@ function optionStyle(coor) {
     radiusStr = '0 0 100% 100%'; // direction = down;
   } else if (sameArray(coor, left)) {
     radiusStr = '100% 0 0 100%'; // direction = left;
-  } // radiusStr = '0'
+  }
 
-
+  radiusStr = '0';
   return radiusStr;
 }
 
@@ -266,8 +265,8 @@ function createMixGrid() {
       tile.setAttribute('colorId', colorId);
       tile.setAttribute('coor', coor);
       tile.setAttribute('class', 'mix-tile');
-      tile.style['background-color'] = colorId;
-      tile.style.border = '1px solid black';
+      tile.style['background-color'] = colorId; // tile.style.border = '1px solid black';
+
       tile.style['aspect-ratio'] = 1;
       tile.addEventListener('click', mixTile);
       var info = {
@@ -368,9 +367,11 @@ function checkWinLose(color) {
       behavior: 'smooth'
     });
     return true;
+  } else if (targetColor !== color && count - 1 === level) {
+    debugger;
+    allTiles[currentTile.coor].innerHTML = 'x';
+    return false;
   }
-
-  return false;
 }
 
 function mixTile() {
@@ -400,8 +401,7 @@ function mixTile() {
     optionTiles.forEach(function (coor) {
       var oldOption = allTiles[coor].ele;
 
-      if (coor !== currentTile) {
-        oldOption.style.border = '1px solid black';
+      if (coor !== currentTile) {// oldOption.style.border = '1px solid black'
       } else {
         oldOption.style.border = 'none';
       }
@@ -469,8 +469,8 @@ function nextMoveOptions(styleCheck) {
       } else if (count === level && newCoor === finishTile) {
         newOptionTiles.push(newCoor); // newOptionTiles = [newCoor];
 
-        var _optionTile = allTiles[newCoor].ele;
-        _optionTile.style.border = '3px solid black';
+        var _optionTile = allTiles[newCoor].ele; // optionTile.style.border = '1px solid transparent';
+
         _optionTile.style['border-radius'] = '100%';
         var star = document.createElement('DIV');
         star.innerHTML = '★';
