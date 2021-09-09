@@ -188,7 +188,9 @@ function checkWinLose(color) {
     lives = lives + 1;
     let finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
-    finalEle.border = 'none'
+    finalEle.style.border = 'none'
+    finalEle.style['border-radius'] = '0'
+    finalEle.removeChild(finalEle.firstChild)
     // selectedTiles = [];
     count = 1;
     setNewGrid();
@@ -206,7 +208,7 @@ function mixTile() {
   let clickedCoor = this.getAttribute('coor');
   let check = optionTiles.some(coor => coor === clickedCoor)
   if (check) {
-    clearStyle(optionTiles, currentTile, true);
+    clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
     if (checkColor) {
@@ -289,7 +291,6 @@ function nextMoveOptions(styleCheck) {
     arrow.setAttribute('id', `${pos.name}`);
     arrow.setAttribute('class', 'arrow-icons')
     
-    debugger
     if (newX <= 10 &&
       newX > 0 &&
       newY <= 10 &&
@@ -310,15 +311,29 @@ function nextMoveOptions(styleCheck) {
         optionTile.style.border = 'none';
         // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
-        clearStyle(newOptionTiles, currentTile);
-        newOptionTiles = [newCoor];
+        newOptionTiles.push(newCoor);
+        // newOptionTiles = [newCoor];
         let optionTile = allTiles[newCoor].ele;
-        optionTile.style.border = '2px solid black';
 
+        optionTile.style.border = '3px solid black';
+        optionTile.style['border-radius'] = '100%';
+        let star = document.createElement('DIV');
+        star.innerHTML = '★';
+        optionTile.appendChild(star);
+        
       }
-
+      
     }
   });
+  
+  if ( newOptionTiles.includes(finishTile) ) {
+    clearStyle(newOptionTiles, currentTile, finishTile);
+    newOptionTiles = [finishTile]
+  } else if ( count > level ) {
+    clearStyle(newOptionTiles, currentTile, finishTile);
+    newOptionTiles = [];
+  }
+
   return newOptionTiles
 }
 

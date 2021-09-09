@@ -16,7 +16,10 @@ div.tile-grid {
     border-color: white; } }
 .blink {
   border-width: 3px;
-  animation: blink 1s step-end infinite alternate; }
+  animation: blink 1s step-end infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .level-cont {
   width: 70%;

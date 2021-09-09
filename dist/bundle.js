@@ -130,17 +130,21 @@ function styleFinish(finishTile) {
   finishEle.style['border-radius'] = '100%';
   finishEle.setAttribute('class', 'blink');
 }
-function clearStyle(tiles, currentTile) {
-  var updateCheck = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+function clearStyle(tiles, currentTile, finishTile) {
+  var updateCheck = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   tiles.forEach(function (coor) {
     var oldTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
 
-    if (oldTile.firstChild) {
-      oldTile.removeChild(oldTile.firstChild);
-    }
+    if (coor !== finishTile) {
+      debugger;
 
-    oldTile.style.border = 'none';
-    oldTile.style['border-radius'] = '0 0 0 0';
+      if (oldTile.firstChild) {
+        oldTile.removeChild(oldTile.firstChild);
+      }
+
+      oldTile.style.border = '1px solid black';
+      oldTile.style['border-radius'] = '0';
+    }
   });
 
   if (updateCheck) {
@@ -159,7 +163,8 @@ function optionStyle(coor) {
     radiusStr = '0 0 100% 100%'; // direction = down;
   } else if (sameArray(coor, left)) {
     radiusStr = '100% 0 0 100%'; // direction = left;
-  }
+  } // radiusStr = '0'
+
 
   return radiusStr;
 }
@@ -353,7 +358,9 @@ function checkWinLose(color) {
     lives = lives + 1;
     var finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
-    finalEle.border = 'none'; // selectedTiles = [];
+    finalEle.style.border = 'none';
+    finalEle.style['border-radius'] = '0';
+    finalEle.removeChild(finalEle.firstChild); // selectedTiles = [];
 
     count = 1;
     setNewGrid();
@@ -373,7 +380,7 @@ function mixTile() {
   });
 
   if (check) {
-    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(optionTiles, currentTile, true);
+    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     var colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId');
 
@@ -444,7 +451,6 @@ function nextMoveOptions(styleCheck) {
     var arrow = document.createElement('DIV');
     arrow.setAttribute('id', "".concat(pos.name));
     arrow.setAttribute('class', 'arrow-icons');
-    debugger;
 
     if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
       if (!styleCheck) {
@@ -461,13 +467,27 @@ function nextMoveOptions(styleCheck) {
         optionTile.style['border-radius'] = radiusStr;
         optionTile.style.border = 'none'; // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
-        (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile);
-        newOptionTiles = [newCoor];
+        newOptionTiles.push(newCoor); // newOptionTiles = [newCoor];
+
         var _optionTile = allTiles[newCoor].ele;
-        _optionTile.style.border = '2px solid black';
+        _optionTile.style.border = '3px solid black';
+        _optionTile.style['border-radius'] = '100%';
+        var star = document.createElement('DIV');
+        star.innerHTML = '★';
+
+        _optionTile.appendChild(star);
       }
     }
   });
+
+  if (newOptionTiles.includes(finishTile)) {
+    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
+    newOptionTiles = [finishTile];
+  } else if (count > level) {
+    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
+    newOptionTiles = [];
+  }
+
   return newOptionTiles;
 }
 

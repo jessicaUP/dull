@@ -46,15 +46,20 @@ export function styleFinish(finishTile) {
 }
 
 
-export function clearStyle(tiles, currentTile, updateCheck = false) {
+export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) {
     tiles.forEach(coor => {
       let oldTile = allTiles[coor].ele;
-      if (oldTile.firstChild) {
-        oldTile.removeChild(oldTile.firstChild)
+      if (coor !== finishTile) {
+        debugger
+        if (oldTile.firstChild) {
+          oldTile.removeChild(oldTile.firstChild)
+        }
+        oldTile.style.border = '1px solid black';
+        oldTile.style['border-radius'] = '0';
+
       }
-      oldTile.style.border = 'none';
-      oldTile.style['border-radius'] = '0 0 0 0';
     })
+
     if (updateCheck) {
       let prev = allTiles[currentTile.coor].ele;
       prev.style['border-radius'] = '100%';
@@ -78,7 +83,7 @@ export function optionStyle(coor) {
       radiusStr = '100% 0 0 100%';
       // direction = left;
     }
-
+    // radiusStr = '0'
     return radiusStr;
   }
 
