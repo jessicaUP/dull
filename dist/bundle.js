@@ -194,7 +194,7 @@ var path;
 var startTile;
 var finishTile;
 var targetColor;
-var level = 3;
+var level = 1;
 var lives = 3;
 var OPTIONS = [{
   dir: [-1, 0],
@@ -237,11 +237,19 @@ function setNewGrid() {
 function createMixGrid() {
   body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
 
-  var cont = document.createElement('div');
-  body.appendChild(cont); // tileGrid.appendChild(cont)
+  var cont1 = document.createElement('div');
+  cont1.setAttribute('class', "level-cont");
+  cont1.setAttribute('id', "level-".concat(level));
+  body.appendChild(cont1);
+  var cont2 = document.createElement('div');
+  cont1.appendChild(cont2);
+  cont2.setAttribute('class', 'tile-grid');
+  cont2.setAttribute('id', "group-".concat(level));
+  var cont3 = document.createElement('div');
+  cont3.setAttribute('class', 'level-text');
+  cont3.innerHTML = "".concat(level);
+  cont1.appendChild(cont3); // tileGrid.appendChild(cont)
 
-  cont.setAttribute('class', 'tile-grid');
-  cont.setAttribute('id', "group-".concat(level));
   var colorCount = 0;
 
   for (var x = 1; x <= 10; x++) {
@@ -264,15 +272,15 @@ function createMixGrid() {
         y: y
       };
       allTiles[coor] = info;
-      cont.appendChild(tile);
+      cont2.appendChild(tile);
       colorCount++;
     }
   }
 
   ;
-  cont.style.display = 'tile-grid';
-  cont.style['grid-gap'] = '4px';
-  cont.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
+  cont2.style.display = 'tile-grid';
+  cont2.style['grid-gap'] = '4px';
+  cont2.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
   // setPath();
   // markOptions();
 }
@@ -400,7 +408,7 @@ function mixTile() {
 }
 
 function resetGrid() {
-  var prev = document.querySelector("#group-".concat(level));
+  var prev = document.querySelector("#level-".concat(level));
   prev.remove();
   createMixGrid();
   resetVariables();

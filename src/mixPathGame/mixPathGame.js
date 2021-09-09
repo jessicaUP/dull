@@ -14,7 +14,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-let level = 3;
+let level = 1;
 let lives = 3;
 
 export const OPTIONS = [
@@ -60,12 +60,21 @@ function setNewGrid() {
 function createMixGrid() {
   body = document.querySelector('body');
   // tileGrid = document.querySelector('.tile-grid');
+  let cont1 = document.createElement('div');
+  cont1.setAttribute('class', `level-cont`);
+  cont1.setAttribute('id', `level-${level}`);
+  body.appendChild(cont1);
+  let cont2 = document.createElement('div');
+  cont1.appendChild(cont2);
+  cont2.setAttribute('class', 'tile-grid');
+  cont2.setAttribute('id', `group-${level}`);
+  
+  let cont3 = document.createElement('div');
+  cont3.setAttribute('class', 'level-text');
+  cont3.innerHTML = `${level}`;
+  cont1.appendChild(cont3);
 
-  let cont = document.createElement('div')
-  body.appendChild(cont)
   // tileGrid.appendChild(cont)
-  cont.setAttribute('class', 'tile-grid');
-  cont.setAttribute('id', `group-${level}`);
   let colorCount = 0;
 
   for (let x = 1; x <= 10; x++) {
@@ -88,13 +97,13 @@ function createMixGrid() {
         y
       }
       allTiles[coor] = info;
-      cont.appendChild(tile)
+      cont2.appendChild(tile)
       colorCount++
     }
   };
-  cont.style.display = 'tile-grid';
-  cont.style['grid-gap'] = '4px';
-  cont.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
+  cont2.style.display = 'tile-grid';
+  cont2.style['grid-gap'] = '4px';
+  cont2.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
   // SET START TILE 
   // setPath();
   // markOptions();
@@ -238,7 +247,7 @@ function mixTile() {
 
 
 export function resetGrid() {
-  let prev = document.querySelector(`#group-${level}`);
+  let prev = document.querySelector(`#level-${level}`);
   prev.remove();
   createMixGrid();
   resetVariables();
