@@ -43,8 +43,8 @@ export function startGame() {
   setNewGrid();
 
   // ADD RESET... for now
-  const reset = document.querySelector('.reset');
-  reset.addEventListener('click', resetGrid);
+  // const reset = document.querySelector('.reset');
+  // reset.addEventListener('click', resetGrid);
 
 
 }
@@ -74,8 +74,11 @@ function createMixGrid() {
   cont3.innerHTML = `${level}`;
   cont1.appendChild(cont3);
 
+  let livesCont = document.querySelector('.lives');
+  livesCont.innerHTML = `${lives}`;
   // tileGrid.appendChild(cont)
   let colorCount = 0;
+
 
   for (let x = 1; x <= 10; x++) {
     for (let y = 1; y <= 10; y++) {
@@ -102,7 +105,7 @@ function createMixGrid() {
     }
   };
   cont2.style.display = 'tile-grid';
-  cont2.style['grid-gap'] = '4px';
+  // cont2.style['grid-gap'] = '4px';
   cont2.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
   // SET START TILE 
   // setPath();
@@ -119,7 +122,9 @@ function findPath() {
     let next = optionTiles[randomNum(optionTiles.length)];
     // return next = `${newX}-${newY}`
     selectedTiles.push(next);
-    
+    if ( !allTiles[next] ) {
+     return findPath();
+    }
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);
@@ -173,9 +178,15 @@ function setPath() {
   // return coorObj;
 }
 
+function checkLives() {
+  if (lives === 0) {
+    alert('...you lose')
+  }
+}
 
 
 function checkWinLose(color) {
+  // checkLives();
   if ( targetColor === color && count - 1 === level ) {
     Object.values(allTiles).forEach(tile => {
       let { coor, ele } = tile;
@@ -184,8 +195,8 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     })
+    lives = lives + level;
     level = level + 1;
-    lives = lives + 1;
     let finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
     finalEle.style.border = 'none'
@@ -199,9 +210,22 @@ function checkWinLose(color) {
     });
 
     return true;
-  } else if ( targetColor !== color && count - 1 === level ) {
+  } 
+  let nextOptions = nextMoveOptions(false);
+  if ((targetColor !== color && count - 1 === level) || nextOptions.length === 0 ) {
     debugger
-    allTiles[currentTile.coor].innerHTML = 'x'
+    let final = currentTile.ele
+    if (final.firstChild) {
+      final.removeChild(final.firstChild);
+    }
+    final.setAttribute('class', 'wrong');
+    let x = document.createElement('DIV');
+    x.innerHTML = 'x';
+    x.setAttribute('class', 'wrong-x');
+    final.appendChild(x)
+    lives = lives - 1;
+    final.addEventListener('click', resetGrid);
+
     return false;
   }
 }
@@ -229,6 +253,8 @@ function mixTile() {
     // SET NEW COLOR & MARK NEXT OPTIONS
     this.style['background-color'] = rgbStr;
 
+    // SET CURRENT
+    
     // CHECK WIN or LOSE
     optionTiles.forEach(coor => {
       let oldOption = allTiles[coor].ele;
@@ -238,6 +264,8 @@ function mixTile() {
         oldOption.style.border = 'none'
       }
     })
+    currentTile = allTiles[clickedCoor];
+    this.style['border-radius'] = '100%';
     if ( !checkWinLose(rgbStr) ) {
       currentTile = posObject(this.getAttribute('coor'));
       optionTiles = markOptions();

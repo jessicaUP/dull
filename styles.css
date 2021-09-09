@@ -31,7 +31,16 @@ div.tile-grid {
     bottom: 0;
     right: 10px;
     font-size: 150px;
-    font-family: Odibee Sans; }
+    font-family: Helvetica, sans-serif; }
+
+.wrong {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .wrong .wrong-x {
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: 20px; }
 
 .tile-grid {
   width: 55%;
@@ -46,7 +55,7 @@ div.tile-grid {
 h1 {
   color: white;
   font-family: Odibee Sans;
-  font-size: 52px; }
+  font-size: 70px; }
 
 body {
   background-color: black;
@@ -60,10 +69,21 @@ body {
 .nav-cont {
   position: fixed;
   top: 50px;
-  left: 50px;
+  left: 150px;
   display: flex;
   flex-direction: column;
   width: 8%; }
+  .nav-cont .lives-cont {
+    display: flex;
+    position: fixed;
+    bottom: 85px; }
+    .nav-cont .lives-cont h4 {
+      vertical-align: bottom;
+      font-family: Odibee Sans;
+      font-size: 25px; }
+    .nav-cont .lives-cont .lives {
+      font-family: Helvetica, sans-serif;
+      font-size: 40px; }
   .nav-cont .button {
     width: 75%;
     aspect-ratio: 1;

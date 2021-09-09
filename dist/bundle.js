@@ -224,9 +224,8 @@ var optionTiles = []; // let direction;
 function startGame() {
   // CREATE GRID
   setNewGrid(); // ADD RESET... for now
-
-  var reset = document.querySelector('.reset');
-  reset.addEventListener('click', resetGrid);
+  // const reset = document.querySelector('.reset');
+  // reset.addEventListener('click', resetGrid);
 }
 
 function setNewGrid() {
@@ -252,7 +251,9 @@ function createMixGrid() {
   var cont3 = document.createElement('div');
   cont3.setAttribute('class', 'level-text');
   cont3.innerHTML = "".concat(level);
-  cont1.appendChild(cont3); // tileGrid.appendChild(cont)
+  cont1.appendChild(cont3);
+  var livesCont = document.querySelector('.lives');
+  livesCont.innerHTML = "".concat(lives); // tileGrid.appendChild(cont)
 
   var colorCount = 0;
 
@@ -282,8 +283,8 @@ function createMixGrid() {
   }
 
   ;
-  cont2.style.display = 'tile-grid';
-  cont2.style['grid-gap'] = '4px';
+  cont2.style.display = 'tile-grid'; // cont2.style['grid-gap'] = '4px';
+
   cont2.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // SET START TILE 
   // setPath();
   // markOptions();
@@ -298,6 +299,11 @@ function findPath() {
     var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)]; // return next = `${newX}-${newY}`
 
     selectedTiles.push(next);
+
+    if (!allTiles[next]) {
+      return findPath();
+    }
+
     var nextColor = allTiles[next].ele.getAttribute('colorId');
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);
     currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
@@ -342,7 +348,14 @@ function setPath() {
   // return coorObj;
 }
 
+function checkLives() {
+  if (lives === 0) {
+    alert('...you lose');
+  }
+}
+
 function checkWinLose(color) {
+  // checkLives();
   if (targetColor === color && count - 1 === level) {
     Object.values(allTiles).forEach(function (tile) {
       var coor = tile.coor,
@@ -353,8 +366,8 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     });
+    lives = lives + level;
     level = level + 1;
-    lives = lives + 1;
     var finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
     finalEle.style.border = 'none';
@@ -367,9 +380,30 @@ function checkWinLose(color) {
       behavior: 'smooth'
     });
     return true;
-  } else if (targetColor !== color && count - 1 === level) {
+  }
+
+  var nextOptions = nextMoveOptions(false);
+
+  if (targetColor !== color && count - 1 === level || nextOptions.length === 0) {
     debugger;
-    allTiles[currentTile.coor].innerHTML = 'x';
+    var _final = currentTile.ele;
+
+    if (_final.firstChild) {
+      _final.removeChild(_final.firstChild);
+    }
+
+    _final.setAttribute('class', 'wrong');
+
+    var x = document.createElement('DIV');
+    x.innerHTML = 'x';
+    x.setAttribute('class', 'wrong-x');
+
+    _final.appendChild(x);
+
+    lives = lives - 1;
+
+    _final.addEventListener('click', resetGrid);
+
     return false;
   }
 }
@@ -396,7 +430,8 @@ function mixTile() {
     var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")");
     count = count + 1; // SET NEW COLOR & MARK NEXT OPTIONS
 
-    this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
+    this.style['background-color'] = rgbStr; // SET CURRENT
+    // CHECK WIN or LOSE
 
     optionTiles.forEach(function (coor) {
       var oldOption = allTiles[coor].ele;
@@ -406,6 +441,8 @@ function mixTile() {
         oldOption.style.border = 'none';
       }
     });
+    currentTile = allTiles[clickedCoor];
+    this.style['border-radius'] = '100%';
 
     if (!checkWinLose(rgbStr)) {
       currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(this.getAttribute('coor'));
