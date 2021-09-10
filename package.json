@@ -15,15 +15,22 @@
     "grunt-compare-size": "^0.4.2",
     "grunt-git-authors": "^3.2.0",
     "webpack": "^5.38.1",
-    "webpack-cli": "^4.7.0"
+    "webpack-cli": "^4.7.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
+    "assert": "^2.0.0",
     "babel-loader": "^8.2.2",
+    "buffer": "^6.0.3",
     "chroma": "^0.0.1",
+    "isexe": "^2.0.0",
     "jquery": "^3.6.0",
     "jquery-color": "^2.2.0",
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.4",
     "webpack-dev-server": "^3.11.2"
   }
 }

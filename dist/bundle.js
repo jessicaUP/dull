@@ -295,15 +295,13 @@ function findPath() {
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(currentColor);
 
   while (count <= level) {
-    optionTiles = nextMoveOptions(false);
+    optionTiles = nextMoveOptions(false); // if ( optionTiles.length === 0 ) {
+    //  return findPath();
+    // }
+
     var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)]; // return next = `${newX}-${newY}`
 
     selectedTiles.push(next);
-
-    if (!allTiles[next]) {
-      return findPath();
-    }
-
     var nextColor = allTiles[next].ele.getAttribute('colorId');
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);
     currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
@@ -366,7 +364,7 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     });
-    lives = lives + level;
+    lives = lives + Math.ceil(level / 2);
     level = level + 1;
     var finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
@@ -385,7 +383,6 @@ function checkWinLose(color) {
   var nextOptions = nextMoveOptions(false);
 
   if (targetColor !== color && count - 1 === level || nextOptions.length === 0) {
-    debugger;
     var _final = currentTile.ele;
 
     if (_final.firstChild) {

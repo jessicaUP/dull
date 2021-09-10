@@ -119,12 +119,12 @@ function findPath() {
   currentColor = setFirstColor(currentColor);
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
+    // if ( optionTiles.length === 0 ) {
+    //  return findPath();
+    // }
     let next = optionTiles[randomNum(optionTiles.length)];
     // return next = `${newX}-${newY}`
     selectedTiles.push(next);
-    if ( !allTiles[next] ) {
-     return findPath();
-    }
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);
@@ -195,7 +195,7 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     })
-    lives = lives + level;
+    lives = lives + Math.ceil(level / 2);
     level = level + 1;
     let finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
@@ -213,7 +213,6 @@ function checkWinLose(color) {
   } 
   let nextOptions = nextMoveOptions(false);
   if ((targetColor !== color && count - 1 === level) || nextOptions.length === 0 ) {
-    debugger
     let final = currentTile.ele
     if (final.firstChild) {
       final.removeChild(final.firstChild);
