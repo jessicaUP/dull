@@ -56,6 +56,8 @@ export function setFirstColor(rgbColor) {
   C = color[0];
   M = color[1];
   Y = color[2];
+  let currentSwatch = document.querySelector('#current-color');
+  currentSwatch.style['background-color'] = rgbColor;
   return step;
 }
 
@@ -64,9 +66,9 @@ export function setFirstColor(rgbColor) {
 export function addColor(rgbColor, count) {
   let cmykColor = rgbCMYK(colorArr(rgbColor));
 
-  C = (C * (count - 1) + cmykColor[0]) / count
-  Y = (Y * (count - 1) + cmykColor[2]) / count
-  M = (M * (count - 1) + cmykColor[1]) / count
+  C = ((C * (count - 1)) + cmykColor[0]) / count
+  Y = ((Y * (count - 1)) + cmykColor[2]) / count
+  M = ((M * (count - 1)) + cmykColor[1]) / count
   cmykMax();
 
   return cmykRGB([C, M, Y, K])

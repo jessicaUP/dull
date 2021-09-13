@@ -1,4 +1,4 @@
-import { allTiles } from '../mixPathGame/mixPathGame'
+import { allTiles, hoverSwatch } from '../mixPathGame/mixPathGame'
 
 
 const up = [-1, 0];
@@ -35,15 +35,50 @@ export function sameArray(arr1, arr2) {
 // STYLING
 
 
+export function createSwatches(parent) {
+  let swatches = document.createElement('DIV');
+  parent.appendChild(swatches);
+  swatches.setAttribute('class', 'swatches');
+  
+  
+  let target = document.createElement('DIV');
+  target.setAttribute('class', 'swatch blink');
+  target.setAttribute('id', 'target-color');
+  // target.setAttribute('')
+  swatches.appendChild(target);
 
+  let hover = document.createElement('DIV');
+  hover.setAttribute('class', 'swatch');
+  hover.setAttribute('id', 'hover-color');
+  swatches.appendChild(hover);
+
+
+  let current = document.createElement('DIV');
+  current.setAttribute('class', 'swatch');
+  current.setAttribute('id', 'current-color');
+  swatches.appendChild(current);
+  
+}
 
 
 export function styleFinish(finishTile) {
+  debugger
   let finishEle = allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
+
   finishEle.setAttribute('class', 'blink')
 
+}
+
+export function finishStar(finishTile) {
+  debugger
+  let finishEle = allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  let star = document.createElement('DIV');
+  star.setAttribute('class', 'star')
+  star.innerHTML = '★';
+  finishEle.appendChild(star);
 }
 
 
@@ -56,9 +91,11 @@ export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) 
         }
         // oldTile.style.border = '1px solid black';
         oldTile.style['border-radius'] = '0';
-
+        
+        // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
       }
     })
+    
 
     if (updateCheck) {
       let prev = allTiles[currentTile.coor].ele;

@@ -74,6 +74,8 @@ function setFirstColor(rgbColor) {
   C = color[0];
   M = color[1];
   Y = color[2];
+  var currentSwatch = document.querySelector('#current-color');
+  currentSwatch.style['background-color'] = rgbColor;
   return step;
 }
 function addColor(rgbColor, count) {
@@ -98,7 +100,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "randomNum": () => (/* binding */ randomNum),
 /* harmony export */   "posObject": () => (/* binding */ posObject),
 /* harmony export */   "sameArray": () => (/* binding */ sameArray),
+/* harmony export */   "createSwatches": () => (/* binding */ createSwatches),
 /* harmony export */   "styleFinish": () => (/* binding */ styleFinish),
+/* harmony export */   "finishStar": () => (/* binding */ finishStar),
 /* harmony export */   "clearStyle": () => (/* binding */ clearStyle),
 /* harmony export */   "optionStyle": () => (/* binding */ optionStyle)
 /* harmony export */ });
@@ -125,11 +129,39 @@ function sameArray(arr1, arr2) {
   });
 } // STYLING
 
+function createSwatches(parent) {
+  var swatches = document.createElement('DIV');
+  parent.appendChild(swatches);
+  swatches.setAttribute('class', 'swatches');
+  var target = document.createElement('DIV');
+  target.setAttribute('class', 'swatch blink');
+  target.setAttribute('id', 'target-color'); // target.setAttribute('')
+
+  swatches.appendChild(target);
+  var hover = document.createElement('DIV');
+  hover.setAttribute('class', 'swatch');
+  hover.setAttribute('id', 'hover-color');
+  swatches.appendChild(hover);
+  var current = document.createElement('DIV');
+  current.setAttribute('class', 'swatch');
+  current.setAttribute('id', 'current-color');
+  swatches.appendChild(current);
+}
 function styleFinish(finishTile) {
+  debugger;
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
   finishEle.setAttribute('class', 'blink');
+}
+function finishStar(finishTile) {
+  debugger;
+  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  var star = document.createElement('DIV');
+  star.setAttribute('class', 'star');
+  star.innerHTML = '★';
+  finishEle.appendChild(star);
 }
 function clearStyle(tiles, currentTile, finishTile) {
   var updateCheck = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
@@ -142,7 +174,7 @@ function clearStyle(tiles, currentTile, finishTile) {
       } // oldTile.style.border = '1px solid black';
 
 
-      oldTile.style['border-radius'] = '0';
+      oldTile.style['border-radius'] = '0'; // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
     }
   });
 
@@ -181,7 +213,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "allTiles": () => (/* binding */ allTiles),
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
-/* harmony export */   "resetGrid": () => (/* binding */ resetGrid)
+/* harmony export */   "resetGrid": () => (/* binding */ resetGrid),
+/* harmony export */   "hoverSwatch": () => (/* binding */ hoverSwatch)
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
 /* harmony import */ var _main_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/helper */ "./src/main/helper.js");
@@ -217,7 +250,8 @@ var OPTIONS = [{
 var currentTile;
 var currentColor;
 var count = 1;
-var optionTiles = []; // let direction;
+var optionTiles = [];
+var hoverColor; // let direction;
 // let mixedTiles = [];
 // DOM LOADED START
 
@@ -231,6 +265,7 @@ function startGame() {
 function setNewGrid() {
   createMixGrid();
   setPath();
+  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
   resetVariables();
   optionTiles = markOptions();
 }
@@ -244,6 +279,7 @@ function createMixGrid() {
   cont1.setAttribute('class', "level-cont");
   cont1.setAttribute('id', "level-".concat(level));
   body.appendChild(cont1);
+  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.createSwatches)(cont1);
   var cont2 = document.createElement('div');
   cont1.appendChild(cont2);
   cont2.setAttribute('class', 'tile-grid');
@@ -313,7 +349,9 @@ function findPath() {
   // finishEle.style['border-radius'] = '100%';
   // finishEle.style.border = 'none'
 
+  var background = document.querySelector('.image-cont');
   var body = document.querySelector('body');
+  background.style['background-color'] = targetColor;
   body.style['background-color'] = targetColor; // RESET VARIABLES FOR GAMEPLAY
   // currentTile = startTile;
   // count = 1
@@ -364,6 +402,10 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     });
+    var prevLevel = document.querySelector("#level-".concat(level));
+    prevLevel.style.position = 'relative';
+    var swatches = document.querySelector('.swatches');
+    swatches.remove();
     lives = lives + Math.ceil(level / 2);
     level = level + 1;
     var finalEle = allTiles[finishTile].ele;
@@ -412,6 +454,11 @@ function mixTile() {
   });
 
   if (check) {
+    optionTiles.forEach(function (coor) {
+      var tile = allTiles[coor].ele;
+      hoverColor = tile.getAttribute('colorId');
+      tile.removeEventListener('mouseover', hoverSwatch);
+    });
     (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     var colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId');
@@ -427,8 +474,7 @@ function mixTile() {
     var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")");
     count = count + 1; // SET NEW COLOR & MARK NEXT OPTIONS
 
-    this.style['background-color'] = rgbStr; // SET CURRENT
-    // CHECK WIN or LOSE
+    this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
 
     optionTiles.forEach(function (coor) {
       var oldOption = allTiles[coor].ele;
@@ -439,6 +485,8 @@ function mixTile() {
       }
     });
     currentTile = allTiles[clickedCoor];
+    var swatch = document.querySelector('#current-color');
+    swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '100%';
 
     if (!checkWinLose(rgbStr)) {
@@ -453,6 +501,7 @@ function resetGrid() {
   prev.remove();
   createMixGrid();
   resetVariables();
+  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
   optionTiles = markOptions(); // console.log('clicked')
 }
 
@@ -463,8 +512,7 @@ function resetVariables() {
 
   selectedTiles = [currentTile.coor];
   var color = allTiles[currentTile.coor].ele.getAttribute('colorId');
-  currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(color);
-  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.styleFinish)(finishTile);
+  currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(color); // finishStar(finishTile);
 }
 
 function markOptions() {
@@ -472,6 +520,11 @@ function markOptions() {
   tile.ele.style['border-radius'] = '100%';
   return nextMoveOptions(true);
 }
+
+var hoverSwatch = function hoverSwatch() {
+  var swatch = document.querySelector('#hover-color');
+  swatch.style['background-color'] = hoverColor;
+};
 
 function nextMoveOptions(styleCheck) {
   var newOptionTiles = [];
@@ -490,32 +543,44 @@ function nextMoveOptions(styleCheck) {
       if (!styleCheck) {
         newOptionTiles.push(newCoor);
       } else if (newCoor !== finishTile) {
-        newOptionTiles.push(newCoor);
-        var optionTile = allTiles[newCoor].ele; // [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        var optionTile = allTiles[newCoor].ele;
+        hoverColor = optionTile.getAttribute('colorId');
+        optionTile.addEventListener('mouseover', hoverSwatch);
+        newOptionTiles.push(newCoor); // [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
         var radiusStr = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.optionStyle)(pos.dir); // let arrow = <i class="fas fa-caret-up"></i>
 
         optionTile.appendChild(arrow);
-        arrow.style.display = 'flex'; // arrow.style['color'] = targetColor;
+        arrow.style.display = 'flex'; // EVENT LISTENER
+        // arrow.style['color'] = targetColor;
 
         optionTile.style['border-radius'] = radiusStr;
         optionTile.style.border = 'none'; // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
+        var _optionTile = allTiles[newCoor].ele;
+        hoverColor = _optionTile.getAttribute('colorId');
+
+        _optionTile.addEventListener('mouseover', hoverSwatch);
+
         newOptionTiles.push(newCoor); // newOptionTiles = [newCoor];
+        // let optionTile = allTiles[newCoor].ele;
+        // optionTile.style.border = '1px solid transparent';
+        // optionTile.style['border-radius'] = '100%';
+        // let star = document.createElement('DIV');
+        // star.innerHTML = '★';
+        // optionTile.appendChild(star);
 
-        var _optionTile = allTiles[newCoor].ele; // optionTile.style.border = '1px solid transparent';
-
-        _optionTile.style['border-radius'] = '100%';
-        var star = document.createElement('DIV');
-        star.innerHTML = '★';
-
-        _optionTile.appendChild(star);
+        (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.styleFinish)(finishTile);
       }
     }
   });
 
   if (newOptionTiles.includes(finishTile)) {
     (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
+    newOptionTiles.forEach(function (coor) {
+      var tile = allTiles[coor].ele;
+      tile.removeEventListener('mouseover', hoverSwatch);
+    });
     newOptionTiles = [finishTile];
   } else if (count > level) {
     (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);

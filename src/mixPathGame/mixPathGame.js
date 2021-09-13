@@ -1,5 +1,5 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle } from '../main/helper'
+import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches } from '../main/helper'
 
 // BOARD
 let tileGrid;
@@ -29,6 +29,7 @@ let currentTile;
 let currentColor;
 let count = 1;
 let optionTiles = [];
+let hoverColor;
 // let direction;
 
 
@@ -52,6 +53,7 @@ export function startGame() {
 function setNewGrid() {
   createMixGrid();
   setPath();
+  finishStar(finishTile);
   resetVariables();
   optionTiles = markOptions();
 };
@@ -64,6 +66,9 @@ function createMixGrid() {
   cont1.setAttribute('class', `level-cont`);
   cont1.setAttribute('id', `level-${level}`);
   body.appendChild(cont1);
+
+  createSwatches(cont1);
+
   let cont2 = document.createElement('div');
   cont1.appendChild(cont2);
   cont2.setAttribute('class', 'tile-grid');
@@ -138,7 +143,9 @@ function findPath() {
   // let finishEle = allTiles[finishTile].ele;
   // finishEle.style['border-radius'] = '100%';
   // finishEle.style.border = 'none'
+  let background = document.querySelector('.image-cont');
   let body = document.querySelector('body');
+  background.style['background-color'] = targetColor;
   body.style['background-color'] = targetColor;
 
   // RESET VARIABLES FOR GAMEPLAY
@@ -195,6 +202,11 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     })
+    let prevLevel = document.querySelector(`#level-${level}`)
+    prevLevel.style.position = 'relative'
+    let swatches = document.querySelector('.swatches');
+    swatches.remove();
+
     lives = lives + Math.ceil(level / 2);
     level = level + 1;
     let finalEle = allTiles[finishTile].ele;
@@ -234,6 +246,11 @@ function mixTile() {
   let clickedCoor = this.getAttribute('coor');
   let check = optionTiles.some(coor => coor === clickedCoor)
   if (check) {
+    optionTiles.forEach(coor => {
+      let tile = allTiles[coor].ele;
+      hoverColor = tile.getAttribute('colorId');
+      tile.removeEventListener('mouseover', hoverSwatch)
+    })
     clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
@@ -252,8 +269,7 @@ function mixTile() {
     // SET NEW COLOR & MARK NEXT OPTIONS
     this.style['background-color'] = rgbStr;
 
-    // SET CURRENT
-    
+
     // CHECK WIN or LOSE
     optionTiles.forEach(coor => {
       let oldOption = allTiles[coor].ele;
@@ -264,6 +280,8 @@ function mixTile() {
       }
     })
     currentTile = allTiles[clickedCoor];
+    let swatch = document.querySelector('#current-color');
+    swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '100%';
     if ( !checkWinLose(rgbStr) ) {
       currentTile = posObject(this.getAttribute('coor'));
@@ -283,6 +301,7 @@ export function resetGrid() {
   prev.remove();
   createMixGrid();
   resetVariables();
+  finishStar(finishTile)
   optionTiles = markOptions();
   // console.log('clicked')
   
@@ -296,7 +315,8 @@ function resetVariables() {
   selectedTiles = [currentTile.coor];
   let color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = setFirstColor(color);
-  styleFinish(finishTile);
+  
+  // finishStar(finishTile);
 }
 
 
@@ -304,6 +324,13 @@ function markOptions() {
   let tile = allTiles[currentTile.coor];
   tile.ele.style['border-radius'] = '100%'
   return nextMoveOptions(true)
+}
+
+
+export const hoverSwatch = () => {    let swatch = document.querySelector('#hover-color');
+    swatch.style['background-color'] = hoverColor;
+
+
 }
 
 function nextMoveOptions(styleCheck) {
@@ -326,31 +353,43 @@ function nextMoveOptions(styleCheck) {
       newY <= 10 &&
       newY > 0 &&
       !selectedTiles.includes(newCoor)) {
-      if (!styleCheck) {
-        newOptionTiles.push(newCoor);
-      } else if (newCoor !== finishTile) {
-        newOptionTiles.push(newCoor);
+        
+        
+        if (!styleCheck) {
+          newOptionTiles.push(newCoor);
+        } else if (newCoor !== finishTile) {
         let optionTile = allTiles[newCoor].ele;
+        hoverColor = optionTile.getAttribute('colorId');
+        optionTile.addEventListener('mouseover', hoverSwatch);
+        newOptionTiles.push(newCoor);
         // [[-1, 0], [1, 0], [0, -1], [0, 1]];
         let radiusStr = optionStyle(pos.dir);
         // let arrow = <i class="fas fa-caret-up"></i>
         optionTile.appendChild(arrow);
         arrow.style.display = 'flex'
+        
+        // EVENT LISTENER
+        
+        
+        
         // arrow.style['color'] = targetColor;
         optionTile.style['border-radius'] = radiusStr;
         optionTile.style.border = 'none';
         // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
+        let optionTile = allTiles[newCoor].ele;
+        hoverColor = optionTile.getAttribute('colorId');
+        optionTile.addEventListener('mouseover', hoverSwatch)
         newOptionTiles.push(newCoor);
         // newOptionTiles = [newCoor];
-        let optionTile = allTiles[newCoor].ele;
+        // let optionTile = allTiles[newCoor].ele;
 
         // optionTile.style.border = '1px solid transparent';
-        optionTile.style['border-radius'] = '100%';
-        let star = document.createElement('DIV');
-        star.innerHTML = '★';
-        optionTile.appendChild(star);
-        
+        // optionTile.style['border-radius'] = '100%';
+        // let star = document.createElement('DIV');
+        // star.innerHTML = '★';
+        // optionTile.appendChild(star);
+        styleFinish(finishTile);
       }
       
     }
@@ -358,6 +397,10 @@ function nextMoveOptions(styleCheck) {
   
   if ( newOptionTiles.includes(finishTile) ) {
     clearStyle(newOptionTiles, currentTile, finishTile);
+    newOptionTiles.forEach(coor => {
+      let tile = allTiles[coor].ele;
+      tile.removeEventListener('mouseover', hoverSwatch)
+    })
     newOptionTiles = [finishTile]
   } else if ( count > level ) {
     clearStyle(newOptionTiles, currentTile, finishTile);
@@ -366,6 +409,7 @@ function nextMoveOptions(styleCheck) {
 
   return newOptionTiles
 }
+
 
 
 
