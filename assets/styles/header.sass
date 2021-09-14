@@ -1,7 +1,7 @@
 .logos
   position: fixed
-  top: 30px
-  left: 40px
+  top: 10px
+  left: 20px
   color: white
   font-family: Odibee Sans
   font-size: 12vw
@@ -9,8 +9,8 @@
 
 #logo-2
   color: black
-  top: 29px
-  left: 41px
+  top: 9px
+  left: 21px
   font-size: 12vw
   z-index: 0
 
@@ -25,7 +25,7 @@ body
   justify-items: center
   // align-items: flex-end 
   margin: auto
-  height: autp
+  height: auto
 
 .nav-cont
   position: absolute
@@ -36,10 +36,18 @@ body
   width: 100% 
   // z-index: 0
 
+  .information
+    display: flex
+    flex-direction: column
+    position: fixed
+    top: 300px
+
   .lives-cont
     display: flex
     position: fixed
-    bottom: 85px
+    top: 25vw
+    left: 50px
+    // bottom: 85px
     
     h4
       vertical-align: bottom
@@ -198,3 +206,7 @@ body
 //   top: -14px
 //   left: -4px
 //   z-index: -1
+
+
+.results-cont
+  display: none

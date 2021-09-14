@@ -1,5 +1,5 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches } from '../main/helper'
+import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches, addArrow } from '../main/helper'
 
 // BOARD
 let tileGrid;
@@ -51,33 +51,48 @@ export function startGame() {
 }
 
 function setNewGrid() {
-  createMixGrid();
+  let prev = createMixGrid();
   setPath();
+  let body = document.querySelector('body');
+  let background = document.querySelector('.image-cont');
+  body.style['background-color'] = targetColor;
+  background.style['background-color'] = targetColor;
+  
+  prev.remove();
+  createMixGrid(true);
   finishStar(finishTile);
   resetVariables();
+  
+  // tiles.remove();
+  // tiles.style['background-color'] = targetColor;
+  // createMixGrid();
+
   optionTiles = markOptions();
 };
 
 
-function createMixGrid() {
+function createMixGrid(second = false) {
   body = document.querySelector('body');
   // tileGrid = document.querySelector('.tile-grid');
   let cont1 = document.createElement('div');
-  cont1.setAttribute('class', `level-cont`);
+  cont1.setAttribute('class', `level-cont tile-grid`);
+  if (second) {
+    cont1.setAttribute('class', `level-cont tile-grid ${level}-tiles`);
+
+  }
   cont1.setAttribute('id', `level-${level}`);
   body.appendChild(cont1);
 
-  createSwatches(cont1);
+  // createSwatches(cont1);
 
-  let cont2 = document.createElement('div');
-  cont1.appendChild(cont2);
-  cont2.setAttribute('class', 'tile-grid');
-  cont2.setAttribute('id', `group-${level}`);
+  // let cont2 = document.createElement('div');
+  // cont2.setAttribute('class', 'tile-grid');
+  // cont2.setAttribute('id', `group-${level}`);
   
-  let cont3 = document.createElement('div');
-  cont3.setAttribute('class', 'level-text');
-  cont3.innerHTML = `${level}`;
-  cont1.appendChild(cont3);
+  let levelText = document.querySelector('.level-text');
+  // cont3.setAttribute('class', 'level-text');
+  levelText.innerHTML = `${level}`;
+  // cont1.appendChild(cont3);
 
   let livesCont = document.querySelector('.lives');
   livesCont.innerHTML = `${lives}`;
@@ -90,10 +105,13 @@ function createMixGrid() {
       let colorId = COLORS[colorCount];
       let coor = `${x}-${y}`;
       const tile = document.createElement('div');
-      tile.setAttribute('id', colorCount)
+      tile.setAttribute('id', `tile-${colorCount}`)
       tile.setAttribute('colorId', colorId)
       tile.setAttribute('coor', coor)
-      tile.setAttribute('class', 'mix-tile')
+      if (second) {
+        tile.setAttribute('class', `${level}tile`)
+      }
+      tile.setAttribute('class', `mix-tile`)
       tile.style['background-color'] = colorId;
       // tile.style.border = '1px solid black';
       tile.style['aspect-ratio'] = 1;
@@ -105,16 +123,21 @@ function createMixGrid() {
         y
       }
       allTiles[coor] = info;
-      cont2.appendChild(tile)
+      cont1.appendChild(tile)
       colorCount++
     }
   };
-  cont2.style.display = 'tile-grid';
+  cont1.style.display = 'tile-grid';
   // cont2.style['grid-gap'] = '4px';
-  cont2.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
+  cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
+  // cont1.appendChild(cont2);
+  // let tiles = document.querySelector('.tile-grid');
+
+
   // SET START TILE 
   // setPath();
   // markOptions();
+  return cont1
 }
 
 
@@ -136,6 +159,10 @@ function findPath() {
     count = count + 1
     // count + 1;
   }
+  // let background = document.querySelector('.image-cont');
+  // background.style['background-color'] = targetColor;
+  // let body = document.querySelector('body');
+  // body.style['background-color'] = targetColor;
   
 
   targetColor = `rgb(${parseInt(mixedColor[0])}, ${parseInt(mixedColor[1])}, ${parseInt(mixedColor[2])})`;
@@ -143,10 +170,6 @@ function findPath() {
   // let finishEle = allTiles[finishTile].ele;
   // finishEle.style['border-radius'] = '100%';
   // finishEle.style.border = 'none'
-  let background = document.querySelector('.image-cont');
-  let body = document.querySelector('body');
-  background.style['background-color'] = targetColor;
-  body.style['background-color'] = targetColor;
 
   // RESET VARIABLES FOR GAMEPLAY
   // currentTile = startTile;
@@ -202,24 +225,30 @@ function checkWinLose(color) {
         ele.style['background-color'] = color;
       }
     })
-    let prevLevel = document.querySelector(`#level-${level}`)
-    prevLevel.style.position = 'relative'
-    let swatches = document.querySelector('.swatches');
-    swatches.remove();
+    let finalEle = allTiles[finishTile].ele;
+    finalEle.classList.remove('blink');
+    finalEle.style.border = 'none';
+    finalEle.style['border-radius'] = '0';
+    finalEle.removeChild(finalEle.firstChild)
+    
+    let results = document.querySelector('.results-cont');
+    let prevLevel = document.querySelector(`#level-${level}`);
+    results.appendChild(prevLevel);
+    // prevLevel.style.position = 'relative'
+    // let swatches = document.querySelector('.swatches');
+    // swatches.remove();
 
     lives = lives + Math.ceil(level / 2);
     level = level + 1;
-    let finalEle = allTiles[finishTile].ele;
-    finalEle.classList.remove('blink');
-    finalEle.style.border = 'none'
-    finalEle.style['border-radius'] = '0'
-    finalEle.removeChild(finalEle.firstChild)
+
     // selectedTiles = [];
     count = 1;
     setNewGrid();
-    document.querySelector(`#group-${level}`).scrollIntoView({
-      behavior: 'smooth'
-    });
+    // let body = document.querySelector('body');
+    // body.style['background-color'] = targetColor;
+    // document.querySelector(`#group-${level}`).scrollIntoView({
+    //   behavior: 'smooth'
+    // });
 
     return true;
   } 
@@ -299,7 +328,13 @@ function mixTile() {
 export function resetGrid() {
   let prev = document.querySelector(`#level-${level}`);
   prev.remove();
-  createMixGrid();
+  createMixGrid(true);
+  // document.querySelector('body');
+  // let tiles = document.querySelector('.tile-grid');
+  // let background = document.querySelector('.image-cont');
+  // body.style['background-color'] = targetColor;
+  // background.style['background-color'] = targetColor;
+  // tiles.style['background-color'] = targetColor;
   resetVariables();
   finishStar(finishTile)
   optionTiles = markOptions();
@@ -315,6 +350,10 @@ function resetVariables() {
   selectedTiles = [currentTile.coor];
   let color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = setFirstColor(color);
+  let body = document.querySelector('body');
+  let background = document.querySelector('.image-cont');
+  body.style['background-color'] = targetColor;
+  background.style['background-color'] = targetColor;
   
   // finishStar(finishTile);
 }
@@ -344,9 +383,7 @@ function nextMoveOptions(styleCheck) {
 
     // SHOULD CREATE ARROW INSTEAD
     // let arrow = document.querySelector(`#${pos.name}`);
-    let arrow = document.createElement('DIV');
-    arrow.setAttribute('id', `${pos.name}`);
-    arrow.setAttribute('class', 'arrow-icons')
+    let arrow = addArrow(pos.name);
     
     if (newX <= 10 &&
       newX > 0 &&

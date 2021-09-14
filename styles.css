@@ -1,19 +1,24 @@
-div.tile-grid {
+.tile-grid {
+  overflow: hidden;
   display: grid;
-  position: absolute;
-  top: 25px;
+  position: fixed;
+  top: 50px;
+  left: 27.25%;
+  width: 46%;
   margin: 20px;
   margin-left: 15px;
   width: 45%;
   grid-gap: 2px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; }
-  div.tile-grid .tile {
-    aspect-ratio: 1; }
-  div.tile-grid .mix-tile {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center; }
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  z-index: 6; }
+
+.mix-tile {
+  aspect-ratio: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; }
 
 @keyframes blink {
   50% {
@@ -24,6 +29,7 @@ div.tile-grid {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-size: 20px; }
 
 .image-cont {
@@ -36,23 +42,13 @@ div.tile-grid {
   background-repeat: no-repeat;
   padding-top: 59.15%; }
 
-.level-cont {
-  width: 100%;
-  display: flex;
-  position: sticky;
-  padding-top: 59.15%;
-  left: 0;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  overflow: hidden; }
-  .level-cont .level-text {
-    position: absolute;
-    top: 10px;
-    right: 50px;
-    font-size: 17vw;
-    font-family: Helvetica, sans-serif;
-    color: white; }
+.level-text {
+  position: fixed;
+  top: 10px;
+  right: 50px;
+  font-size: 17vw;
+  font-family: Helvetica, sans-serif;
+  color: white; }
 
 .wrong {
   display: flex;
@@ -71,42 +67,33 @@ div.tile-grid {
   overflow: hidden; }
 
 .swatches {
-  position: absolute;
-  height: 200px;
-  width: 50px;
-  bottom: 40px;
-  right: 13%; }
+  position: fixed;
+  height: auto;
+  top: 55%;
+  right: 23%; }
   .swatches .swatch {
     position: absolute;
     width: 50px;
     height: 50px;
     border-radius: 100%; }
   .swatches #target-color {
-    width: 85px;
-    height: 85px;
+    width: 100px;
+    height: 100px;
     border: 2px dotted black;
-    top: 0; }
+    top: 0;
+    left: 15px; }
   .swatches #hover-color {
-    top: 60px;
+    top: 50px;
     background-color: black; }
   .swatches #current-color {
-    top: 100px;
+    top: 75px;
+    left: 35px;
     border: 1px solid white; }
-
-.tile-grid {
-  width: 55%;
-  max-height: 90%;
-  aspect-ratio: 1;
-  margin: 20px;
-  margin-left: 10%; }
-
-.mix-tile {
-  position: relative; }
 
 .logos {
   position: fixed;
-  top: 30px;
-  left: 40px;
+  top: 10px;
+  left: 20px;
   color: white;
   font-family: Odibee Sans;
   font-size: 12vw;
@@ -114,8 +101,8 @@ div.tile-grid {
 
 #logo-2 {
   color: black;
-  top: 29px;
-  left: 41px;
+  top: 9px;
+  left: 21px;
   font-size: 12vw;
   z-index: 0; }
 
@@ -128,7 +115,7 @@ body {
   align-content: center;
   justify-items: center;
   margin: auto;
-  height: autp; }
+  height: auto; }
 
 .nav-cont {
   position: absolute;
@@ -137,10 +124,16 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%; }
+  .nav-cont .information {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 300px; }
   .nav-cont .lives-cont {
     display: flex;
     position: fixed;
-    bottom: 85px; }
+    top: 25vw;
+    left: 50px; }
     .nav-cont .lives-cont h4 {
       vertical-align: bottom;
       font-family: Odibee Sans;
@@ -226,5 +219,8 @@ body {
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
   border-right: 15px solid black; }
+
+.results-cont {
+  display: none; }
 
 /*# sourceMappingURL=styles.css.map */

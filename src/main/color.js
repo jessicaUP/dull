@@ -58,6 +58,8 @@ export function setFirstColor(rgbColor) {
   Y = color[2];
   let currentSwatch = document.querySelector('#current-color');
   currentSwatch.style['background-color'] = rgbColor;
+  // let body = document.querySelector('body');
+  // body.style['background-color'] = rgbColor;
   return step;
 }
 
