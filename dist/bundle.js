@@ -152,20 +152,20 @@ function sameArray(arr1, arr2) {
 function addArrow(pos) {
   var arrow = document.createElement('DIV');
   arrow.setAttribute('id', pos);
-  arrow.setAttribute('class', 'arrow-icons');
+  arrow.classList.add('arrow-icons');
   return arrow;
 }
 function styleFinish(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
-  finishEle.setAttribute('class', 'blink');
+  finishEle.classList.add('blink');
 }
 function finishStar(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finishEle.style['border-radius'] = '100%';
   var star = document.createElement('DIV');
-  star.setAttribute('class', 'star');
+  star.classList.add('star');
   star.innerHTML = '★';
   finishEle.appendChild(star);
 }
@@ -178,15 +178,17 @@ function clearStyle(tiles, currentTile, finishTile) {
       if (oldTile.firstChild) {
         oldTile.removeChild(oldTile.firstChild);
       } // oldTile.style.border = '1px solid black';
+      // oldTile.style['border-radius'] = '0';
+      // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
 
-
-      oldTile.style['border-radius'] = '0'; // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
     }
   });
 
   if (updateCheck) {
     var prev = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[currentTile.coor].ele;
     prev.style['border-radius'] = '100%';
+    var dot = prev.firstChild;
+    dot.removeChild(dot.firstChild);
   }
 }
 function optionStyle(coor) {
@@ -276,7 +278,7 @@ function setNewGrid() {
   body.style['background-color'] = targetColor;
   background.style['background-color'] = targetColor;
   prev.remove();
-  createMixGrid(true);
+  createMixGrid();
   (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
   resetVariables(); // tiles.remove();
   // tiles.style['background-color'] = targetColor;
@@ -288,16 +290,11 @@ function setNewGrid() {
 ;
 
 function createMixGrid() {
-  var second = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
 
   var cont1 = document.createElement('div');
-  cont1.setAttribute('class', "level-cont tile-grid");
-
-  if (second) {
-    cont1.setAttribute('class', "level-cont tile-grid ".concat(level, "-tiles"));
-  }
-
+  cont1.classList.add("tile-grid");
+  cont1.classList.add("level-cont");
   cont1.setAttribute('id', "level-".concat(level));
   body.appendChild(cont1); // createSwatches(cont1);
   // let cont2 = document.createElement('div');
@@ -321,12 +318,7 @@ function createMixGrid() {
       tile.setAttribute('id', "tile-".concat(colorCount));
       tile.setAttribute('colorId', colorId);
       tile.setAttribute('coor', coor);
-
-      if (second) {
-        tile.setAttribute('class', "".concat(level, "tile"));
-      }
-
-      tile.setAttribute('class', "mix-tile");
+      tile.classList.add("mix-tile");
       tile.style['background-color'] = colorId; // tile.style.border = '1px solid black';
 
       tile.style['aspect-ratio'] = 1;
@@ -420,55 +412,67 @@ function checkLives() {
 }
 
 function checkWinLose(color) {
-  // checkLives();
+  var nextOptions = nextMoveOptions(false); // checkLives();
+
   if (targetColor === color && count - 1 === level) {
+    debugger;
     Object.values(allTiles).forEach(function (tile) {
       var coor = tile.coor,
           ele = tile.ele;
 
       if (!selectedTiles.includes(coor)) {
-        ele.style.border = 'none';
+        ele.style.border = '1px solid black';
         ele.style['background-color'] = color;
       }
     });
     var finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
-    finalEle.style.border = 'none';
     finalEle.style['border-radius'] = '0';
-    finalEle.removeChild(finalEle.firstChild);
-    var results = document.querySelector('.results-cont');
-    var prevLevel = document.querySelector("#level-".concat(level));
-    results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
-    // let swatches = document.querySelector('.swatches');
-    // swatches.remove();
+    finalEle.style.border = '1px solid black';
 
-    lives = lives + Math.ceil(level / 2);
-    level = level + 1; // selectedTiles = [];
+    if (finalEle.firstChild) {
+      finalEle.removeChild(finalEle.firstChild);
+    }
 
-    count = 1;
-    setNewGrid(); // let body = document.querySelector('body');
-    // body.style['background-color'] = targetColor;
-    // document.querySelector(`#group-${level}`).scrollIntoView({
-    //   behavior: 'smooth'
-    // });
+    var success = document.createElement('DIV');
+    success.setAttribute('class', 'success');
+    success.innerHTML = '...success';
+    body.appendChild(success);
+    window.setTimeout(function () {
+      // finalEle.removeChild(finalEle.firstChild)
+      var results = document.querySelector('.results-cont');
+      var prevLevel = document.querySelector("#level-".concat(level));
+      results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
+      // let swatches = document.querySelector('.swatches');
+      // swatches.remove();
 
-    return true;
+      lives = lives + Math.ceil(level / 2);
+      level = level + 1; // selectedTiles = [];
+
+      count = 1;
+      setNewGrid(); // let body = document.querySelector('body');
+      // body.style['background-color'] = targetColor;
+      // document.querySelector(`#group-${level}`).scrollIntoView({
+      //   behavior: 'smooth'
+      // });
+
+      return true;
+    }, 1500);
   }
 
-  var nextOptions = nextMoveOptions(false);
-
-  if (targetColor !== color && count - 1 === level || nextOptions.length === 0) {
+  if (nextOptions.length === 0 && targetColor !== color && count - 1 === level) {
     var _final = currentTile.ele;
 
     if (_final.firstChild) {
       _final.removeChild(_final.firstChild);
     }
 
-    _final.setAttribute('class', 'wrong');
+    _final.classList.add('wrong');
 
+    _final.style['border-radius'] = '100%';
     var x = document.createElement('DIV');
     x.innerHTML = 'x';
-    x.setAttribute('class', 'wrong-x');
+    x.classList.add('wrong-x');
 
     _final.appendChild(x);
 
@@ -508,19 +512,19 @@ function mixTile() {
     count = count + 1; // SET NEW COLOR & MARK NEXT OPTIONS
 
     this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
+    // optionTiles.forEach(coor => {
+    //   let oldOption = allTiles[coor].ele;
+    //   if (coor !== currentTile) {
+    //     // oldOption.style.border = '1px solid black'
+    //   } else {
+    //     oldOption.style.border = '1px solid black'
+    //   }
+    // })
 
-    optionTiles.forEach(function (coor) {
-      var oldOption = allTiles[coor].ele;
-
-      if (coor !== currentTile) {// oldOption.style.border = '1px solid black'
-      } else {
-        oldOption.style.border = 'none';
-      }
-    });
     currentTile = allTiles[clickedCoor];
     var swatch = document.querySelector('#current-color');
     swatch.style['background-color'] = rgbStr;
-    this.style['border-radius'] = '100%';
+    this.style['border-radius'] = '0';
 
     if (!checkWinLose(rgbStr)) {
       currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(this.getAttribute('coor'));
@@ -532,7 +536,7 @@ function mixTile() {
 function resetGrid() {
   var prev = document.querySelector("#level-".concat(level));
   prev.remove();
-  createMixGrid(true); // document.querySelector('body');
+  createMixGrid(); // document.querySelector('body');
   // let tiles = document.querySelector('.tile-grid');
   // let background = document.querySelector('.image-cont');
   // body.style['background-color'] = targetColor;
@@ -560,7 +564,18 @@ function resetVariables() {
 
 function markOptions() {
   var tile = allTiles[currentTile.coor];
-  tile.ele.style['border-radius'] = '100%';
+
+  if (currentTile.coor !== finishTile) {
+    tile.ele.style['border-radius'] = '100%';
+    var dotOutline = document.createElement('DIV');
+    dotOutline.setAttribute('class', 'dot-outline');
+    var dot = document.createElement('DIV');
+    dot.setAttribute('class', 'dot');
+    dot.innerHTML = "".concat(level - (count - 1));
+    dotOutline.appendChild(dot);
+    tile.ele.appendChild(dotOutline);
+  }
+
   return nextMoveOptions(true);
 }
 
@@ -594,9 +609,9 @@ function nextMoveOptions(styleCheck) {
         optionTile.appendChild(arrow);
         arrow.style.display = 'flex'; // EVENT LISTENER
         // arrow.style['color'] = targetColor;
-
-        optionTile.style['border-radius'] = radiusStr;
-        optionTile.style.border = 'none'; // optionTile.style.border = '1px solid white'
+        // optionTile.style['border-radius'] = radiusStr;
+        // optionTile.style.border = 'none';
+        // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
         var _optionTile = allTiles[newCoor].ele;
         hoverColor = _optionTile.getAttribute('colorId');

@@ -68,9 +68,8 @@
 
 .swatches {
   position: fixed;
-  height: auto;
-  top: 55%;
-  right: 23%; }
+  top: 35vw;
+  right: 20%; }
   .swatches .swatch {
     position: absolute;
     width: 50px;
@@ -89,6 +88,24 @@
     top: 75px;
     left: 35px;
     border: 1px solid white; }
+
+.dot-outline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 100%; }
+  .dot-outline .dot {
+    width: 16px;
+    height: 16px;
+    background-color: black;
+    color: white;
+    border-radius: 100%;
+    font-size: 15px;
+    text-align: center;
+    justify-self: center; }
 
 .logos {
   position: fixed;
@@ -221,6 +238,19 @@ body {
   border-right: 15px solid black; }
 
 .results-cont {
-  display: none; }
+  display: none;
+  z-index: 7;
+  width: 100%;
+  height: auto; }
+  .results-cont .level-cont {
+    position: relative;
+    width: 9%; }
+
+.success {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  font-family: Odibee Sans;
+  font-size: 10vw; }
 
 /*# sourceMappingURL=styles.css.map */

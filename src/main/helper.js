@@ -63,7 +63,7 @@ export function sameArray(arr1, arr2) {
 export function addArrow(pos) {
   let arrow = document.createElement('DIV');
   arrow.setAttribute('id', pos);
-  arrow.setAttribute('class', 'arrow-icons');
+  arrow.classList.add('arrow-icons');
   return arrow;
 }
 
@@ -73,7 +73,7 @@ export function styleFinish(finishTile) {
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
 
-  finishEle.setAttribute('class', 'blink')
+  finishEle.classList.add('blink')
 
 }
 
@@ -81,7 +81,7 @@ export function finishStar(finishTile) {
   let finishEle = allTiles[finishTile].ele;
   finishEle.style['border-radius'] = '100%';
   let star = document.createElement('DIV');
-  star.setAttribute('class', 'star')
+  star.classList.add('star')
   star.innerHTML = '★';
   finishEle.appendChild(star);
 }
@@ -95,7 +95,7 @@ export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) 
           oldTile.removeChild(oldTile.firstChild)
         }
         // oldTile.style.border = '1px solid black';
-        oldTile.style['border-radius'] = '0';
+        // oldTile.style['border-radius'] = '0';
         
         // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
       }
@@ -105,6 +105,9 @@ export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) 
     if (updateCheck) {
       let prev = allTiles[currentTile.coor].ele;
       prev.style['border-radius'] = '100%';
+      let dot = prev.firstChild;
+      dot.removeChild(dot.firstChild);
+      
     }
 
   }
