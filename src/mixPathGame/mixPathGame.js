@@ -236,37 +236,45 @@ function checkWinLose(color) {
     body.appendChild(success);
 
     window.setTimeout(() => {
+      let buttonDiv = document.createElement('DIV');
+      buttonDiv.classList.add('button-cont', 'blink');
       let levelButton = document.createElement('BUTTON');
+      let swatch = document.querySelector('#target-color');
+      swatch.classList.remove('blink');
       levelButton.innerHTML = 'next level...';
       levelButton.setAttribute('class', 'level-button');
-      body.appendChild(levelButton);
+      buttonDiv.appendChild(levelButton);
+      body.appendChild(buttonDiv);
       levelButton.addEventListener('click', () => {
 
-        success.remove();
-        nextLevel.remove();
         let results = document.querySelector('.results-cont');
         let prevLevel = document.querySelector(`#level-${level}`);
         results.appendChild(prevLevel);
         // prevLevel.style.position = 'relative'
         // let swatches = document.querySelector('.swatches');
         // swatches.remove();
-    
+        
         lives = lives + Math.ceil(level / 2);
         level = level + 1;
-    
+        
         // selectedTiles = [];
         count = 1;
         setNewGrid();
         // let body = document.querySelector('body');
         // body.style['background-color'] = targetColor;
         // document.querySelector(`#group-${level}`).scrollIntoView({
-        //   behavior: 'smooth'
-        // });
-    
-        return true;
-      })
-      // finalEle.removeChild(finalEle.firstChild)
+          //   behavior: 'smooth'
+          // });
+          success.remove();
+          buttonDiv.remove();
+          nextLevel.remove();
+          swatch.classList.add('blink');
 
+          
+          return true;
+        })
+        // finalEle.removeChild(finalEle.firstChild)
+        
     }, 1500);
   } 
   if ( nextOptions.length === 0 && (targetColor !== color && count - 1 === level) ) {

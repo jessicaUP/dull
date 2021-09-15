@@ -439,13 +439,16 @@ function checkWinLose(color) {
     success.innerHTML = '...success';
     body.appendChild(success);
     window.setTimeout(function () {
+      var buttonDiv = document.createElement('DIV');
+      buttonDiv.classList.add('button-cont', 'blink');
       var levelButton = document.createElement('BUTTON');
+      var swatch = document.querySelector('#target-color');
+      swatch.classList.remove('blink');
       levelButton.innerHTML = 'next level...';
       levelButton.setAttribute('class', 'level-button');
-      body.appendChild(levelButton);
+      buttonDiv.appendChild(levelButton);
+      body.appendChild(buttonDiv);
       levelButton.addEventListener('click', function () {
-        success.remove();
-        nextLevel.remove();
         var results = document.querySelector('.results-cont');
         var prevLevel = document.querySelector("#level-".concat(level));
         results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
@@ -462,6 +465,10 @@ function checkWinLose(color) {
         //   behavior: 'smooth'
         // });
 
+        success.remove();
+        buttonDiv.remove();
+        nextLevel.remove();
+        swatch.classList.add('blink');
         return true;
       }); // finalEle.removeChild(finalEle.firstChild)
     }, 1500);
