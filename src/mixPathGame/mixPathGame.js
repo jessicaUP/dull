@@ -236,28 +236,36 @@ function checkWinLose(color) {
     body.appendChild(success);
 
     window.setTimeout(() => {
+      let levelButton = document.createElement('BUTTON');
+      levelButton.innerHTML = 'next level...';
+      levelButton.setAttribute('class', 'level-button');
+      body.appendChild(levelButton);
+      levelButton.addEventListener('click', () => {
+
+        success.remove();
+        nextLevel.remove();
+        let results = document.querySelector('.results-cont');
+        let prevLevel = document.querySelector(`#level-${level}`);
+        results.appendChild(prevLevel);
+        // prevLevel.style.position = 'relative'
+        // let swatches = document.querySelector('.swatches');
+        // swatches.remove();
+    
+        lives = lives + Math.ceil(level / 2);
+        level = level + 1;
+    
+        // selectedTiles = [];
+        count = 1;
+        setNewGrid();
+        // let body = document.querySelector('body');
+        // body.style['background-color'] = targetColor;
+        // document.querySelector(`#group-${level}`).scrollIntoView({
+        //   behavior: 'smooth'
+        // });
+    
+        return true;
+      })
       // finalEle.removeChild(finalEle.firstChild)
-      success.remove();
-      let results = document.querySelector('.results-cont');
-      let prevLevel = document.querySelector(`#level-${level}`);
-      results.appendChild(prevLevel);
-      // prevLevel.style.position = 'relative'
-      // let swatches = document.querySelector('.swatches');
-      // swatches.remove();
-  
-      lives = lives + Math.ceil(level / 2);
-      level = level + 1;
-  
-      // selectedTiles = [];
-      count = 1;
-      setNewGrid();
-      // let body = document.querySelector('body');
-      // body.style['background-color'] = targetColor;
-      // document.querySelector(`#group-${level}`).scrollIntoView({
-      //   behavior: 'smooth'
-      // });
-  
-      return true;
 
     }, 1500);
   } 

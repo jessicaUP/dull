@@ -439,25 +439,31 @@ function checkWinLose(color) {
     success.innerHTML = '...success';
     body.appendChild(success);
     window.setTimeout(function () {
-      // finalEle.removeChild(finalEle.firstChild)
-      success.remove();
-      var results = document.querySelector('.results-cont');
-      var prevLevel = document.querySelector("#level-".concat(level));
-      results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
-      // let swatches = document.querySelector('.swatches');
-      // swatches.remove();
+      var levelButton = document.createElement('BUTTON');
+      levelButton.innerHTML = 'next level...';
+      levelButton.setAttribute('class', 'level-button');
+      body.appendChild(levelButton);
+      levelButton.addEventListener('click', function () {
+        success.remove();
+        nextLevel.remove();
+        var results = document.querySelector('.results-cont');
+        var prevLevel = document.querySelector("#level-".concat(level));
+        results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
+        // let swatches = document.querySelector('.swatches');
+        // swatches.remove();
 
-      lives = lives + Math.ceil(level / 2);
-      level = level + 1; // selectedTiles = [];
+        lives = lives + Math.ceil(level / 2);
+        level = level + 1; // selectedTiles = [];
 
-      count = 1;
-      setNewGrid(); // let body = document.querySelector('body');
-      // body.style['background-color'] = targetColor;
-      // document.querySelector(`#group-${level}`).scrollIntoView({
-      //   behavior: 'smooth'
-      // });
+        count = 1;
+        setNewGrid(); // let body = document.querySelector('body');
+        // body.style['background-color'] = targetColor;
+        // document.querySelector(`#group-${level}`).scrollIntoView({
+        //   behavior: 'smooth'
+        // });
 
-      return true;
+        return true;
+      }); // finalEle.removeChild(finalEle.firstChild)
     }, 1500);
   }
 
