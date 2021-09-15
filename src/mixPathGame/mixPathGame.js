@@ -148,9 +148,9 @@ function findPath() {
     // return next = `${newX}-${newY}`
     selectedTiles.push(next);
     let nextColor = allTiles[next].ele.getAttribute('colorId');
+    count = count + 1
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);
-    count = count + 1
     // count + 1;
   }
   // let background = document.querySelector('.image-cont');
@@ -210,15 +210,16 @@ function checkLives() {
 
 
 function checkWinLose(color) {
-  let nextOptions = nextMoveOptions(false);
   // checkLives();
   if ( targetColor === color && count - 1 === level ) {
-    debugger
     Object.values(allTiles).forEach(tile => {
       let { coor, ele } = tile;
-      if (!selectedTiles.includes(coor)) {
+      if (!selectedTiles.includes(coor) || coor === finishTile ) {
         ele.style.border = '1px solid black';
         ele.style['background-color'] = color;
+        // if (ele.firstChild) {
+        //   ele.removeChild(ele.firstChild)
+        // }
       }
     })
 
@@ -226,9 +227,9 @@ function checkWinLose(color) {
     finalEle.classList.remove('blink');
     finalEle.style['border-radius'] = '0';
     finalEle.style.border = '1px solid black';
-    if (finalEle.firstChild) {
-      finalEle.removeChild(finalEle.firstChild);
-    }
+    // finalEle.removeChild(finalEle.firstChild);
+    // if (finalEle.firstChild) finalEle.removeChild(finalEle.firstChild);
+
 
     let success = document.createElement('DIV');
     success.setAttribute('class', 'success');
@@ -274,25 +275,30 @@ function checkWinLose(color) {
         })
         // finalEle.removeChild(finalEle.firstChild)
         
-    }, 1500);
-  } 
-  if ( nextOptions.length === 0 && (targetColor !== color && count - 1 === level) ) {
-    let final = currentTile.ele
-    if (final.firstChild) {
-      final.removeChild(final.firstChild);
+    }, 1500)
+  } else if (targetColor !== color && count - 1 === level) {
+      let final = currentTile.ele
+      // if (final.firstChild) {
+      //   final.removeChild(final.firstChild);
+      // }
+      // final.classList.add('wrong');
+      final.style['border-radius'] = '100%'
+  
+      // let outline = document.createElement('DIV');
+      // outline.setAttribute('class', 'dot-outline');
+      // x.classList.add('dot');
+      // outline.appendChild(x);
+      // final.appendChild(outline);
+      lives = lives - 1;
+      final.addEventListener('click', resetGrid);
+  
+      return false;
+    } else {
+      nextMoveOptions(false);
+      return false
     }
-    final.classList.add('wrong');
-    final.style['border-radius'] = '100%'
-    let x = document.createElement('DIV');
-    x.innerHTML = 'x';
-    x.classList.add('wrong-x');
-    final.appendChild(x)
-    lives = lives - 1;
-    final.addEventListener('click', resetGrid);
+}
 
-    return false;
-  }
-} 
 
 
 function mixTile() {
@@ -301,8 +307,8 @@ function mixTile() {
   if (check) {
     optionTiles.forEach(coor => {
       let tile = allTiles[coor].ele;
-      hoverColor = tile.getAttribute('colorId');
-      tile.removeEventListener('mouseover', hoverSwatch)
+      let hoverColor = tile.getAttribute('colorId');
+      tile.removeEventListener('mouseover', hoverSwatch,true)
     })
     clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
@@ -314,9 +320,9 @@ function mixTile() {
     let colorTwo = this.getAttribute('colorId')
 
     // ADD COLOR RETURN MIXED RGB
+    count = count + 1
     let rgb = addColor(colorTwo, count);
     let rgbStr = `rgb(${parseInt(rgb[0])}, ${parseInt(rgb[1])}, ${parseInt(rgb[2])})`
-    count = count + 1
   
 
     // SET NEW COLOR & MARK NEXT OPTIONS
@@ -336,10 +342,30 @@ function mixTile() {
     let swatch = document.querySelector('#current-color');
     swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '0';
-    if ( !checkWinLose(rgbStr) ) {
+    optionTiles = markOptions();
+    // checkWinLose(rgbStr);
+    if ( checkWinLose(rgbStr) === false  ) {
+      // LOSE
       currentTile = posObject(this.getAttribute('coor'));
-      optionTiles = markOptions();
+      if (optionTiles.length === 0 || count - 1 === level ) {
+        let star = document.querySelector('.star');
+        if (star) star.remove(); 
+        let x = document.querySelector('.dot');
+        x.innerHTML = 'X';
+        let blink = allTiles[currentTile.coor].ele.firstChild;
+        blink.classList.add('blink');
+        let removeBlink = document.querySelector('#target-color');
+        removeBlink.classList.remove('blink');
+        
+      }
+      
+    } else {
 
+      // WIN
+      let star = document.querySelector('.star');
+      if (star) star.remove(); 
+      let x = document.querySelector(`#dot-${count - 1}`);
+      x.remove();
     }
 
   }
@@ -353,6 +379,8 @@ export function resetGrid() {
   let prev = document.querySelector(`#level-${level}`);
   prev.remove();
   createMixGrid();
+  let blink = document.querySelector('#target-color');
+  blink.classList.add('blink');
   // document.querySelector('body');
   // let tiles = document.querySelector('.tile-grid');
   // let background = document.querySelector('.image-cont');
@@ -387,22 +415,25 @@ function markOptions() {
   let tile = allTiles[currentTile.coor];
   if (currentTile.coor !== finishTile) {
     tile.ele.style['border-radius'] = '100%'
-    let dotOutline = document.createElement('DIV');
-    dotOutline.setAttribute('class', 'dot-outline');
-    let dot = document.createElement('DIV');
-    dot.setAttribute('class', 'dot');
-    dot.innerHTML = `${level - (count - 1)}`;
-    dotOutline.appendChild(dot);
-    tile.ele.appendChild(dotOutline)
   }
+  let dotOutline = document.createElement('DIV');
+  dotOutline.setAttribute('class', 'dot-outline');
+  dotOutline.setAttribute('ID', `dot-${count - 1}`);
+  let dot = document.createElement('DIV');
+  dot.setAttribute('class', 'dot');
+  dot.innerHTML = `${level - (count - 1)}`;
+  dotOutline.appendChild(dot);
+  tile.ele.appendChild(dotOutline)
   return nextMoveOptions(true);
 }
 
 
-export const hoverSwatch = () => {    let swatch = document.querySelector('#hover-color');
+export const hoverSwatch = (hoverColor) => {    
+  return () => {
+    let swatch = document.querySelector('#hover-color');
     swatch.style['background-color'] = hoverColor;
 
-
+  }
 }
 
 function nextMoveOptions(styleCheck) {
@@ -429,8 +460,8 @@ function nextMoveOptions(styleCheck) {
           newOptionTiles.push(newCoor);
         } else if (newCoor !== finishTile) {
         let optionTile = allTiles[newCoor].ele;
-        hoverColor = optionTile.getAttribute('colorId');
-        optionTile.addEventListener('mouseover', hoverSwatch);
+        let hoverColor = optionTile.getAttribute('colorId');
+        optionTile.addEventListener('mouseover', hoverSwatch(hoverColor));
         newOptionTiles.push(newCoor);
         // [[-1, 0], [1, 0], [0, -1], [0, 1]];
         let radiusStr = optionStyle(pos.dir);
@@ -448,8 +479,8 @@ function nextMoveOptions(styleCheck) {
         // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
         let optionTile = allTiles[newCoor].ele;
-        hoverColor = optionTile.getAttribute('colorId');
-        optionTile.addEventListener('mouseover', hoverSwatch)
+        let hoverColor = optionTile.getAttribute('colorId');
+        optionTile.addEventListener('mouseover', hoverSwatch(hoverColor))
         newOptionTiles.push(newCoor);
         // newOptionTiles = [newCoor];
         // let optionTile = allTiles[newCoor].ele;
@@ -469,7 +500,8 @@ function nextMoveOptions(styleCheck) {
     clearStyle(newOptionTiles, currentTile, finishTile);
     newOptionTiles.forEach(coor => {
       let tile = allTiles[coor].ele;
-      tile.removeEventListener('mouseover', hoverSwatch)
+      let hoverColor = tile.getAttribute('colorId')
+      tile.removeEventListener('mouseover', hoverSwatch,true)
     })
     newOptionTiles = [finishTile]
   } else if ( count > level ) {

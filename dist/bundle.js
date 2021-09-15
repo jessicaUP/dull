@@ -39,21 +39,24 @@ function colorArr(rgbColor) {
   return step.map(function (num) {
     return parseInt(num);
   });
-}
+} // function avg(num1, num2, step) {
+//   return ((num1 * (step - 1)) + num2) / step
+// }
 
-function avg(num1, num2, step) {
-  return (num1 * (step - 1) + num2) / step;
-}
 
 function rgbCMYK(rgb) {
   var red = rgb[0] / 255;
   var green = rgb[1] / 255;
-  var blue = rgb[2] / 255;
-  var k = 1 - Math.max(red, green, blue);
-  var c = (1 - (red - k)) / (1 - k);
-  var m = (1 - (green - k)) / (1 - k);
-  var y = (1 - (blue - k)) / (1 - k);
-  return [c, m, y, k];
+  var blue = rgb[2] / 255; // let k = (1 - Math.max(red, green, blue));
+  // let c = (1 - (red - k)) / (1 - k);
+  // let m = (1 - (green - k)) / (1 - k);
+  // let y = (1 - (blue - k)) / (1 - k);
+  // let k = (1 - Math.max(red, green, blue));
+
+  var c = (1 - red) / 1;
+  var m = (1 - green) / 1;
+  var y = (1 - blue) / 1;
+  return [c, m, y, 0];
 }
 function cmykRGB(cmyk) {
   var r = 255 * (1 - cmyk[0]) * (1 - cmyk[3]);
@@ -62,6 +65,7 @@ function cmykRGB(cmyk) {
   return [r, g, b];
 }
 function cmykMax() {
+  debugger;
   if (C > 1) C = 1;
   if (M > 1) M = 1;
   if (Y > 1) Y = 1;
@@ -69,6 +73,7 @@ function cmykMax() {
 function setFirstColor(rgbColor) {
   // let step = $.Color(hex1).rgba();
   // MAKE INTO ARRAY OF VALUES R-G-B
+  debugger;
   var step = colorArr(rgbColor);
   var color = rgbCMYK(step);
   C = color[0];
@@ -185,6 +190,7 @@ function clearStyle(tiles, currentTile, finishTile) {
   });
 
   if (updateCheck) {
+    debugger;
     var prev = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[currentTile.coor].ele;
     prev.style['border-radius'] = '100%';
     var dot = prev.firstChild;
@@ -360,9 +366,9 @@ function findPath() {
 
     selectedTiles.push(next);
     var nextColor = allTiles[next].ele.getAttribute('colorId');
+    count = count + 1;
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);
-    currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
-    count = count + 1; // count + 1;
+    currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next); // count + 1;
   } // let background = document.querySelector('.image-cont');
   // background.style['background-color'] = targetColor;
   // let body = document.querySelector('body');
@@ -412,27 +418,24 @@ function checkLives() {
 }
 
 function checkWinLose(color) {
-  var nextOptions = nextMoveOptions(false); // checkLives();
-
+  // checkLives();
   if (targetColor === color && count - 1 === level) {
-    debugger;
     Object.values(allTiles).forEach(function (tile) {
       var coor = tile.coor,
           ele = tile.ele;
 
-      if (!selectedTiles.includes(coor)) {
+      if (!selectedTiles.includes(coor) || coor === finishTile) {
         ele.style.border = '1px solid black';
-        ele.style['background-color'] = color;
+        ele.style['background-color'] = color; // if (ele.firstChild) {
+        //   ele.removeChild(ele.firstChild)
+        // }
       }
     });
     var finalEle = allTiles[finishTile].ele;
     finalEle.classList.remove('blink');
     finalEle.style['border-radius'] = '0';
-    finalEle.style.border = '1px solid black';
-
-    if (finalEle.firstChild) {
-      finalEle.removeChild(finalEle.firstChild);
-    }
+    finalEle.style.border = '1px solid black'; // finalEle.removeChild(finalEle.firstChild);
+    // if (finalEle.firstChild) finalEle.removeChild(finalEle.firstChild);
 
     var success = document.createElement('DIV');
     success.setAttribute('class', 'success');
@@ -471,28 +474,25 @@ function checkWinLose(color) {
         return true;
       }); // finalEle.removeChild(finalEle.firstChild)
     }, 1500);
-  }
+  } else if (targetColor !== color && count - 1 === level) {
+    var _final = currentTile.ele; // if (final.firstChild) {
+    //   final.removeChild(final.firstChild);
+    // }
+    // final.classList.add('wrong');
 
-  if (nextOptions.length === 0 && targetColor !== color && count - 1 === level) {
-    var _final = currentTile.ele;
-
-    if (_final.firstChild) {
-      _final.removeChild(_final.firstChild);
-    }
-
-    _final.classList.add('wrong');
-
-    _final.style['border-radius'] = '100%';
-    var x = document.createElement('DIV');
-    x.innerHTML = 'x';
-    x.classList.add('wrong-x');
-
-    _final.appendChild(x);
+    _final.style['border-radius'] = '100%'; // let outline = document.createElement('DIV');
+    // outline.setAttribute('class', 'dot-outline');
+    // x.classList.add('dot');
+    // outline.appendChild(x);
+    // final.appendChild(outline);
 
     lives = lives - 1;
 
     _final.addEventListener('click', resetGrid);
 
+    return false;
+  } else {
+    nextMoveOptions(false);
     return false;
   }
 }
@@ -506,8 +506,8 @@ function mixTile() {
   if (check) {
     optionTiles.forEach(function (coor) {
       var tile = allTiles[coor].ele;
-      hoverColor = tile.getAttribute('colorId');
-      tile.removeEventListener('mouseover', hoverSwatch);
+      var hoverColor = tile.getAttribute('colorId');
+      tile.removeEventListener('mouseover', hoverSwatch, true);
     });
     (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
@@ -520,9 +520,9 @@ function mixTile() {
 
     var colorTwo = this.getAttribute('colorId'); // ADD COLOR RETURN MIXED RGB
 
+    count = count + 1;
     var rgb = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(colorTwo, count);
-    var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")");
-    count = count + 1; // SET NEW COLOR & MARK NEXT OPTIONS
+    var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")"); // SET NEW COLOR & MARK NEXT OPTIONS
 
     this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
     // optionTiles.forEach(coor => {
@@ -538,10 +538,31 @@ function mixTile() {
     var swatch = document.querySelector('#current-color');
     swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '0';
+    optionTiles = markOptions(); // checkWinLose(rgbStr);
 
-    if (!checkWinLose(rgbStr)) {
+    if (checkWinLose(rgbStr) === false) {
+      // LOSE
       currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(this.getAttribute('coor'));
-      optionTiles = markOptions();
+
+      if (optionTiles.length === 0 || count - 1 === level) {
+        var star = document.querySelector('.star');
+        if (star) star.remove();
+        var x = document.querySelector('.dot');
+        x.innerHTML = 'X';
+        var blink = allTiles[currentTile.coor].ele.firstChild;
+        blink.classList.add('blink');
+        var removeBlink = document.querySelector('#target-color');
+        removeBlink.classList.remove('blink');
+      }
+    } else {
+      // WIN
+      var _star = document.querySelector('.star');
+
+      if (_star) _star.remove();
+
+      var _x = document.querySelector("#dot-".concat(count - 1));
+
+      _x.remove();
     }
   }
 }
@@ -549,7 +570,9 @@ function mixTile() {
 function resetGrid() {
   var prev = document.querySelector("#level-".concat(level));
   prev.remove();
-  createMixGrid(); // document.querySelector('body');
+  createMixGrid();
+  var blink = document.querySelector('#target-color');
+  blink.classList.add('blink'); // document.querySelector('body');
   // let tiles = document.querySelector('.tile-grid');
   // let background = document.querySelector('.image-cont');
   // body.style['background-color'] = targetColor;
@@ -580,21 +603,24 @@ function markOptions() {
 
   if (currentTile.coor !== finishTile) {
     tile.ele.style['border-radius'] = '100%';
-    var dotOutline = document.createElement('DIV');
-    dotOutline.setAttribute('class', 'dot-outline');
-    var dot = document.createElement('DIV');
-    dot.setAttribute('class', 'dot');
-    dot.innerHTML = "".concat(level - (count - 1));
-    dotOutline.appendChild(dot);
-    tile.ele.appendChild(dotOutline);
   }
 
+  var dotOutline = document.createElement('DIV');
+  dotOutline.setAttribute('class', 'dot-outline');
+  dotOutline.setAttribute('ID', "dot-".concat(count - 1));
+  var dot = document.createElement('DIV');
+  dot.setAttribute('class', 'dot');
+  dot.innerHTML = "".concat(level - (count - 1));
+  dotOutline.appendChild(dot);
+  tile.ele.appendChild(dotOutline);
   return nextMoveOptions(true);
 }
 
-var hoverSwatch = function hoverSwatch() {
-  var swatch = document.querySelector('#hover-color');
-  swatch.style['background-color'] = hoverColor;
+var hoverSwatch = function hoverSwatch(hoverColor) {
+  return function () {
+    var swatch = document.querySelector('#hover-color');
+    swatch.style['background-color'] = hoverColor;
+  };
 };
 
 function nextMoveOptions(styleCheck) {
@@ -613,8 +639,10 @@ function nextMoveOptions(styleCheck) {
         newOptionTiles.push(newCoor);
       } else if (newCoor !== finishTile) {
         var optionTile = allTiles[newCoor].ele;
-        hoverColor = optionTile.getAttribute('colorId');
-        optionTile.addEventListener('mouseover', hoverSwatch);
+
+        var _hoverColor = optionTile.getAttribute('colorId');
+
+        optionTile.addEventListener('mouseover', hoverSwatch(_hoverColor));
         newOptionTiles.push(newCoor); // [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
         var radiusStr = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.optionStyle)(pos.dir); // let arrow = <i class="fas fa-caret-up"></i>
@@ -627,9 +655,10 @@ function nextMoveOptions(styleCheck) {
         // optionTile.style.border = '1px solid white'
       } else if (count === level && newCoor === finishTile) {
         var _optionTile = allTiles[newCoor].ele;
-        hoverColor = _optionTile.getAttribute('colorId');
 
-        _optionTile.addEventListener('mouseover', hoverSwatch);
+        var _hoverColor2 = _optionTile.getAttribute('colorId');
+
+        _optionTile.addEventListener('mouseover', hoverSwatch(_hoverColor2));
 
         newOptionTiles.push(newCoor); // newOptionTiles = [newCoor];
         // let optionTile = allTiles[newCoor].ele;
@@ -648,7 +677,8 @@ function nextMoveOptions(styleCheck) {
     (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
     newOptionTiles.forEach(function (coor) {
       var tile = allTiles[coor].ele;
-      tile.removeEventListener('mouseover', hoverSwatch);
+      var hoverColor = tile.getAttribute('colorId');
+      tile.removeEventListener('mouseover', hoverSwatch, true);
     });
     newOptionTiles = [finishTile];
   } else if (count > level) {

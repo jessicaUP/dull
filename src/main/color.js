@@ -16,20 +16,24 @@ function colorArr(rgbColor) {
   return step.map(num => parseInt(num));
 }
 
-function avg(num1, num2, step) {
-  return ((num1 * (step - 1)) + num2) / step
-}
+// function avg(num1, num2, step) {
+//   return ((num1 * (step - 1)) + num2) / step
+// }
 
 export function rgbCMYK(rgb) {
   let red = (rgb[0] / 255);
   let green = (rgb[1] / 255);
   let blue = (rgb[2] / 255);
 
-  let k = (1 - Math.max(red, green, blue));
-  let c = (1 - (red - k)) / (1 - k);
-  let m = (1 - (green - k)) / (1 - k);
-  let y = (1 - (blue - k)) / (1 - k);
-  return [c, m, y, k]
+  // let k = (1 - Math.max(red, green, blue));
+  // let c = (1 - (red - k)) / (1 - k);
+  // let m = (1 - (green - k)) / (1 - k);
+  // let y = (1 - (blue - k)) / (1 - k);
+  // let k = (1 - Math.max(red, green, blue));
+  let c = (1 - (red)) / 1;
+  let m = (1 - (green)) / 1;
+  let y = (1 - (blue)) / 1;
+  return [c, m, y, 0]
 }
 
 export function cmykRGB(cmyk) {
@@ -41,6 +45,7 @@ export function cmykRGB(cmyk) {
 
 
 export function cmykMax() {
+  debugger
   if (C > 1) C = 1;
   if (M > 1) M = 1;
   if (Y > 1) Y = 1;
@@ -50,7 +55,7 @@ export function cmykMax() {
 export function setFirstColor(rgbColor) {
   // let step = $.Color(hex1).rgba();
   // MAKE INTO ARRAY OF VALUES R-G-B
-
+debugger
   let step = colorArr(rgbColor);
   let color = rgbCMYK(step);
   C = color[0];
