@@ -233,11 +233,11 @@ function checkWinLose(color) {
     let success = document.createElement('DIV');
     success.setAttribute('class', 'success');
     success.innerHTML = '...success';
-    body.appendChild(success)
+    body.appendChild(success);
 
     window.setTimeout(() => {
       // finalEle.removeChild(finalEle.firstChild)
-      
+      success.remove();
       let results = document.querySelector('.results-cont');
       let prevLevel = document.querySelector(`#level-${level}`);
       results.appendChild(prevLevel);

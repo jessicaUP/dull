@@ -440,6 +440,7 @@ function checkWinLose(color) {
     body.appendChild(success);
     window.setTimeout(function () {
       // finalEle.removeChild(finalEle.firstChild)
+      success.remove();
       var results = document.querySelector('.results-cont');
       var prevLevel = document.querySelector("#level-".concat(level));
       results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
