@@ -109,7 +109,7 @@
 
 .logos {
   position: fixed;
-  top: 10px;
+  top: 9px;
   left: 20px;
   color: white;
   font-family: Odibee Sans;
@@ -120,8 +120,18 @@
   color: black;
   top: 9px;
   left: 21px;
-  font-size: 12vw;
-  z-index: 0; }
+  z-index: 1; }
+
+#logo-3 {
+  left: 22px; }
+
+#logo-4 {
+  left: 21px;
+  top: 8px; }
+
+#logo-5 {
+  left: 21px;
+  top: 10px; }
 
 body {
   position: relative;

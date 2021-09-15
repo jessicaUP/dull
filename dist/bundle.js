@@ -438,12 +438,12 @@ function checkWinLose(color) {
     success.setAttribute('class', 'success');
     success.innerHTML = '...success';
     body.appendChild(success);
+    var swatch = document.querySelector('#target-color');
+    swatch.classList.remove('blink');
     window.setTimeout(function () {
       var buttonDiv = document.createElement('DIV');
       buttonDiv.classList.add('button-cont', 'blink');
       var levelButton = document.createElement('BUTTON');
-      var swatch = document.querySelector('#target-color');
-      swatch.classList.remove('blink');
       levelButton.innerHTML = 'next level...';
       levelButton.setAttribute('class', 'level-button');
       buttonDiv.appendChild(levelButton);
@@ -467,7 +467,6 @@ function checkWinLose(color) {
 
         success.remove();
         buttonDiv.remove();
-        nextLevel.remove();
         swatch.classList.add('blink');
         return true;
       }); // finalEle.removeChild(finalEle.firstChild)

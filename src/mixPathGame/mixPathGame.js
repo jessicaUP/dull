@@ -234,13 +234,13 @@ function checkWinLose(color) {
     success.setAttribute('class', 'success');
     success.innerHTML = '...success';
     body.appendChild(success);
+    let swatch = document.querySelector('#target-color');
+    swatch.classList.remove('blink');
 
     window.setTimeout(() => {
       let buttonDiv = document.createElement('DIV');
       buttonDiv.classList.add('button-cont', 'blink');
       let levelButton = document.createElement('BUTTON');
-      let swatch = document.querySelector('#target-color');
-      swatch.classList.remove('blink');
       levelButton.innerHTML = 'next level...';
       levelButton.setAttribute('class', 'level-button');
       buttonDiv.appendChild(levelButton);
@@ -267,7 +267,6 @@ function checkWinLose(color) {
           // });
           success.remove();
           buttonDiv.remove();
-          nextLevel.remove();
           swatch.classList.add('blink');
 
           
