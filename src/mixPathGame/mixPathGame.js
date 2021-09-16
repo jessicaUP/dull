@@ -1,5 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
 import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches, addArrow } from '../main/helper'
+import { livesUpdate, updateNav } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -86,13 +87,10 @@ function createMixGrid() {
   // cont2.setAttribute('class', 'tile-grid');
   // cont2.setAttribute('id', `group-${level}`);
   
-  let levelText = document.querySelector('.level-text');
   // cont3.setAttribute('class', 'level-text');
-  levelText.innerHTML = `${level}`;
   // cont1.appendChild(cont3);
+  updateNav('lives', lives);
 
-  let livesCont = document.querySelector('.lives');
-  livesCont.innerHTML = `${lives}`;
   // tileGrid.appendChild(cont)
   let colorCount = 0;
 
@@ -235,6 +233,9 @@ function checkWinLose(color) {
     success.setAttribute('class', 'success');
     success.innerHTML = '...success';
     body.appendChild(success);
+    let increment = Math.ceil(level / 2);
+    livesUpdate(lives, 'add', increment)
+
     let swatch = document.querySelector('#target-color');
     swatch.classList.remove('blink');
 
@@ -246,6 +247,8 @@ function checkWinLose(color) {
       levelButton.setAttribute('class', 'level-button');
       buttonDiv.appendChild(levelButton);
       body.appendChild(buttonDiv);
+
+      // heartCont.remove();
       levelButton.addEventListener('click', () => {
 
         let results = document.querySelector('.results-cont');
@@ -268,6 +271,7 @@ function checkWinLose(color) {
           // });
           success.remove();
           buttonDiv.remove();
+          
           swatch.classList.add('blink');
 
           

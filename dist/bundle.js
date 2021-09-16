@@ -216,6 +216,65 @@ function optionStyle(coor) {
 
 /***/ }),
 
+/***/ "./src/main/styleElements.js":
+/*!***********************************!*\
+  !*** ./src/main/styleElements.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
+/* harmony export */   "updateNav": () => (/* binding */ updateNav)
+/* harmony export */ });
+function livesUpdate(currentCount, addOrSub, increment) {
+  window.setTimeout(function () {
+    // CREATE FLASH MEMO
+    var livesMemo = document.createElement('DIV');
+    livesMemo.setAttribute('class', "".concat(addOrSub, "-lives"));
+    livesMemo.classList.add('lives-amount');
+    livesMemo.innerHTML = "".concat(addOrSub === 'add' ? '+' : '-').concat(increment);
+    var heartCont = document.createElement('DIV');
+    heartCont.setAttribute('class', 'lives-heart');
+    heartCont.innerHTML = '♥︎';
+    heartCont.appendChild(livesMemo);
+    var body = document.querySelector('body');
+    body.appendChild(heartCont); // UPDATE OVERALL
+
+    updateNav('lives', currentCount, increment); // REMOVE TIMER
+
+    window.setTimeout(function () {
+      heartCont.remove();
+    }, 1000);
+  }, 1000);
+}
+;
+function updateNav(eleType, currentCount) {
+  var increment = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var ele;
+
+  switch (eleType) {
+    case 'lives':
+      ele = document.querySelector('.lives');
+      break;
+
+    case 'level':
+      ele = document.querySelector('.level-text');
+      break;
+
+    default:
+      break;
+  }
+
+  if (!increment) {
+    ele.innerHTML = "".concat(currentCount);
+  } else {
+    ele.innerHTML = "".concat(currentCount + increment);
+  }
+}
+
+/***/ }),
+
 /***/ "./src/mixPathGame/mixPathGame.js":
 /*!****************************************!*\
   !*** ./src/mixPathGame/mixPathGame.js ***!
@@ -232,6 +291,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
 /* harmony import */ var _main_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/helper */ "./src/main/helper.js");
+/* harmony import */ var _main_styleElements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../main/styleElements */ "./src/main/styleElements.js");
+
 
  // BOARD
 
@@ -306,13 +367,10 @@ function createMixGrid() {
   // let cont2 = document.createElement('div');
   // cont2.setAttribute('class', 'tile-grid');
   // cont2.setAttribute('id', `group-${level}`);
+  // cont3.setAttribute('class', 'level-text');
+  // cont1.appendChild(cont3);
 
-  var levelText = document.querySelector('.level-text'); // cont3.setAttribute('class', 'level-text');
-
-  levelText.innerHTML = "".concat(level); // cont1.appendChild(cont3);
-
-  var livesCont = document.querySelector('.lives');
-  livesCont.innerHTML = "".concat(lives); // tileGrid.appendChild(cont)
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('lives', lives); // tileGrid.appendChild(cont)
 
   var colorCount = 0;
 
@@ -441,6 +499,8 @@ function checkWinLose(color) {
     success.setAttribute('class', 'success');
     success.innerHTML = '...success';
     body.appendChild(success);
+    var increment = Math.ceil(level / 2);
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.livesUpdate)(lives, 'add', increment);
     var swatch = document.querySelector('#target-color');
     swatch.classList.remove('blink');
     window.setTimeout(function () {
@@ -450,7 +510,8 @@ function checkWinLose(color) {
       levelButton.innerHTML = 'next level...';
       levelButton.setAttribute('class', 'level-button');
       buttonDiv.appendChild(levelButton);
-      body.appendChild(buttonDiv);
+      body.appendChild(buttonDiv); // heartCont.remove();
+
       levelButton.addEventListener('click', function () {
         var results = document.querySelector('.results-cont');
         var prevLevel = document.querySelector("#level-".concat(level));

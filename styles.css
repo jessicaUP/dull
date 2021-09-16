@@ -87,8 +87,13 @@
     background-color: black;
     z-index: 5; }
   .swatches #current-color {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 75px;
-    left: 35px; }
+    left: 25px;
+    width: 65px;
+    height: 65px; }
 
 .dot-outline {
   display: flex;
@@ -104,9 +109,14 @@
     background-color: black;
     color: white;
     border-radius: 100%;
-    font-size: 15px;
+    font-size: 14px;
     text-align: center;
     justify-self: center; }
+  .dot-outline .dot-2 {
+    width: 16px;
+    height: 16px;
+    background-color: black;
+    border-radius: 100%; }
 
 .logos {
   position: fixed;
@@ -160,17 +170,24 @@ body {
   .nav-cont .lives-cont {
     display: flex;
     position: fixed;
-    top: 25vw;
+    top: 30vw;
     left: 50px; }
     .nav-cont .lives-cont h4 {
+      position: absolute;
+      top: 0;
       vertical-align: bottom;
       font-family: Odibee Sans;
-      font-size: 25px;
-      color: white; }
+      font-size: 85px;
+      color: black;
+      margin: 0; }
     .nav-cont .lives-cont .lives {
+      position: absolute;
+      top: 9px;
+      left: 31px;
       font-family: Helvetica, sans-serif;
       font-size: 40px;
-      color: white; }
+      color: white;
+      z-index: 1; }
   .nav-cont .button {
     width: 75%;
     aspect-ratio: 1;
@@ -206,6 +223,25 @@ body {
       margin-top: 10px; }
     .nav-cont .bottom:hover .help {
       display: block; }
+
+.lives-heart {
+  position: fixed;
+  top: 30.5vw;
+  right: 19.5vw;
+  vertical-align: bottom;
+  font-family: Odibee Sans;
+  font-size: 50px;
+  color: black;
+  margin: 0;
+  z-index: 5; }
+  .lives-heart .lives-amount {
+    position: absolute;
+    margin: 0;
+    color: white;
+    font-size: 15px;
+    z-index: 6;
+    top: 29px;
+    right: 18px; }
 
 .no-show {
   display: none; }
