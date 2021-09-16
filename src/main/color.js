@@ -45,7 +45,6 @@ export function cmykRGB(cmyk) {
 
 
 export function cmykMax() {
-  debugger
   if (C > 1) C = 1;
   if (M > 1) M = 1;
   if (Y > 1) Y = 1;
@@ -55,7 +54,6 @@ export function cmykMax() {
 export function setFirstColor(rgbColor) {
   // let step = $.Color(hex1).rgba();
   // MAKE INTO ARRAY OF VALUES R-G-B
-debugger
   let step = colorArr(rgbColor);
   let color = rgbCMYK(step);
   C = color[0];

@@ -103,7 +103,6 @@ export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) 
     
 
     if (updateCheck) {
-      debugger
       let prev = allTiles[currentTile.coor].ele;
       prev.style['border-radius'] = '100%';
       let dot = prev.firstChild;

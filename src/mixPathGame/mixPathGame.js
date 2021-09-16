@@ -1,6 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
 import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches, addArrow } from '../main/helper'
-import { livesUpdate, updateNav } from '../main/styleElements';
+import { livesUpdate, updateBackgound, updateNav } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -54,10 +54,8 @@ export function startGame() {
 function setNewGrid() {
   let prev = createMixGrid();
   setPath();
-  let body = document.querySelector('body');
-  let background = document.querySelector('.image-cont');
-  body.style['background-color'] = targetColor;
-  background.style['background-color'] = targetColor;
+
+  updateBackgound(targetColor);
   
   prev.remove();
   createMixGrid();
@@ -279,7 +277,7 @@ function checkWinLose(color) {
         })
         // finalEle.removeChild(finalEle.firstChild)
         
-    }, 1500)
+    }, 1750)
   } else if (targetColor !== color && count - 1 === level) {
       let final = currentTile.ele
       // if (final.firstChild) {
@@ -293,6 +291,7 @@ function checkWinLose(color) {
       // x.classList.add('dot');
       // outline.appendChild(x);
       // final.appendChild(outline);
+      livesUpdate(lives, 'sub', -1)
       lives = lives - 1;
       final.addEventListener('click', resetGrid);
   
@@ -406,10 +405,9 @@ function resetVariables() {
   selectedTiles = [currentTile.coor];
   let color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = setFirstColor(color);
-  let body = document.querySelector('body');
-  let background = document.querySelector('.image-cont');
-  body.style['background-color'] = targetColor;
-  background.style['background-color'] = targetColor;
+
+
+  updateBackgound(targetColor);
   
   // finishStar(finishTile);
 }

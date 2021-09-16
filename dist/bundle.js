@@ -65,7 +65,6 @@ function cmykRGB(cmyk) {
   return [r, g, b];
 }
 function cmykMax() {
-  debugger;
   if (C > 1) C = 1;
   if (M > 1) M = 1;
   if (Y > 1) Y = 1;
@@ -73,7 +72,6 @@ function cmykMax() {
 function setFirstColor(rgbColor) {
   // let step = $.Color(hex1).rgba();
   // MAKE INTO ARRAY OF VALUES R-G-B
-  debugger;
   var step = colorArr(rgbColor);
   var color = rgbCMYK(step);
   C = color[0];
@@ -190,7 +188,6 @@ function clearStyle(tiles, currentTile, finishTile) {
   });
 
   if (updateCheck) {
-    debugger;
     var prev = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[currentTile.coor].ele;
     prev.style['border-radius'] = '100%';
     var dot = prev.firstChild;
@@ -224,16 +221,25 @@ function optionStyle(coor) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "updateBackgound": () => (/* binding */ updateBackgound),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
 /* harmony export */   "updateNav": () => (/* binding */ updateNav)
 /* harmony export */ });
+// GRID ELEMENTS
+function updateBackgound(targetColor) {
+  var body = document.querySelector('body');
+  var background = document.querySelector('.image-cont');
+  body.style['background-color'] = targetColor;
+  background.style['background-color'] = targetColor;
+} // NAV ELEMENTS
+
 function livesUpdate(currentCount, addOrSub, increment) {
   window.setTimeout(function () {
     // CREATE FLASH MEMO
     var livesMemo = document.createElement('DIV');
     livesMemo.setAttribute('class', "".concat(addOrSub, "-lives"));
     livesMemo.classList.add('lives-amount');
-    livesMemo.innerHTML = "".concat(addOrSub === 'add' ? '+' : '-').concat(increment);
+    livesMemo.innerHTML = "".concat(addOrSub === 'add' ? '+' : '').concat(increment);
     var heartCont = document.createElement('DIV');
     heartCont.setAttribute('class', 'lives-heart');
     heartCont.innerHTML = '♥︎';
@@ -246,7 +252,7 @@ function livesUpdate(currentCount, addOrSub, increment) {
     window.setTimeout(function () {
       heartCont.remove();
     }, 1000);
-  }, 1000);
+  }, 750);
 }
 ;
 function updateNav(eleType, currentCount) {
@@ -269,7 +275,8 @@ function updateNav(eleType, currentCount) {
   if (!increment) {
     ele.innerHTML = "".concat(currentCount);
   } else {
-    ele.innerHTML = "".concat(currentCount + increment);
+    var total = parseInt(currentCount) + increment;
+    ele.innerHTML = "".concat(total);
   }
 }
 
@@ -340,10 +347,7 @@ function startGame() {
 function setNewGrid() {
   var prev = createMixGrid();
   setPath();
-  var body = document.querySelector('body');
-  var background = document.querySelector('.image-cont');
-  body.style['background-color'] = targetColor;
-  background.style['background-color'] = targetColor;
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor);
   prev.remove();
   createMixGrid();
   (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
@@ -534,7 +538,7 @@ function checkWinLose(color) {
         swatch.classList.add('blink');
         return true;
       }); // finalEle.removeChild(finalEle.firstChild)
-    }, 1500);
+    }, 1750);
   } else if (targetColor !== color && count - 1 === level) {
     var _final = currentTile.ele; // if (final.firstChild) {
     //   final.removeChild(final.firstChild);
@@ -547,6 +551,7 @@ function checkWinLose(color) {
     // outline.appendChild(x);
     // final.appendChild(outline);
 
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.livesUpdate)(lives, 'sub', -1);
     lives = lives - 1;
 
     _final.addEventListener('click', resetGrid);
@@ -653,10 +658,7 @@ function resetVariables() {
   selectedTiles = [currentTile.coor];
   var color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(color);
-  var body = document.querySelector('body');
-  var background = document.querySelector('.image-cont');
-  body.style['background-color'] = targetColor;
-  background.style['background-color'] = targetColor; // finishStar(finishTile);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor); // finishStar(finishTile);
 }
 
 function markOptions() {
