@@ -1,6 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
 import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches, addArrow } from '../main/helper'
-import { livesUpdate, updateBackgound, updateNav } from '../main/styleElements';
+import { createLevelCount, createLevelDiv, createTile, livesUpdate, updateBackgound, updateNav } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -52,82 +52,36 @@ export function startGame() {
 }
 
 function setNewGrid() {
-  let prev = createMixGrid();
+  let step = createMixGrid();
   setPath();
 
   updateBackgound(targetColor);
   
-  prev.remove();
+  step.remove();
   createMixGrid();
   finishStar(finishTile);
   resetVariables();
   
-  // tiles.remove();
-  // tiles.style['background-color'] = targetColor;
-  // createMixGrid();
-
   optionTiles = markOptions();
 };
 
 
 function createMixGrid() {
-  body = document.querySelector('body');
-  // tileGrid = document.querySelector('.tile-grid');
-  let cont1 = document.createElement('div');
-  cont1.classList.add(`tile-grid`);
-  cont1.classList.add(`level-cont`);
-  cont1.setAttribute('id', `level-${level}`);
-  body.appendChild(cont1);
 
-  // createSwatches(cont1);
-
-  // let cont2 = document.createElement('div');
-  // cont2.setAttribute('class', 'tile-grid');
-  // cont2.setAttribute('id', `group-${level}`);
-  
-  // cont3.setAttribute('class', 'level-text');
-  // cont1.appendChild(cont3);
+  let grid = createLevelDiv(level);
   updateNav('lives', lives);
 
-  // tileGrid.appendChild(cont)
   let colorCount = 0;
-
-
   for (let x = 1; x <= 10; x++) {
     for (let y = 1; y <= 10; y++) {
-      let colorId = COLORS[colorCount];
       let coor = `${x}-${y}`;
-      const tile = document.createElement('div');
-      tile.setAttribute('id', `tile-${colorCount}`);
-      tile.setAttribute('colorId', colorId);
-      tile.setAttribute('coor', coor);
-      tile.classList.add(`mix-tile`);
-      tile.style['background-color'] = colorId;
-      // tile.style.border = '1px solid black';
-      tile.style['aspect-ratio'] = 1;
-      tile.addEventListener('click', mixTile);
-      let info = {
-        ele: tile,
-        coor: coor,
-        x,
-        y
-      }
-      allTiles[coor] = info;
-      cont1.appendChild(tile)
+      let tile = createTile(grid, colorCount, x, y, coor);
+      allTiles[coor] = tile;
       colorCount++
     }
   };
-  cont1.style.display = 'tile-grid';
-  // cont2.style['grid-gap'] = '4px';
-  cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
-  // cont1.appendChild(cont2);
-  // let tiles = document.querySelector('.tile-grid');
 
-
-  // SET START TILE 
-  // setPath();
-  // markOptions();
-  return cont1
+  return grid
 }
 
 
@@ -137,22 +91,17 @@ function findPath() {
   currentColor = setFirstColor(currentColor);
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
-    // if ( optionTiles.length === 0 ) {
-    //  return findPath();
-    // }
+
     let next = optionTiles[randomNum(optionTiles.length)];
-    // return next = `${newX}-${newY}`
+
     selectedTiles.push(next);
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);
-    // count + 1;
+
   }
-  // let background = document.querySelector('.image-cont');
-  // background.style['background-color'] = targetColor;
-  // let body = document.querySelector('body');
-  // body.style['background-color'] = targetColor;
+
   
 
   targetColor = `rgb(${parseInt(mixedColor[0])}, ${parseInt(mixedColor[1])}, ${parseInt(mixedColor[2])})`;
@@ -207,6 +156,7 @@ function checkLives() {
 
 function checkWinLose(color) {
   // checkLives();
+  let body = document.querySelector('body')
   if ( targetColor === color && count - 1 === level ) {
     Object.values(allTiles).forEach(tile => {
       let { coor, ele } = tile;
@@ -304,7 +254,7 @@ function checkWinLose(color) {
 
 
 
-function mixTile() {
+export function mixTile() {
   let clickedCoor = this.getAttribute('coor');
   let check = optionTiles.some(coor => coor === clickedCoor)
   if (check) {

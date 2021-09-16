@@ -222,17 +222,56 @@ function optionStyle(coor) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "updateBackgound": () => (/* binding */ updateBackgound),
+/* harmony export */   "createTile": () => (/* binding */ createTile),
+/* harmony export */   "createLevelDiv": () => (/* binding */ createLevelDiv),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
 /* harmony export */   "updateNav": () => (/* binding */ updateNav)
 /* harmony export */ });
-// GRID ELEMENTS
+/* harmony import */ var _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixPathGame/mixPathGame */ "./src/mixPathGame/mixPathGame.js");
+/* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
+
+ // GRID ELEMENTS
+
 function updateBackgound(targetColor) {
   var body = document.querySelector('body');
   var background = document.querySelector('.image-cont');
   body.style['background-color'] = targetColor;
   background.style['background-color'] = targetColor;
+}
+function createTile(parentDiv, colorCount, x, y, coor) {
+  var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
+  var tile = document.createElement('div');
+  tile.setAttribute('id', "tile-".concat(colorCount));
+  tile.setAttribute('colorId', colorId);
+  tile.setAttribute('coor', coor);
+  tile.classList.add("mix-tile");
+  tile.style['background-color'] = colorId; // tile.style.border = '1px solid black';
+
+  tile.style['aspect-ratio'] = 1;
+  tile.addEventListener('click', _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.mixTile);
+  var info = {
+    ele: tile,
+    coor: coor,
+    x: x,
+    y: y
+  };
+  parentDiv.appendChild(tile);
+  return info;
 } // NAV ELEMENTS
 
+function createLevelDiv(level) {
+  var body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
+
+  var cont1 = document.createElement('div');
+  cont1.classList.add("tile-grid");
+  cont1.classList.add("level-cont");
+  cont1.setAttribute('id', "level-".concat(level));
+  cont1.style.display = 'tile-grid'; // cont2.style['grid-gap'] = '4px';
+
+  cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
+  body.appendChild(cont1);
+  return cont1;
+}
 function livesUpdate(currentCount, addOrSub, increment) {
   window.setTimeout(function () {
     // CREATE FLASH MEMO
@@ -293,6 +332,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "allTiles": () => (/* binding */ allTiles),
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
+/* harmony export */   "mixTile": () => (/* binding */ mixTile),
 /* harmony export */   "resetGrid": () => (/* binding */ resetGrid),
 /* harmony export */   "hoverSwatch": () => (/* binding */ hoverSwatch)
 /* harmony export */ });
@@ -345,74 +385,34 @@ function startGame() {
 }
 
 function setNewGrid() {
-  var prev = createMixGrid();
+  var step = createMixGrid();
   setPath();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor);
-  prev.remove();
+  step.remove();
   createMixGrid();
   (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
-  resetVariables(); // tiles.remove();
-  // tiles.style['background-color'] = targetColor;
-  // createMixGrid();
-
+  resetVariables();
   optionTiles = markOptions();
 }
 
 ;
 
 function createMixGrid() {
-  body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
-
-  var cont1 = document.createElement('div');
-  cont1.classList.add("tile-grid");
-  cont1.classList.add("level-cont");
-  cont1.setAttribute('id', "level-".concat(level));
-  body.appendChild(cont1); // createSwatches(cont1);
-  // let cont2 = document.createElement('div');
-  // cont2.setAttribute('class', 'tile-grid');
-  // cont2.setAttribute('id', `group-${level}`);
-  // cont3.setAttribute('class', 'level-text');
-  // cont1.appendChild(cont3);
-
-  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('lives', lives); // tileGrid.appendChild(cont)
-
+  var grid = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createLevelDiv)(level);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('lives', lives);
   var colorCount = 0;
 
   for (var x = 1; x <= 10; x++) {
     for (var y = 1; y <= 10; y++) {
-      var colorId = _main_color__WEBPACK_IMPORTED_MODULE_0__.COLORS[colorCount];
       var coor = "".concat(x, "-").concat(y);
-      var tile = document.createElement('div');
-      tile.setAttribute('id', "tile-".concat(colorCount));
-      tile.setAttribute('colorId', colorId);
-      tile.setAttribute('coor', coor);
-      tile.classList.add("mix-tile");
-      tile.style['background-color'] = colorId; // tile.style.border = '1px solid black';
-
-      tile.style['aspect-ratio'] = 1;
-      tile.addEventListener('click', mixTile);
-      var info = {
-        ele: tile,
-        coor: coor,
-        x: x,
-        y: y
-      };
-      allTiles[coor] = info;
-      cont1.appendChild(tile);
+      var tile = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createTile)(grid, colorCount, x, y, coor);
+      allTiles[coor] = tile;
       colorCount++;
     }
   }
 
   ;
-  cont1.style.display = 'tile-grid'; // cont2.style['grid-gap'] = '4px';
-
-  cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr'; // cont1.appendChild(cont2);
-  // let tiles = document.querySelector('.tile-grid');
-  // SET START TILE 
-  // setPath();
-  // markOptions();
-
-  return cont1;
+  return grid;
 }
 
 function findPath() {
@@ -420,22 +420,14 @@ function findPath() {
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(currentColor);
 
   while (count <= level) {
-    optionTiles = nextMoveOptions(false); // if ( optionTiles.length === 0 ) {
-    //  return findPath();
-    // }
-
-    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)]; // return next = `${newX}-${newY}`
-
+    optionTiles = nextMoveOptions(false);
+    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)];
     selectedTiles.push(next);
     var nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1;
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);
-    currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next); // count + 1;
-  } // let background = document.querySelector('.image-cont');
-  // background.style['background-color'] = targetColor;
-  // let body = document.querySelector('body');
-  // body.style['background-color'] = targetColor;
-
+    currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
+  }
 
   targetColor = "rgb(".concat(parseInt(mixedColor[0]), ", ").concat(parseInt(mixedColor[1]), ", ").concat(parseInt(mixedColor[2]), ")");
   finishTile = currentTile.coor; // let finishEle = allTiles[finishTile].ele;
@@ -481,6 +473,8 @@ function checkLives() {
 
 function checkWinLose(color) {
   // checkLives();
+  var body = document.querySelector('body');
+
   if (targetColor === color && count - 1 === level) {
     Object.values(allTiles).forEach(function (tile) {
       var coor = tile.coor,
@@ -632,7 +626,6 @@ function mixTile() {
     }
   }
 }
-
 function resetGrid() {
   var prev = document.querySelector("#level-".concat(level));
   prev.remove();
