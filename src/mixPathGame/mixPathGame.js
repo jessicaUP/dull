@@ -1,6 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, clearStyle, finishStar, createSwatches, addArrow } from '../main/helper'
-import { createLevelCount, createLevelDiv, createTile, livesUpdate, updateBackgound, updateNav } from '../main/styleElements';
+import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, finishStar, createSwatches, addArrow } from '../main/helper'
+import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -61,6 +61,7 @@ function setNewGrid() {
   createMixGrid();
   finishStar(finishTile);
   resetVariables();
+  updateNav('level', level);
   
   optionTiles = markOptions();
 };
@@ -89,36 +90,25 @@ function createMixGrid() {
 function findPath() {
   let mixedColor;
   currentColor = setFirstColor(currentColor);
+  
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
 
     let next = optionTiles[randomNum(optionTiles.length)];
-
     selectedTiles.push(next);
+
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1
+
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);
 
-  }
-
-  
+  };
 
   targetColor = `rgb(${parseInt(mixedColor[0])}, ${parseInt(mixedColor[1])}, ${parseInt(mixedColor[2])})`;
   finishTile = currentTile.coor;
-  // let finishEle = allTiles[finishTile].ele;
-  // finishEle.style['border-radius'] = '100%';
-  // finishEle.style.border = 'none'
 
-  // RESET VARIABLES FOR GAMEPLAY
-  // currentTile = startTile;
-  // count = 1
-  // optionTiles = [startTile];
   path = selectedTiles;
-  // selectedTiles = [currentTile.coor];
-  // C = 0;
-  // M = 0;
-  // Y = 0;
   resetVariables();
 }
 
@@ -141,10 +131,6 @@ function setPath() {
 
   // FIND PATH
     findPath();
-
-
-  // RETURN START TILE
-  // return coorObj;
 }
 
 function checkLives() {
@@ -156,114 +142,59 @@ function checkLives() {
 
 function checkWinLose(color) {
   // checkLives();
-  let body = document.querySelector('body')
+  
   if ( targetColor === color && count - 1 === level ) {
-    Object.values(allTiles).forEach(tile => {
-      let { coor, ele } = tile;
-      if (!selectedTiles.includes(coor) || coor === finishTile ) {
-        ele.style.border = '1px solid black';
-        ele.style['background-color'] = color;
-        // if (ele.firstChild) {
-        //   ele.removeChild(ele.firstChild)
-        // }
-      }
-    })
+    // CORRECT
 
-    let finalEle = allTiles[finishTile].ele;
-    finalEle.classList.remove('blink');
-    finalEle.style['border-radius'] = '0';
-    finalEle.style.border = '1px solid black';
-    // finalEle.removeChild(finalEle.firstChild);
-    // if (finalEle.firstChild) finalEle.removeChild(finalEle.firstChild);
-
-
-    let success = document.createElement('DIV');
-    success.setAttribute('class', 'success');
-    success.innerHTML = '...success';
-    body.appendChild(success);
-    let increment = Math.ceil(level / 2);
-    livesUpdate(lives, 'add', increment)
-
-    let swatch = document.querySelector('#target-color');
-    swatch.classList.remove('blink');
-
+    styleWin(allTiles, selectedTiles, finishTile, color, level, lives);    
+    
+    // NEXT LEVEL BUTTON
     window.setTimeout(() => {
-      let buttonDiv = document.createElement('DIV');
-      buttonDiv.classList.add('button-cont', 'blink');
-      let levelButton = document.createElement('BUTTON');
-      levelButton.innerHTML = 'next level...';
-      levelButton.setAttribute('class', 'level-button');
-      buttonDiv.appendChild(levelButton);
-      body.appendChild(buttonDiv);
+      let buttonDiv = createNextButton();
+      buttonDiv.addEventListener('click', () => {
+        addResult(level);
 
-      // heartCont.remove();
-      levelButton.addEventListener('click', () => {
-
-        let results = document.querySelector('.results-cont');
-        let prevLevel = document.querySelector(`#level-${level}`);
-        results.appendChild(prevLevel);
-        // prevLevel.style.position = 'relative'
-        // let swatches = document.querySelector('.swatches');
-        // swatches.remove();
-        
         lives = lives + Math.ceil(level / 2);
         level = level + 1;
-        
-        // selectedTiles = [];
         count = 1;
         setNewGrid();
-        // let body = document.querySelector('body');
-        // body.style['background-color'] = targetColor;
-        // document.querySelector(`#group-${level}`).scrollIntoView({
-          //   behavior: 'smooth'
-          // });
-          success.remove();
-          buttonDiv.remove();
-          
-          swatch.classList.add('blink');
+        let success = document.querySelector('.success');
+        success.remove();
+        buttonDiv.remove();
+        let swatch = document.querySelector('#target-color');
+        swatch.classList.add('blink');
 
-          
-          return true;
-        })
-        // finalEle.removeChild(finalEle.firstChild)
-        
+        return true;
+      })
     }, 1750)
+
   } else if (targetColor !== color && count - 1 === level) {
+    // INCORRECT
       let final = currentTile.ele
-      // if (final.firstChild) {
-      //   final.removeChild(final.firstChild);
-      // }
-      // final.classList.add('wrong');
       final.style['border-radius'] = '100%'
-  
-      // let outline = document.createElement('DIV');
-      // outline.setAttribute('class', 'dot-outline');
-      // x.classList.add('dot');
-      // outline.appendChild(x);
-      // final.appendChild(outline);
+
       livesUpdate(lives, 'sub', -1)
       lives = lives - 1;
       final.addEventListener('click', resetGrid);
   
       return false;
     } else {
+      // NEXT MOVE
       nextMoveOptions(false);
-      return false
-    }
-}
+      return false;
+    };
+};
 
 
 
 export function mixTile() {
   let clickedCoor = this.getAttribute('coor');
-  let check = optionTiles.some(coor => coor === clickedCoor)
+  let check = optionTiles.some(coor => coor === clickedCoor);
   if (check) {
-    optionTiles.forEach(coor => {
-      let tile = allTiles[coor].ele;
-      let hoverColor = tile.getAttribute('colorId');
-      tile.removeEventListener('mouseover', hoverSwatch,true)
-    })
-    clearStyle(optionTiles, currentTile, finishTile, true);
+    // REMOVE OPTION STYLING
+    removeOption(allTiles, optionTiles, currentTile, finishTile, true);
+
+    // clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
     if (checkColor) {
@@ -380,13 +311,7 @@ function markOptions() {
 }
 
 
-export const hoverSwatch = (hoverColor) => {    
-  return () => {
-    let swatch = document.querySelector('#hover-color');
-    swatch.style['background-color'] = hoverColor;
 
-  }
-}
 
 function nextMoveOptions(styleCheck) {
   let newOptionTiles = [];
@@ -399,65 +324,39 @@ function nextMoveOptions(styleCheck) {
 
     // SHOULD CREATE ARROW INSTEAD
     // let arrow = document.querySelector(`#${pos.name}`);
-    let arrow = addArrow(pos.name);
     
     if (newX <= 10 &&
       newX > 0 &&
       newY <= 10 &&
       newY > 0 &&
       !selectedTiles.includes(newCoor)) {
-        
-        
-        if (!styleCheck) {
-          newOptionTiles.push(newCoor);
-        } else if (newCoor !== finishTile) {
-        let optionTile = allTiles[newCoor].ele;
-        let hoverColor = optionTile.getAttribute('colorId');
-        optionTile.addEventListener('mouseover', hoverSwatch(hoverColor));
+         
+      if (!styleCheck) {
         newOptionTiles.push(newCoor);
-        // [[-1, 0], [1, 0], [0, -1], [0, 1]];
-        let radiusStr = optionStyle(pos.dir);
-        // let arrow = <i class="fas fa-caret-up"></i>
-        optionTile.appendChild(arrow);
-        arrow.style.display = 'flex'
-        
-        // EVENT LISTENER
-        
-        
-        
-        // arrow.style['color'] = targetColor;
-        // optionTile.style['border-radius'] = radiusStr;
-        // optionTile.style.border = 'none';
-        // optionTile.style.border = '1px solid white'
+      } else if (newCoor !== finishTile) {
+        // STYLE NEXT OPTION
+        let arrow = styleOption(allTiles, newCoor, pos.name);
+        newOptionTiles.push(newCoor);
       } else if (count === level && newCoor === finishTile) {
         let optionTile = allTiles[newCoor].ele;
-        let hoverColor = optionTile.getAttribute('colorId');
-        optionTile.addEventListener('mouseover', hoverSwatch(hoverColor))
+        removeHover(optionTile);
         newOptionTiles.push(newCoor);
-        // newOptionTiles = [newCoor];
-        // let optionTile = allTiles[newCoor].ele;
-
-        // optionTile.style.border = '1px solid transparent';
-        // optionTile.style['border-radius'] = '100%';
-        // let star = document.createElement('DIV');
-        // star.innerHTML = '★';
-        // optionTile.appendChild(star);
         styleFinish(finishTile);
       }
       
     }
   });
   
-  if ( newOptionTiles.includes(finishTile) ) {
-    clearStyle(newOptionTiles, currentTile, finishTile);
-    newOptionTiles.forEach(coor => {
-      let tile = allTiles[coor].ele;
-      let hoverColor = tile.getAttribute('colorId')
-      tile.removeEventListener('mouseover', hoverSwatch,true)
-    })
+  if (newOptionTiles.includes(finishTile) && count === level) {
+    let finalIdx = newOptionTiles.indexOf(finishTile);
+    let optionEdit = [...newOptionTiles];
+    optionEdit.splice(finalIdx, 1);
+    debugger
+    removeOption(allTiles, optionEdit, currentTile, finishTile);
+    
     newOptionTiles = [finishTile]
   } else if ( count > level ) {
-    clearStyle(newOptionTiles, currentTile, finishTile);
+    removeOption(allTiles, newOptionTiles, currentTile, finishTile);
     newOptionTiles = [];
   }
 

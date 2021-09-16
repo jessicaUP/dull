@@ -34,8 +34,121 @@ export function createTile(parentDiv, colorCount, x, y, coor) {
   return info;
 }
 
+export function styleOption(allTiles, coor, pos) {
+  let arrow = addArrow(pos);
+  let optionTile = allTiles[coor].ele;
+
+  optionTile.appendChild(arrow);
+  arrow.style.display = 'flex'
+  return arrow
+};
+
+function addArrow(pos) {
+  let arrow = document.createElement('DIV');
+  arrow.setAttribute('id', pos);
+  arrow.classList.add('arrow-icons');
+  return arrow;
+}
+
+export function removeHover(tile) {
+  let hoverColor = tile.getAttribute('colorId');
+  let functionName = `hover${hoverColor}`
+  tile.removeEventListener('mouseover', [functionName]);
+}
+
+export function removeOption(allTiles, optionTiles, currentTile, finishTile, updateCheck = false) {
+  optionTiles.forEach(coor => {
+    let oldTile = allTiles[coor].ele;
+    
+    // not working....
+
+    removeHover(oldTile);
+
+    if (coor !== finishTile) {
+      if (oldTile.firstChild) {
+        oldTile.removeChild(oldTile.firstChild)
+      }
+    }
+  })
+
+
+  if (updateCheck) {
+    let prev = allTiles[currentTile.coor].ele;
+    prev.style['border-radius'] = '100%';
+    let dot = prev.firstChild;
+    dot.removeChild(dot.firstChild);
+
+  }
+
+}
+
+function hoverFunction(optionTile, hoverColor) {
+  // let hoverColor = optionTile.getAttribute('colorId');
+  
+  this[`hover${hoverColor}`] = () => {
+    return () => {
+      let swatch = document.querySelector('#hover-color');
+      swatch.style['background-color'] = hoverColor;
+      
+    }
+  };
+  optionTile.addEventListener('mouseover', this[`hover${hoverColor}`] );
+}
+
+export function styleWin(allTiles, selectedTiles, finishTile, color, level, lives) {
+  let body = document.querySelector('body');
+
+  // EXTRA TILES
+  Object.values(allTiles).forEach(tile => {
+    let { coor, ele } = tile;
+    if (!selectedTiles.includes(coor) || coor === finishTile) {
+      ele.style.border = '1px solid black';
+      ele.style['background-color'] = color;
+    }
+  });
+
+  // FINISH TILE
+  let finalEle = allTiles[finishTile].ele;
+  finalEle.classList.remove('blink');
+  finalEle.style['border-radius'] = '0';
+  finalEle.style.border = '1px solid black';
+
+  // SUCCESS MESSAGE
+  let success = document.createElement('DIV');
+  success.setAttribute('class', 'success');
+  success.innerHTML = '...success';
+  body.appendChild(success);
+  let increment = Math.ceil(level / 2);
+  livesUpdate(lives, 'add', increment)
+
+  let swatch = document.querySelector('#target-color');
+  swatch.classList.remove('blink');
+
+
+}
+
+export function createNextButton() {
+  let body = document.querySelector('body');
+  let buttonDiv = document.createElement('DIV');
+  buttonDiv.classList.add('button-cont', 'blink');
+  let levelButton = document.createElement('BUTTON');
+  levelButton.innerHTML = 'next level...';
+  levelButton.setAttribute('class', 'level-button');
+  buttonDiv.appendChild(levelButton);
+  body.appendChild(buttonDiv);
+  return buttonDiv;
+}
+
+
+
 
 // NAV ELEMENTS
+
+export function addResult(level) {
+  let results = document.querySelector('.results-cont');
+  let prevLevel = document.querySelector(`#level-${level}`);
+  results.appendChild(prevLevel);
+}
 
 export function createLevelDiv(level) {
   let body = document.querySelector('body');

@@ -186,6 +186,8 @@ body {
       left: 31px;
       font-family: Helvetica, sans-serif;
       font-size: 40px;
+      text-align: center;
+      justify-content: center;
       color: white;
       z-index: 1; }
   .nav-cont .button {

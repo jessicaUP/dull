@@ -105,10 +105,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "randomNum": () => (/* binding */ randomNum),
 /* harmony export */   "posObject": () => (/* binding */ posObject),
 /* harmony export */   "sameArray": () => (/* binding */ sameArray),
-/* harmony export */   "addArrow": () => (/* binding */ addArrow),
 /* harmony export */   "styleFinish": () => (/* binding */ styleFinish),
 /* harmony export */   "finishStar": () => (/* binding */ finishStar),
-/* harmony export */   "clearStyle": () => (/* binding */ clearStyle),
 /* harmony export */   "optionStyle": () => (/* binding */ optionStyle)
 /* harmony export */ });
 /* harmony import */ var _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixPathGame/mixPathGame */ "./src/mixPathGame/mixPathGame.js");
@@ -152,12 +150,6 @@ function sameArray(arr1, arr2) {
 //   swatches.appendChild(current);
 // }
 
-function addArrow(pos) {
-  var arrow = document.createElement('DIV');
-  arrow.setAttribute('id', pos);
-  arrow.classList.add('arrow-icons');
-  return arrow;
-}
 function styleFinish(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
@@ -171,28 +163,6 @@ function finishStar(finishTile) {
   star.classList.add('star');
   star.innerHTML = '★';
   finishEle.appendChild(star);
-}
-function clearStyle(tiles, currentTile, finishTile) {
-  var updateCheck = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  tiles.forEach(function (coor) {
-    var oldTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
-
-    if (coor !== finishTile) {
-      if (oldTile.firstChild) {
-        oldTile.removeChild(oldTile.firstChild);
-      } // oldTile.style.border = '1px solid black';
-      // oldTile.style['border-radius'] = '0';
-      // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
-
-    }
-  });
-
-  if (updateCheck) {
-    var prev = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[currentTile.coor].ele;
-    prev.style['border-radius'] = '100%';
-    var dot = prev.firstChild;
-    dot.removeChild(dot.firstChild);
-  }
 }
 function optionStyle(coor) {
   var radiusStr;
@@ -223,6 +193,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "updateBackgound": () => (/* binding */ updateBackgound),
 /* harmony export */   "createTile": () => (/* binding */ createTile),
+/* harmony export */   "styleOption": () => (/* binding */ styleOption),
+/* harmony export */   "removeHover": () => (/* binding */ removeHover),
+/* harmony export */   "removeOption": () => (/* binding */ removeOption),
+/* harmony export */   "styleWin": () => (/* binding */ styleWin),
+/* harmony export */   "createNextButton": () => (/* binding */ createNextButton),
+/* harmony export */   "addResult": () => (/* binding */ addResult),
 /* harmony export */   "createLevelDiv": () => (/* binding */ createLevelDiv),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
 /* harmony export */   "updateNav": () => (/* binding */ updateNav)
@@ -257,8 +233,106 @@ function createTile(parentDiv, colorCount, x, y, coor) {
   };
   parentDiv.appendChild(tile);
   return info;
+}
+function styleOption(allTiles, coor, pos) {
+  var arrow = addArrow(pos);
+  var optionTile = allTiles[coor].ele;
+  optionTile.appendChild(arrow);
+  arrow.style.display = 'flex';
+  return arrow;
+}
+;
+
+function addArrow(pos) {
+  var arrow = document.createElement('DIV');
+  arrow.setAttribute('id', pos);
+  arrow.classList.add('arrow-icons');
+  return arrow;
+}
+
+function removeHover(tile) {
+  var hoverColor = tile.getAttribute('colorId');
+  var functionName = "hover".concat(hoverColor);
+  tile.removeEventListener('mouseover', [functionName]);
+}
+function removeOption(allTiles, optionTiles, currentTile, finishTile) {
+  var updateCheck = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  optionTiles.forEach(function (coor) {
+    var oldTile = allTiles[coor].ele; // not working....
+
+    removeHover(oldTile);
+
+    if (coor !== finishTile) {
+      if (oldTile.firstChild) {
+        oldTile.removeChild(oldTile.firstChild);
+      }
+    }
+  });
+
+  if (updateCheck) {
+    var prev = allTiles[currentTile.coor].ele;
+    prev.style['border-radius'] = '100%';
+    var dot = prev.firstChild;
+    dot.removeChild(dot.firstChild);
+  }
+}
+
+function hoverFunction(optionTile, hoverColor) {
+  // let hoverColor = optionTile.getAttribute('colorId');
+  this["hover".concat(hoverColor)] = function () {
+    return function () {
+      var swatch = document.querySelector('#hover-color');
+      swatch.style['background-color'] = hoverColor;
+    };
+  };
+
+  optionTile.addEventListener('mouseover', this["hover".concat(hoverColor)]);
+}
+
+function styleWin(allTiles, selectedTiles, finishTile, color, level, lives) {
+  var body = document.querySelector('body'); // EXTRA TILES
+
+  Object.values(allTiles).forEach(function (tile) {
+    var coor = tile.coor,
+        ele = tile.ele;
+
+    if (!selectedTiles.includes(coor) || coor === finishTile) {
+      ele.style.border = '1px solid black';
+      ele.style['background-color'] = color;
+    }
+  }); // FINISH TILE
+
+  var finalEle = allTiles[finishTile].ele;
+  finalEle.classList.remove('blink');
+  finalEle.style['border-radius'] = '0';
+  finalEle.style.border = '1px solid black'; // SUCCESS MESSAGE
+
+  var success = document.createElement('DIV');
+  success.setAttribute('class', 'success');
+  success.innerHTML = '...success';
+  body.appendChild(success);
+  var increment = Math.ceil(level / 2);
+  livesUpdate(lives, 'add', increment);
+  var swatch = document.querySelector('#target-color');
+  swatch.classList.remove('blink');
+}
+function createNextButton() {
+  var body = document.querySelector('body');
+  var buttonDiv = document.createElement('DIV');
+  buttonDiv.classList.add('button-cont', 'blink');
+  var levelButton = document.createElement('BUTTON');
+  levelButton.innerHTML = 'next level...';
+  levelButton.setAttribute('class', 'level-button');
+  buttonDiv.appendChild(levelButton);
+  body.appendChild(buttonDiv);
+  return buttonDiv;
 } // NAV ELEMENTS
 
+function addResult(level) {
+  var results = document.querySelector('.results-cont');
+  var prevLevel = document.querySelector("#level-".concat(level));
+  results.appendChild(prevLevel);
+}
 function createLevelDiv(level) {
   var body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
 
@@ -333,12 +407,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
 /* harmony export */   "mixTile": () => (/* binding */ mixTile),
-/* harmony export */   "resetGrid": () => (/* binding */ resetGrid),
-/* harmony export */   "hoverSwatch": () => (/* binding */ hoverSwatch)
+/* harmony export */   "resetGrid": () => (/* binding */ resetGrid)
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
 /* harmony import */ var _main_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/helper */ "./src/main/helper.js");
 /* harmony import */ var _main_styleElements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../main/styleElements */ "./src/main/styleElements.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
  // BOARD
@@ -392,6 +477,7 @@ function setNewGrid() {
   createMixGrid();
   (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
   resetVariables();
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('level', level);
   optionTiles = markOptions();
 }
 
@@ -429,20 +515,10 @@ function findPath() {
     currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
   }
 
+  ;
   targetColor = "rgb(".concat(parseInt(mixedColor[0]), ", ").concat(parseInt(mixedColor[1]), ", ").concat(parseInt(mixedColor[2]), ")");
-  finishTile = currentTile.coor; // let finishEle = allTiles[finishTile].ele;
-  // finishEle.style['border-radius'] = '100%';
-  // finishEle.style.border = 'none'
-  // RESET VARIABLES FOR GAMEPLAY
-  // currentTile = startTile;
-  // count = 1
-  // optionTiles = [startTile];
-
-  path = selectedTiles; // selectedTiles = [currentTile.coor];
-  // C = 0;
-  // M = 0;
-  // Y = 0;
-
+  finishTile = currentTile.coor;
+  path = selectedTiles;
   resetVariables();
 }
 
@@ -461,8 +537,7 @@ function setPath() {
   selectedTiles.push(coor);
   currentColor = allTiles[coor].ele.getAttribute('colorId'); // FIND PATH
 
-  findPath(); // RETURN START TILE
-  // return coorObj;
+  findPath();
 }
 
 function checkLives() {
@@ -473,78 +548,30 @@ function checkLives() {
 
 function checkWinLose(color) {
   // checkLives();
-  var body = document.querySelector('body');
-
   if (targetColor === color && count - 1 === level) {
-    Object.values(allTiles).forEach(function (tile) {
-      var coor = tile.coor,
-          ele = tile.ele;
+    // CORRECT
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleWin)(allTiles, selectedTiles, finishTile, color, level, lives); // NEXT LEVEL BUTTON
 
-      if (!selectedTiles.includes(coor) || coor === finishTile) {
-        ele.style.border = '1px solid black';
-        ele.style['background-color'] = color; // if (ele.firstChild) {
-        //   ele.removeChild(ele.firstChild)
-        // }
-      }
-    });
-    var finalEle = allTiles[finishTile].ele;
-    finalEle.classList.remove('blink');
-    finalEle.style['border-radius'] = '0';
-    finalEle.style.border = '1px solid black'; // finalEle.removeChild(finalEle.firstChild);
-    // if (finalEle.firstChild) finalEle.removeChild(finalEle.firstChild);
-
-    var success = document.createElement('DIV');
-    success.setAttribute('class', 'success');
-    success.innerHTML = '...success';
-    body.appendChild(success);
-    var increment = Math.ceil(level / 2);
-    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.livesUpdate)(lives, 'add', increment);
-    var swatch = document.querySelector('#target-color');
-    swatch.classList.remove('blink');
     window.setTimeout(function () {
-      var buttonDiv = document.createElement('DIV');
-      buttonDiv.classList.add('button-cont', 'blink');
-      var levelButton = document.createElement('BUTTON');
-      levelButton.innerHTML = 'next level...';
-      levelButton.setAttribute('class', 'level-button');
-      buttonDiv.appendChild(levelButton);
-      body.appendChild(buttonDiv); // heartCont.remove();
-
-      levelButton.addEventListener('click', function () {
-        var results = document.querySelector('.results-cont');
-        var prevLevel = document.querySelector("#level-".concat(level));
-        results.appendChild(prevLevel); // prevLevel.style.position = 'relative'
-        // let swatches = document.querySelector('.swatches');
-        // swatches.remove();
-
+      var buttonDiv = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)();
+      buttonDiv.addEventListener('click', function () {
+        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.addResult)(level);
         lives = lives + Math.ceil(level / 2);
-        level = level + 1; // selectedTiles = [];
-
+        level = level + 1;
         count = 1;
-        setNewGrid(); // let body = document.querySelector('body');
-        // body.style['background-color'] = targetColor;
-        // document.querySelector(`#group-${level}`).scrollIntoView({
-        //   behavior: 'smooth'
-        // });
-
+        setNewGrid();
+        var success = document.querySelector('.success');
         success.remove();
         buttonDiv.remove();
+        var swatch = document.querySelector('#target-color');
         swatch.classList.add('blink');
         return true;
-      }); // finalEle.removeChild(finalEle.firstChild)
+      });
     }, 1750);
   } else if (targetColor !== color && count - 1 === level) {
-    var _final = currentTile.ele; // if (final.firstChild) {
-    //   final.removeChild(final.firstChild);
-    // }
-    // final.classList.add('wrong');
-
-    _final.style['border-radius'] = '100%'; // let outline = document.createElement('DIV');
-    // outline.setAttribute('class', 'dot-outline');
-    // x.classList.add('dot');
-    // outline.appendChild(x);
-    // final.appendChild(outline);
-
+    // INCORRECT
+    var _final = currentTile.ele;
+    _final.style['border-radius'] = '100%';
     (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.livesUpdate)(lives, 'sub', -1);
     lives = lives - 1;
 
@@ -552,11 +579,15 @@ function checkWinLose(color) {
 
     return false;
   } else {
+    // NEXT MOVE
     nextMoveOptions(false);
     return false;
   }
+
+  ;
 }
 
+;
 function mixTile() {
   var clickedCoor = this.getAttribute('coor');
   var check = optionTiles.some(function (coor) {
@@ -564,12 +595,9 @@ function mixTile() {
   });
 
   if (check) {
-    optionTiles.forEach(function (coor) {
-      var tile = allTiles[coor].ele;
-      var hoverColor = tile.getAttribute('colorId');
-      tile.removeEventListener('mouseover', hoverSwatch, true);
-    });
-    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(optionTiles, currentTile, finishTile, true);
+    // REMOVE OPTION STYLING
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, optionTiles, currentTile, finishTile, true); // clearStyle(optionTiles, currentTile, finishTile, true);
+
     selectedTiles.push(clickedCoor);
     var colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId');
 
@@ -672,13 +700,6 @@ function markOptions() {
   return nextMoveOptions(true);
 }
 
-var hoverSwatch = function hoverSwatch(hoverColor) {
-  return function () {
-    var swatch = document.querySelector('#hover-color');
-    swatch.style['background-color'] = hoverColor;
-  };
-};
-
 function nextMoveOptions(styleCheck) {
   var newOptionTiles = [];
   var tile = allTiles[currentTile.coor];
@@ -688,57 +709,33 @@ function nextMoveOptions(styleCheck) {
     var newCoor = "".concat(newX, "-").concat(newY); // SHOULD CREATE ARROW INSTEAD
     // let arrow = document.querySelector(`#${pos.name}`);
 
-    var arrow = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.addArrow)(pos.name);
-
     if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
       if (!styleCheck) {
         newOptionTiles.push(newCoor);
       } else if (newCoor !== finishTile) {
-        var optionTile = allTiles[newCoor].ele;
-
-        var _hoverColor = optionTile.getAttribute('colorId');
-
-        optionTile.addEventListener('mouseover', hoverSwatch(_hoverColor));
-        newOptionTiles.push(newCoor); // [[-1, 0], [1, 0], [0, -1], [0, 1]];
-
-        var radiusStr = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.optionStyle)(pos.dir); // let arrow = <i class="fas fa-caret-up"></i>
-
-        optionTile.appendChild(arrow);
-        arrow.style.display = 'flex'; // EVENT LISTENER
-        // arrow.style['color'] = targetColor;
-        // optionTile.style['border-radius'] = radiusStr;
-        // optionTile.style.border = 'none';
-        // optionTile.style.border = '1px solid white'
+        // STYLE NEXT OPTION
+        var arrow = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleOption)(allTiles, newCoor, pos.name);
+        newOptionTiles.push(newCoor);
       } else if (count === level && newCoor === finishTile) {
-        var _optionTile = allTiles[newCoor].ele;
-
-        var _hoverColor2 = _optionTile.getAttribute('colorId');
-
-        _optionTile.addEventListener('mouseover', hoverSwatch(_hoverColor2));
-
-        newOptionTiles.push(newCoor); // newOptionTiles = [newCoor];
-        // let optionTile = allTiles[newCoor].ele;
-        // optionTile.style.border = '1px solid transparent';
-        // optionTile.style['border-radius'] = '100%';
-        // let star = document.createElement('DIV');
-        // star.innerHTML = '★';
-        // optionTile.appendChild(star);
-
+        var optionTile = allTiles[newCoor].ele;
+        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeHover)(optionTile);
+        newOptionTiles.push(newCoor);
         (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.styleFinish)(finishTile);
       }
     }
   });
 
-  if (newOptionTiles.includes(finishTile)) {
-    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
-    newOptionTiles.forEach(function (coor) {
-      var tile = allTiles[coor].ele;
-      var hoverColor = tile.getAttribute('colorId');
-      tile.removeEventListener('mouseover', hoverSwatch, true);
-    });
+  if (newOptionTiles.includes(finishTile) && count === level) {
+    var finalIdx = newOptionTiles.indexOf(finishTile);
+
+    var optionEdit = _toConsumableArray(newOptionTiles);
+
+    optionEdit.splice(finalIdx, 1);
+    debugger;
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, optionEdit, currentTile, finishTile);
     newOptionTiles = [finishTile];
   } else if (count > level) {
-    (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.clearStyle)(newOptionTiles, currentTile, finishTile);
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, newOptionTiles, currentTile, finishTile);
     newOptionTiles = [];
   }
 

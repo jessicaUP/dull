@@ -60,13 +60,6 @@ export function sameArray(arr1, arr2) {
   
 // }
 
-export function addArrow(pos) {
-  let arrow = document.createElement('DIV');
-  arrow.setAttribute('id', pos);
-  arrow.classList.add('arrow-icons');
-  return arrow;
-}
-
 
 export function styleFinish(finishTile) {
   let finishEle = allTiles[finishTile].ele;
@@ -87,30 +80,7 @@ export function finishStar(finishTile) {
 }
 
 
-export function clearStyle(tiles, currentTile, finishTile, updateCheck = false) {
-    tiles.forEach(coor => {
-      let oldTile = allTiles[coor].ele;
-      if (coor !== finishTile) {
-        if (oldTile.firstChild) {
-          oldTile.removeChild(oldTile.firstChild)
-        }
-        // oldTile.style.border = '1px solid black';
-        // oldTile.style['border-radius'] = '0';
-        
-        // oldTile.removeEventListener('mouseover', hoverSwatch(oldTile.getAttribute('colorId')))
-      }
-    })
-    
 
-    if (updateCheck) {
-      let prev = allTiles[currentTile.coor].ele;
-      prev.style['border-radius'] = '100%';
-      let dot = prev.firstChild;
-      dot.removeChild(dot.firstChild);
-      
-    }
-
-  }
 
 export function optionStyle(coor) {
     let radiusStr;
