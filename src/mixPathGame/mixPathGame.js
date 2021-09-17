@@ -192,8 +192,8 @@ export function mixTile() {
   let check = optionTiles.some(coor => coor === clickedCoor);
   if (check) {
     // REMOVE OPTION STYLING
+    
     removeOption(optionTiles, currentTile, finishTile, true);
-
     // clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
     let colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId')
@@ -201,28 +201,31 @@ export function mixTile() {
       currentColor = setFirstColor(colorOne);
       checkColor = false;
     }
-    let colorTwo = this.getAttribute('colorId')
-
+    // let posCoor = this.getAttribute('coor');
+    // let newTile = allTiles[posCoor].ele;
+    let colorTwo = this.getAttribute('colorId');
+    
     // ADD COLOR RETURN MIXED RGB
     count = count + 1
     let rgb = addColor(colorTwo, count);
     let rgbStr = `rgb(${parseInt(rgb[0])}, ${parseInt(rgb[1])}, ${parseInt(rgb[2])})`
-  
-
+    
+    
     // SET NEW COLOR & MARK NEXT OPTIONS
-    this.style['background-color'] = rgbStr;
-
-
+    
+    
     // CHECK WIN or LOSE
     // optionTiles.forEach(coor => {
-    //   let oldOption = allTiles[coor].ele;
-    //   if (coor !== currentTile) {
-    //     // oldOption.style.border = '1px solid black'
-    //   } else {
-    //     oldOption.style.border = '1px solid black'
-    //   }
-    // })
+      //   let oldOption = allTiles[coor].ele;
+      //   if (coor !== currentTile) {
+        //     // oldOption.style.border = '1px solid black'
+        //   } else {
+          //     oldOption.style.border = '1px solid black'
+          //   }
+          // })
     currentTile = allTiles[clickedCoor];
+    currentTile.ele.style['background-color'] = rgbStr;
+
     let swatch = document.querySelector('#current-color');
     swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '0';

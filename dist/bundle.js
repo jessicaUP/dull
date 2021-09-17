@@ -655,15 +655,16 @@ function mixTile() {
     if (checkColor) {
       currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(colorOne);
       checkColor = false;
-    }
+    } // let posCoor = this.getAttribute('coor');
+    // let newTile = allTiles[posCoor].ele;
+
 
     var colorTwo = this.getAttribute('colorId'); // ADD COLOR RETURN MIXED RGB
 
     count = count + 1;
     var rgb = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(colorTwo, count);
     var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")"); // SET NEW COLOR & MARK NEXT OPTIONS
-
-    this.style['background-color'] = rgbStr; // CHECK WIN or LOSE
+    // CHECK WIN or LOSE
     // optionTiles.forEach(coor => {
     //   let oldOption = allTiles[coor].ele;
     //   if (coor !== currentTile) {
@@ -674,6 +675,7 @@ function mixTile() {
     // })
 
     currentTile = allTiles[clickedCoor];
+    currentTile.ele.style['background-color'] = rgbStr;
     var swatch = document.querySelector('#current-color');
     swatch.style['background-color'] = rgbStr;
     this.style['border-radius'] = '0';
