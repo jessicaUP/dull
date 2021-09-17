@@ -1,7 +1,9 @@
-import { mixTile } from '../mixPathGame/mixPathGame'
+import { mixTile, allTiles } from '../mixPathGame/mixPathGame'
 import { COLORS } from '../main/color'
 
 // GRID ELEMENTS
+
+
 
 export function updateBackgound(targetColor) {
   let body = document.querySelector('body');
@@ -10,13 +12,14 @@ export function updateBackgound(targetColor) {
   background.style['background-color'] = targetColor;
 }
 
-export function createTile(parentDiv, colorCount, x, y, coor) {
+export function createTile(colorCount, x, y, coor, parentDiv = false) {
   let colorId = COLORS[colorCount];
 
   const tile = document.createElement('div');
   tile.setAttribute('id', `tile-${colorCount}`);
   tile.setAttribute('colorId', colorId);
   tile.setAttribute('coor', coor);
+  tile.setAttribute('color-idx', colorCount);
   tile.classList.add(`mix-tile`);
   tile.style['background-color'] = colorId;
   // tile.style.border = '1px solid black';
@@ -29,46 +32,79 @@ export function createTile(parentDiv, colorCount, x, y, coor) {
     y
   }
 
-  parentDiv.appendChild(tile)
+  if (parentDiv) {
+    parentDiv.appendChild(tile)
+  }
 
   return info;
 }
 
-export function styleOption(allTiles, coor, pos) {
-  let arrow = addArrow(pos);
+export function styleOption(optionTiles, coor, pos, finalCheck) {
   let optionTile = allTiles[coor].ele;
-
+  let hoverColor = optionTile.getAttribute('colorId');
+  hoverFunction(optionTile, hoverColor);
+  
+  let arrow = addArrow(pos);
   optionTile.appendChild(arrow);
   arrow.style.display = 'flex'
+  
+  if (finalCheck) {
+    optionTile.removeChild(optionTile.firstChild)
+    // let star = optionTile.firstChild;
+    // star.style['font-size'] = '1vw';
+    // arrow.style['font-size']
+    // star.style['margin-bottom'] = '5px';
+  }
+  
   return arrow
 };
 
-function addArrow(pos) {
+function addArrow(coor) {
   let arrow = document.createElement('DIV');
-  arrow.setAttribute('id', pos);
+  arrow.setAttribute('id', coor);
   arrow.classList.add('arrow-icons');
   return arrow;
 }
 
-export function removeHover(tile) {
-  let hoverColor = tile.getAttribute('colorId');
-  let functionName = `hover${hoverColor}`
-  tile.removeEventListener('mouseover', [functionName]);
+export function cloneTile() {
+
 }
 
-export function removeOption(allTiles, optionTiles, currentTile, finishTile, updateCheck = false) {
+export function removeHover(tile) {
+  // debugger
+  // let newEle = tile.cloneNode(true);
+  let colorId = COLORS[colorCount];
+  let coor = tile.getAttribute('coor');
+  let colorCount = tile.getAttribute('color-idx');
+  let xy = coor.split('-');
+  let newEle = createTile(colorCount, parseInt(xy[0]), parseInt(xy[1]), coor)
+  // let coor = tile.getAttribute('coor')
+  // newEle.setAttribute('coor', coor);
+  tile.parentElement.replaceChild(newEle.ele, tile);
+  // newEle.addEventListener('click', mixTile);
+
+  allTiles[coor] = newEle;
+  if (newEle.firstChild) newEle.removeChild(newEle.firstChild)
+  return newEle;
+}
+
+export function removeOption(optionTiles, currentTile, finishTile, updateCheck = false) {
   optionTiles.forEach(coor => {
     let oldTile = allTiles[coor].ele;
+    // let coor = oldTile.coor;
+    // let colorCount = oldTile
+    // let colorId = COLORS[colorCount];
     
     // not working....
 
-    removeHover(oldTile);
+    let ele = removeHover(oldTile);
+    if (ele.firstChild) {
+      ele.removeChild(ele.firstChild)
+    };
 
-    if (coor !== finishTile) {
-      if (oldTile.firstChild) {
-        oldTile.removeChild(oldTile.firstChild)
-      }
-    }
+
+
+    return ele;
   })
 
 
@@ -79,23 +115,44 @@ export function removeOption(allTiles, optionTiles, currentTile, finishTile, upd
     dot.removeChild(dot.firstChild);
 
   }
+  // return ele
 
+  // NotWorking
 }
 
-function hoverFunction(optionTile, hoverColor) {
-  // let hoverColor = optionTile.getAttribute('colorId');
-  
-  this[`hover${hoverColor}`] = () => {
+function hoverStep(hoverColor) {
     return () => {
       let swatch = document.querySelector('#hover-color');
       swatch.style['background-color'] = hoverColor;
-      
+  
     }
-  };
-  optionTile.addEventListener('mouseover', this[`hover${hoverColor}`] );
+};
+
+
+function hoverFunction(optionTile, hoverColor) {
+  let hover = () => hoverStep(hoverColor);
+  optionTile.addEventListener('mouseover', hover());
 }
 
-export function styleWin(allTiles, selectedTiles, finishTile, color, level, lives) {
+export function styleFinish(finishTile) {
+  let finishEle = allTiles[finishTile].ele;
+  finishEle.style.border = '1px solid transparent';
+  finishEle.style['border-radius'] = '100%';
+
+  finishEle.classList.add('blink')
+
+}
+
+export function finishStar(finishTile) {
+  let finishEle = allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  let star = document.createElement('DIV');
+  star.classList.add('star')
+  star.innerHTML = '★';
+  finishEle.appendChild(star);
+}
+
+export function styleWin(selectedTiles, finishTile, color, level, lives) {
   let body = document.querySelector('body');
 
   // EXTRA TILES

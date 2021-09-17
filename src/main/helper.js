@@ -61,23 +61,7 @@ export function sameArray(arr1, arr2) {
 // }
 
 
-export function styleFinish(finishTile) {
-  let finishEle = allTiles[finishTile].ele;
-  finishEle.style.border = '1px solid transparent';
-  finishEle.style['border-radius'] = '100%';
 
-  finishEle.classList.add('blink')
-
-}
-
-export function finishStar(finishTile) {
-  let finishEle = allTiles[finishTile].ele;
-  finishEle.style['border-radius'] = '100%';
-  let star = document.createElement('DIV');
-  star.classList.add('star')
-  star.innerHTML = '★';
-  finishEle.appendChild(star);
-}
 
 
 

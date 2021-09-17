@@ -1,6 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray, styleFinish, optionStyle, finishStar, createSwatches, addArrow } from '../main/helper'
-import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover } from '../main/styleElements';
+import { randomNum, posObject, colorArr, sameArray, optionStyle, createSwatches, addArrow } from '../main/helper'
+import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover, styleFinish, finishStar } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -76,7 +76,7 @@ function createMixGrid() {
   for (let x = 1; x <= 10; x++) {
     for (let y = 1; y <= 10; y++) {
       let coor = `${x}-${y}`;
-      let tile = createTile(grid, colorCount, x, y, coor);
+      let tile = createTile(colorCount, x, y, coor, grid);
       allTiles[coor] = tile;
       colorCount++
     }
@@ -146,7 +146,7 @@ function checkWinLose(color) {
   if ( targetColor === color && count - 1 === level ) {
     // CORRECT
 
-    styleWin(allTiles, selectedTiles, finishTile, color, level, lives);    
+    styleWin(selectedTiles, finishTile, color, level, lives);    
     
     // NEXT LEVEL BUTTON
     window.setTimeout(() => {
@@ -192,7 +192,7 @@ export function mixTile() {
   let check = optionTiles.some(coor => coor === clickedCoor);
   if (check) {
     // REMOVE OPTION STYLING
-    removeOption(allTiles, optionTiles, currentTile, finishTile, true);
+    removeOption(optionTiles, currentTile, finishTile, true);
 
     // clearStyle(optionTiles, currentTile, finishTile, true);
     selectedTiles.push(clickedCoor);
@@ -231,11 +231,13 @@ export function mixTile() {
     if ( checkWinLose(rgbStr) === false  ) {
       // LOSE
       currentTile = posObject(this.getAttribute('coor'));
-      if (optionTiles.length === 0 || count - 1 === level ) {
+      if (optionTiles.length === 0 || count -1 === level ) {
+        debugger
         let star = document.querySelector('.star');
         if (star) star.remove(); 
         let x = document.querySelector('.dot');
         x.innerHTML = 'X';
+        this.classList.remove('blink')
         let blink = allTiles[currentTile.coor].ele.firstChild;
         blink.classList.add('blink');
         let removeBlink = document.querySelector('#target-color');
@@ -314,6 +316,7 @@ function markOptions() {
 
 
 function nextMoveOptions(styleCheck) {
+  debugger
   let newOptionTiles = [];
   let tile = allTiles[currentTile.coor];
 
@@ -335,28 +338,30 @@ function nextMoveOptions(styleCheck) {
         newOptionTiles.push(newCoor);
       } else if (newCoor !== finishTile) {
         // STYLE NEXT OPTION
-        let arrow = styleOption(allTiles, newCoor, pos.name);
+        let arrow = styleOption(optionTiles, newCoor, pos.name);
         newOptionTiles.push(newCoor);
       } else if (count === level && newCoor === finishTile) {
         let optionTile = allTiles[newCoor].ele;
-        removeHover(optionTile);
+        styleOption(optionTiles, newCoor, pos.name, true);
         newOptionTiles.push(newCoor);
         styleFinish(finishTile);
       }
       
     }
   });
-  
+
+
   if (newOptionTiles.includes(finishTile) && count === level) {
     let finalIdx = newOptionTiles.indexOf(finishTile);
     let optionEdit = [...newOptionTiles];
     optionEdit.splice(finalIdx, 1);
-    debugger
-    removeOption(allTiles, optionEdit, currentTile, finishTile);
+    removeOption(optionEdit, currentTile, finishTile);
     
     newOptionTiles = [finishTile]
   } else if ( count > level ) {
-    removeOption(allTiles, newOptionTiles, currentTile, finishTile);
+    let newEle = removeOption(newOptionTiles, currentTile, finishTile);
+    // let coor2 = newEle.getAttribute('coor');
+    // allTiles[coor].ele = newEle;
     newOptionTiles = [];
   }
 

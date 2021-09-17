@@ -105,8 +105,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "randomNum": () => (/* binding */ randomNum),
 /* harmony export */   "posObject": () => (/* binding */ posObject),
 /* harmony export */   "sameArray": () => (/* binding */ sameArray),
-/* harmony export */   "styleFinish": () => (/* binding */ styleFinish),
-/* harmony export */   "finishStar": () => (/* binding */ finishStar),
 /* harmony export */   "optionStyle": () => (/* binding */ optionStyle)
 /* harmony export */ });
 /* harmony import */ var _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixPathGame/mixPathGame */ "./src/mixPathGame/mixPathGame.js");
@@ -150,20 +148,6 @@ function sameArray(arr1, arr2) {
 //   swatches.appendChild(current);
 // }
 
-function styleFinish(finishTile) {
-  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
-  finishEle.style.border = '1px solid transparent';
-  finishEle.style['border-radius'] = '100%';
-  finishEle.classList.add('blink');
-}
-function finishStar(finishTile) {
-  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
-  finishEle.style['border-radius'] = '100%';
-  var star = document.createElement('DIV');
-  star.classList.add('star');
-  star.innerHTML = '★';
-  finishEle.appendChild(star);
-}
 function optionStyle(coor) {
   var radiusStr;
 
@@ -194,8 +178,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "updateBackgound": () => (/* binding */ updateBackgound),
 /* harmony export */   "createTile": () => (/* binding */ createTile),
 /* harmony export */   "styleOption": () => (/* binding */ styleOption),
+/* harmony export */   "cloneTile": () => (/* binding */ cloneTile),
 /* harmony export */   "removeHover": () => (/* binding */ removeHover),
 /* harmony export */   "removeOption": () => (/* binding */ removeOption),
+/* harmony export */   "styleFinish": () => (/* binding */ styleFinish),
+/* harmony export */   "finishStar": () => (/* binding */ finishStar),
 /* harmony export */   "styleWin": () => (/* binding */ styleWin),
 /* harmony export */   "createNextButton": () => (/* binding */ createNextButton),
 /* harmony export */   "addResult": () => (/* binding */ addResult),
@@ -214,12 +201,14 @@ function updateBackgound(targetColor) {
   body.style['background-color'] = targetColor;
   background.style['background-color'] = targetColor;
 }
-function createTile(parentDiv, colorCount, x, y, coor) {
+function createTile(colorCount, x, y, coor) {
+  var parentDiv = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
   var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
   var tile = document.createElement('div');
   tile.setAttribute('id', "tile-".concat(colorCount));
   tile.setAttribute('colorId', colorId);
   tile.setAttribute('coor', coor);
+  tile.setAttribute('color-idx', colorCount);
   tile.classList.add("mix-tile");
   tile.style['background-color'] = colorId; // tile.style.border = '1px solid black';
 
@@ -231,68 +220,119 @@ function createTile(parentDiv, colorCount, x, y, coor) {
     x: x,
     y: y
   };
-  parentDiv.appendChild(tile);
+
+  if (parentDiv) {
+    parentDiv.appendChild(tile);
+  }
+
   return info;
 }
-function styleOption(allTiles, coor, pos) {
+function styleOption(optionTiles, coor, pos, finalCheck) {
+  var optionTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
+  var hoverColor = optionTile.getAttribute('colorId');
+  hoverFunction(optionTile, hoverColor);
   var arrow = addArrow(pos);
-  var optionTile = allTiles[coor].ele;
   optionTile.appendChild(arrow);
   arrow.style.display = 'flex';
+
+  if (finalCheck) {
+    optionTile.removeChild(optionTile.firstChild); // let star = optionTile.firstChild;
+    // star.style['font-size'] = '1vw';
+    // arrow.style['font-size']
+    // star.style['margin-bottom'] = '5px';
+  }
+
   return arrow;
 }
 ;
 
-function addArrow(pos) {
+function addArrow(coor) {
   var arrow = document.createElement('DIV');
-  arrow.setAttribute('id', pos);
+  arrow.setAttribute('id', coor);
   arrow.classList.add('arrow-icons');
   return arrow;
 }
 
+function cloneTile() {}
 function removeHover(tile) {
-  var hoverColor = tile.getAttribute('colorId');
-  var functionName = "hover".concat(hoverColor);
-  tile.removeEventListener('mouseover', [functionName]);
+  // debugger
+  // let newEle = tile.cloneNode(true);
+  var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
+  var coor = tile.getAttribute('coor');
+  var colorCount = tile.getAttribute('color-idx');
+  var xy = coor.split('-');
+  var newEle = createTile(colorCount, parseInt(xy[0]), parseInt(xy[1]), coor); // let coor = tile.getAttribute('coor')
+  // newEle.setAttribute('coor', coor);
+
+  tile.parentElement.replaceChild(newEle.ele, tile); // newEle.addEventListener('click', mixTile);
+
+  _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor] = newEle;
+  if (newEle.firstChild) newEle.removeChild(newEle.firstChild);
+  return newEle;
 }
-function removeOption(allTiles, optionTiles, currentTile, finishTile) {
-  var updateCheck = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+function removeOption(optionTiles, currentTile, finishTile) {
+  var updateCheck = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
   optionTiles.forEach(function (coor) {
-    var oldTile = allTiles[coor].ele; // not working....
+    var oldTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele; // let coor = oldTile.coor;
+    // let colorCount = oldTile
+    // let colorId = COLORS[colorCount];
+    // not working....
 
-    removeHover(oldTile);
+    var ele = removeHover(oldTile);
 
-    if (coor !== finishTile) {
-      if (oldTile.firstChild) {
-        oldTile.removeChild(oldTile.firstChild);
-      }
+    if (ele.firstChild) {
+      ele.removeChild(ele.firstChild);
     }
+
+    ;
+    return ele;
   });
 
   if (updateCheck) {
-    var prev = allTiles[currentTile.coor].ele;
+    var prev = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[currentTile.coor].ele;
     prev.style['border-radius'] = '100%';
     var dot = prev.firstChild;
     dot.removeChild(dot.firstChild);
-  }
+  } // return ele
+  // NotWorking
+
 }
+
+function hoverStep(hoverColor) {
+  return function () {
+    var swatch = document.querySelector('#hover-color');
+    swatch.style['background-color'] = hoverColor;
+  };
+}
+
+;
 
 function hoverFunction(optionTile, hoverColor) {
-  // let hoverColor = optionTile.getAttribute('colorId');
-  this["hover".concat(hoverColor)] = function () {
-    return function () {
-      var swatch = document.querySelector('#hover-color');
-      swatch.style['background-color'] = hoverColor;
-    };
+  var hover = function hover() {
+    return hoverStep(hoverColor);
   };
 
-  optionTile.addEventListener('mouseover', this["hover".concat(hoverColor)]);
+  optionTile.addEventListener('mouseover', hover());
 }
 
-function styleWin(allTiles, selectedTiles, finishTile, color, level, lives) {
+function styleFinish(finishTile) {
+  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  finishEle.style.border = '1px solid transparent';
+  finishEle.style['border-radius'] = '100%';
+  finishEle.classList.add('blink');
+}
+function finishStar(finishTile) {
+  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  finishEle.style['border-radius'] = '100%';
+  var star = document.createElement('DIV');
+  star.classList.add('star');
+  star.innerHTML = '★';
+  finishEle.appendChild(star);
+}
+function styleWin(selectedTiles, finishTile, color, level, lives) {
   var body = document.querySelector('body'); // EXTRA TILES
 
-  Object.values(allTiles).forEach(function (tile) {
+  Object.values(_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles).forEach(function (tile) {
     var coor = tile.coor,
         ele = tile.ele;
 
@@ -302,7 +342,7 @@ function styleWin(allTiles, selectedTiles, finishTile, color, level, lives) {
     }
   }); // FINISH TILE
 
-  var finalEle = allTiles[finishTile].ele;
+  var finalEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finalEle.classList.remove('blink');
   finalEle.style['border-radius'] = '0';
   finalEle.style.border = '1px solid black'; // SUCCESS MESSAGE
@@ -475,7 +515,7 @@ function setNewGrid() {
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor);
   step.remove();
   createMixGrid();
-  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.finishStar)(finishTile);
   resetVariables();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('level', level);
   optionTiles = markOptions();
@@ -491,7 +531,7 @@ function createMixGrid() {
   for (var x = 1; x <= 10; x++) {
     for (var y = 1; y <= 10; y++) {
       var coor = "".concat(x, "-").concat(y);
-      var tile = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createTile)(grid, colorCount, x, y, coor);
+      var tile = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createTile)(colorCount, x, y, coor, grid);
       allTiles[coor] = tile;
       colorCount++;
     }
@@ -550,7 +590,7 @@ function checkWinLose(color) {
   // checkLives();
   if (targetColor === color && count - 1 === level) {
     // CORRECT
-    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleWin)(allTiles, selectedTiles, finishTile, color, level, lives); // NEXT LEVEL BUTTON
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleWin)(selectedTiles, finishTile, color, level, lives); // NEXT LEVEL BUTTON
 
     window.setTimeout(function () {
       var buttonDiv = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)();
@@ -596,7 +636,7 @@ function mixTile() {
 
   if (check) {
     // REMOVE OPTION STYLING
-    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, optionTiles, currentTile, finishTile, true); // clearStyle(optionTiles, currentTile, finishTile, true);
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(optionTiles, currentTile, finishTile, true); // clearStyle(optionTiles, currentTile, finishTile, true);
 
     selectedTiles.push(clickedCoor);
     var colorOne = allTiles[currentTile.coor].ele.getAttribute('colorId');
@@ -633,10 +673,12 @@ function mixTile() {
       currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(this.getAttribute('coor'));
 
       if (optionTiles.length === 0 || count - 1 === level) {
+        debugger;
         var star = document.querySelector('.star');
         if (star) star.remove();
         var x = document.querySelector('.dot');
         x.innerHTML = 'X';
+        this.classList.remove('blink');
         var blink = allTiles[currentTile.coor].ele.firstChild;
         blink.classList.add('blink');
         var removeBlink = document.querySelector('#target-color');
@@ -667,7 +709,7 @@ function resetGrid() {
   // tiles.style['background-color'] = targetColor;
 
   resetVariables();
-  (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.finishStar)(finishTile);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.finishStar)(finishTile);
   optionTiles = markOptions(); // console.log('clicked')
 }
 
@@ -701,6 +743,7 @@ function markOptions() {
 }
 
 function nextMoveOptions(styleCheck) {
+  debugger;
   var newOptionTiles = [];
   var tile = allTiles[currentTile.coor];
   Object.values(OPTIONS).forEach(function (pos) {
@@ -714,13 +757,13 @@ function nextMoveOptions(styleCheck) {
         newOptionTiles.push(newCoor);
       } else if (newCoor !== finishTile) {
         // STYLE NEXT OPTION
-        var arrow = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleOption)(allTiles, newCoor, pos.name);
+        var arrow = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleOption)(optionTiles, newCoor, pos.name);
         newOptionTiles.push(newCoor);
       } else if (count === level && newCoor === finishTile) {
         var optionTile = allTiles[newCoor].ele;
-        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeHover)(optionTile);
+        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleOption)(optionTiles, newCoor, pos.name, true);
         newOptionTiles.push(newCoor);
-        (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.styleFinish)(finishTile);
+        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleFinish)(finishTile);
       }
     }
   });
@@ -731,11 +774,12 @@ function nextMoveOptions(styleCheck) {
     var optionEdit = _toConsumableArray(newOptionTiles);
 
     optionEdit.splice(finalIdx, 1);
-    debugger;
-    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, optionEdit, currentTile, finishTile);
+    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(optionEdit, currentTile, finishTile);
     newOptionTiles = [finishTile];
   } else if (count > level) {
-    (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(allTiles, newOptionTiles, currentTile, finishTile);
+    var newEle = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.removeOption)(newOptionTiles, currentTile, finishTile); // let coor2 = newEle.getAttribute('coor');
+    // allTiles[coor].ele = newEle;
+
     newOptionTiles = [];
   }
 
