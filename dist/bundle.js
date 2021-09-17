@@ -331,12 +331,23 @@ function styleFinish(finishTile) {
   finishEle.classList.add('blink');
 }
 function finishStar(finishTile) {
-  var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  var ele = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var finishEle;
+
+  if (ele) {
+    debugger;
+    finishEle = finishTile;
+  } else {
+    finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
+  }
+
   finishEle.style['border-radius'] = '100%';
   var star = document.createElement('DIV');
   star.classList.add('star');
+  if (ele) star.setAttribute('class', 'result-star');
   star.innerHTML = '★';
   finishEle.appendChild(star);
+  return star;
 }
 function styleWin(selectedTiles, finishTile, color, level, lives) {
   var body = document.querySelector('body');
@@ -379,10 +390,31 @@ function createNextButton() {
   return buttonDiv;
 } // NAV ELEMENTS
 
-function addResult(level) {
+function addResult(level, selectedTiles) {
+  // PREPARE CONTAINER
+  var levelCont = document.createElement('DIV');
+  levelCont.setAttribute('class', 'level-display');
+  var selected = []; // ADD SELECTED TILES
+
+  selectedTiles.forEach(function (coor) {
+    var addition = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
+    levelCont.appendChild(addition);
+    selected.push(addition);
+  }); // ADD LEVEL
+
+  var last = selected.at(-1);
+  var star = finishStar(last, true);
+  last.style['border-radius'] = '0';
+  var levelText = document.createElement('DIV');
+  levelText.setAttribute('class', 'level-num');
+  levelCont.appendChild(levelText);
+  levelCont.appendChild(levelText);
+  levelText.innerHTML = level;
   var results = document.querySelector('.results-cont');
+  results.appendChild(levelCont); // DELETE GRID
+
   var prevLevel = document.querySelector("#level-".concat(level));
-  results.appendChild(prevLevel);
+  prevLevel.remove();
 }
 function createLevelDiv(level) {
   var body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
@@ -575,9 +607,18 @@ function findPath() {
 
 function setPath() {
   // FIRST POSITION
-  var x = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(10) + 1;
-  var y = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(10) + 1;
-  var coor = "".concat(x, "-").concat(y);
+  var x, y, coor;
+
+  if (currentTile) {
+    x = currentTile.x;
+    y = currentTile.y;
+    coor = currentTile.coor;
+  } else {
+    x = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(10) + 1;
+    y = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(10) + 1;
+    coor = "".concat(x, "-").concat(y);
+  }
+
   var coorObj = {
     coor: coor,
     x: x,
@@ -606,7 +647,7 @@ function checkWinLose(color) {
     window.setTimeout(function () {
       var buttonDiv = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)();
       buttonDiv.addEventListener('click', function () {
-        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.addResult)(level);
+        (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.addResult)(level, selectedTiles);
         lives = lives + Math.ceil(level / 2);
         level = level + 1;
         count = 1;
@@ -686,7 +727,6 @@ function mixTile() {
       currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(this.getAttribute('coor'));
 
       if (optionTiles.length === 0 || count - 1 === level) {
-        debugger;
         var star = document.querySelector('.star');
         if (star) star.remove();
         var x = document.querySelector('.dot');
@@ -756,7 +796,6 @@ function markOptions() {
 }
 
 function nextMoveOptions(styleCheck) {
-  debugger;
   var newOptionTiles = [];
   var tile = allTiles[currentTile.coor];
   Object.values(OPTIONS).forEach(function (pos) {

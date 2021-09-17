@@ -116,9 +116,17 @@ function findPath() {
 
 function setPath() {
   // FIRST POSITION
-  let x = randomNum(10) + 1;
-  let y = randomNum(10) + 1;
-  let coor = `${x}-${y}`;
+  let x, y, coor;
+  if (currentTile) {
+    x = currentTile.x;
+    y = currentTile.y;
+    coor = currentTile.coor;
+  } else {
+    x = randomNum(10) + 1;
+    y = randomNum(10) + 1;
+    coor = `${x}-${y}`;
+
+  }
   let coorObj = {
       coor,
       x,
@@ -152,7 +160,7 @@ function checkWinLose(color) {
     window.setTimeout(() => {
       let buttonDiv = createNextButton();
       buttonDiv.addEventListener('click', () => {
-        addResult(level);
+        addResult(level, selectedTiles);
 
         lives = lives + Math.ceil(level / 2);
         level = level + 1;
@@ -235,7 +243,6 @@ export function mixTile() {
       // LOSE
       currentTile = posObject(this.getAttribute('coor'));
       if (optionTiles.length === 0 || count -1 === level ) {
-        debugger
         let star = document.querySelector('.star');
         if (star) star.remove(); 
         let x = document.querySelector('.dot');
@@ -319,7 +326,6 @@ function markOptions() {
 
 
 function nextMoveOptions(styleCheck) {
-  debugger
   let newOptionTiles = [];
   let tile = allTiles[currentTile.coor];
 

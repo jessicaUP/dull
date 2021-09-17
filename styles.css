@@ -4,10 +4,9 @@
   position: fixed;
   top: 50px;
   left: 27.25%;
-  width: 46%;
+  width: 45%;
   margin: 20px;
   margin-left: 15px;
-  width: 45%;
   grid-gap: 2px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   z-index: 6; }
@@ -153,13 +152,14 @@
   color: white;
   font-family: Odibee Sans;
   font-size: 12vw;
-  margin: 0; }
+  margin: 0;
+  z-index: 9; }
 
 #logo-2 {
   color: black;
   top: 9px;
   left: 21px;
-  z-index: 1; }
+  z-index: 10; }
 
 #logo-3 {
   left: 22px; }
@@ -314,14 +314,64 @@ body {
   border-bottom: 10px solid transparent;
   border-right: 15px solid black; }
 
-.results-cont {
+.modal {
   display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  z-index: 8; }
+  .modal .display-cont {
+    position: fixed;
+    top: 45px;
+    left: 26%;
+    width: 46%;
+    min-height: 46vw;
+    height: auto;
+    background-color: black;
+    margin: 24px;
+    margin-left: 19px;
+    border: 4px double white; }
+
+.results-cont {
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+  padding-bottom: 15px;
   z-index: 7;
   width: 100%;
-  height: auto; }
-  .results-cont .level-cont {
+  height: 100%; }
+  .results-cont .star {
+    display: flex; }
+  .results-cont .level-display {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: right;
     position: relative;
-    width: 9%; }
+    height: 20px;
+    margin: 5px; }
+    .results-cont .level-display .level-num {
+      color: white;
+      font-family: Helvetica, sans-serif;
+      margin: 0;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+      padding-top: 8px;
+      margin-right: 5px; }
+    .results-cont .level-display .dot-outline {
+      display: none; }
+    .results-cont .level-display .mix-tile {
+      width: 25px;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2px; }
 
 .success {
   position: fixed;

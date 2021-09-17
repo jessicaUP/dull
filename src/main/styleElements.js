@@ -149,13 +149,22 @@ export function styleFinish(finishTile) {
 
 }
 
-export function finishStar(finishTile) {
-  let finishEle = allTiles[finishTile].ele;
+export function finishStar(finishTile, ele = false) {
+  let finishEle;
+  if (ele) {
+    debugger
+    finishEle = finishTile;
+  } else {
+    finishEle = allTiles[finishTile].ele;
+  }
+  
   finishEle.style['border-radius'] = '100%';
   let star = document.createElement('DIV');
   star.classList.add('star')
+  if (ele) star.setAttribute('class', 'result-star');
   star.innerHTML = '★';
   finishEle.appendChild(star);
+  return star;
 }
 
 export function styleWin(selectedTiles, finishTile, color, level, lives) {
@@ -210,10 +219,41 @@ export function createNextButton() {
 
 // NAV ELEMENTS
 
-export function addResult(level) {
+export function addResult(level, selectedTiles) {
+  // PREPARE CONTAINER
+  let levelCont = document.createElement('DIV');
+  levelCont.setAttribute('class', 'level-display');
+  
+  let selected = []
+
+
+  // ADD SELECTED TILES
+  selectedTiles.forEach(coor => {
+    let addition = allTiles[coor].ele;
+    levelCont.appendChild(addition);
+    selected.push(addition);
+
+  });
+
+  
+  // ADD LEVEL
+  let last = selected.at(-1);
+  let star = finishStar(last, true);
+  last.style['border-radius'] = '0';
+  let levelText = document.createElement('DIV');
+  levelText.setAttribute('class', 'level-num');
+  levelCont.appendChild(levelText)  
+  levelCont.appendChild(levelText)  
+  levelText.innerHTML = level;
+
   let results = document.querySelector('.results-cont');
+  results.appendChild(levelCont);
+
+
+
+  // DELETE GRID
   let prevLevel = document.querySelector(`#level-${level}`);
-  results.appendChild(prevLevel);
+  prevLevel.remove();
 }
 
 export function createLevelDiv(level) {
