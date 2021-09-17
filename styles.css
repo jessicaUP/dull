@@ -195,30 +195,44 @@ body {
     flex-direction: column;
     position: fixed;
     top: 300px; }
-  .nav-cont .lives-cont {
-    display: flex;
-    position: fixed;
-    top: 30vw;
-    left: 50px; }
-    .nav-cont .lives-cont h4 {
-      position: absolute;
-      top: 0;
-      vertical-align: bottom;
-      font-family: Odibee Sans;
-      font-size: 85px;
-      color: black;
-      margin: 0; }
-    .nav-cont .lives-cont .lives {
-      position: absolute;
-      top: 9px;
-      left: 31px;
-      font-family: Helvetica, sans-serif;
-      font-size: 40px;
-      text-align: center;
-      justify-content: center;
-      color: white;
-      z-index: 1; }
-  .nav-cont .button {
+    .nav-cont .information .button-cont {
+      top: 32vw;
+      left: 50px; }
+    .nav-cont .information .prev-star {
+      position: fixed;
+      top: 25vw;
+      left: 20px; }
+      .nav-cont .information .prev-star h4 {
+        font-size: 100px;
+        margin: 0; }
+
+.lives-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 85px;
+  height: 128px;
+  top: -45px;
+  left: -60px; }
+  .lives-cont h4 {
+    position: absolute;
+    top: 0;
+    vertical-align: bottom;
+    font-family: Odibee Sans;
+    font-size: 85px;
+    color: rgba(0, 0, 0, 0.3);
+    margin: 0;
+    z-index: 5; }
+  .lives-cont .lives {
+    position: relative;
+    font-family: Helvetica, sans-serif;
+    font-size: 32px;
+    text-align: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.7);
+    z-index: 6; }
+  .lives-cont .button {
     width: 75%;
     aspect-ratio: 1;
     background-color: white;
@@ -227,10 +241,10 @@ body {
     margin: 3px;
     padding: 2px;
     display: none; }
-  .nav-cont .bottom {
+  .lives-cont .bottom {
     position: relative;
     display: inline-block; }
-    .nav-cont .bottom .help {
+    .lives-cont .bottom .help {
       display: none;
       position: absolute;
       top: 45px;
@@ -241,17 +255,17 @@ body {
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
       z-index: 1; }
-      .nav-cont .bottom .help h4 {
+      .lives-cont .bottom .help h4 {
         font-family: Odibee Sans;
         font-size: 18px;
         margin: 5px; }
-    .nav-cont .bottom p {
+    .lives-cont .bottom p {
       font-family: Odibee Sans;
       color: black;
       font-size: 24px;
       margin-left: 60px;
       margin-top: 10px; }
-    .nav-cont .bottom:hover .help {
+    .lives-cont .bottom:hover .help {
       display: block; }
 
 .lives-heart {
@@ -335,8 +349,18 @@ body {
     margin: 24px;
     margin-left: 19px;
     border: 4px double white; }
+  .modal .close-button {
+    font-family: Helvetica, sans-serif;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 15px;
+    left: 15px;
+    color: white;
+    z-index: 10; }
 
 .results-cont {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding-top: 15px;
@@ -392,6 +416,7 @@ body {
   border: 1px solid black;
   z-index: 10; }
   .button-cont .level-button {
+    font-family: Helvetica, sans-serif;
     width: 86px;
     height: 20px;
     background-color: black;

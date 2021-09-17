@@ -186,6 +186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "styleWin": () => (/* binding */ styleWin),
 /* harmony export */   "createNextButton": () => (/* binding */ createNextButton),
 /* harmony export */   "addResult": () => (/* binding */ addResult),
+/* harmony export */   "createResults": () => (/* binding */ createResults),
 /* harmony export */   "createLevelDiv": () => (/* binding */ createLevelDiv),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
 /* harmony export */   "updateNav": () => (/* binding */ updateNav)
@@ -416,6 +417,29 @@ function addResult(level, selectedTiles) {
   var prevLevel = document.querySelector("#level-".concat(level));
   prevLevel.remove();
 }
+
+function modalFunc(element, type) {
+  return function () {
+    if (type === 'close') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'flex';
+    }
+  };
+}
+
+function createResults() {
+  var close = document.querySelector('.close-button');
+  var modal = document.querySelector('.modal');
+  var display = document.querySelector('.display-cont');
+  var starButton = document.querySelector('.result-star');
+  starButton.addEventListener('click', modalFunc(modal, 'open'));
+  close.addEventListener('click', modalFunc(modal, 'close'));
+  modal.addEventListener('click', modalFunc(modal, 'close'));
+  display.addEventListener('click', function (e) {
+    return e.stopPropagation();
+  });
+}
 function createLevelDiv(level) {
   var body = document.querySelector('body'); // tileGrid = document.querySelector('.tile-grid');
 
@@ -435,11 +459,11 @@ function livesUpdate(currentCount, addOrSub, increment) {
     var livesMemo = document.createElement('DIV');
     livesMemo.setAttribute('class', "".concat(addOrSub, "-lives"));
     livesMemo.classList.add('lives-amount');
-    livesMemo.innerHTML = "".concat(addOrSub === 'add' ? '+' : '').concat(increment);
-    var heartCont = document.createElement('DIV');
-    heartCont.setAttribute('class', 'lives-heart');
-    heartCont.innerHTML = '♥︎';
-    heartCont.appendChild(livesMemo);
+    livesMemo.innerHTML = "".concat(addOrSub === 'add' ? '+' : '').concat(increment); // let heartCont = document.createElement('DIV');
+    // heartCont.setAttribute('class', 'lives-heart');
+    // heartCont.innerHTML = '♥︎';
+
+    livesMemo.appendChild(livesMemo);
     var body = document.querySelector('body');
     body.appendChild(heartCont); // UPDATE OVERALL
 
@@ -547,7 +571,8 @@ var hoverColor; // let direction;
 
 function startGame() {
   // CREATE GRID
-  setNewGrid(); // ADD RESET... for now
+  setNewGrid();
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createResults)(); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
 }

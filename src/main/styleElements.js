@@ -251,9 +251,35 @@ export function addResult(level, selectedTiles) {
 
 
 
+
   // DELETE GRID
   let prevLevel = document.querySelector(`#level-${level}`);
   prevLevel.remove();
+}
+
+function modalFunc(element, type) {
+  return () => {
+    if (type === 'close') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'flex';
+    }
+
+  }
+}
+
+
+
+export function createResults() {
+  let close = document.querySelector('.close-button');
+  let modal = document.querySelector('.modal');
+  let display = document.querySelector('.display-cont');
+  let starButton = document.querySelector('.result-star');
+
+  starButton.addEventListener('click', modalFunc(modal, 'open'));
+  close.addEventListener('click', modalFunc(modal, 'close'));
+  modal.addEventListener('click', modalFunc(modal, 'close'));
+  display.addEventListener('click', (e) => e.stopPropagation());
 }
 
 export function createLevelDiv(level) {
@@ -280,10 +306,10 @@ export function livesUpdate(currentCount, addOrSub, increment) {
     livesMemo.setAttribute('class', `${addOrSub}-lives`);
     livesMemo.classList.add('lives-amount');
     livesMemo.innerHTML = `${addOrSub === 'add' ? '+' : ''}${increment}`;
-    let heartCont = document.createElement('DIV');
-    heartCont.setAttribute('class', 'lives-heart');
-    heartCont.innerHTML = '♥︎';
-    heartCont.appendChild(livesMemo);
+    // let heartCont = document.createElement('DIV');
+    // heartCont.setAttribute('class', 'lives-heart');
+    // heartCont.innerHTML = '♥︎';
+    livesMemo.appendChild(livesMemo);
     let body = document.querySelector('body');
     body.appendChild(heartCont);
 
