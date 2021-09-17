@@ -120,17 +120,23 @@ export function removeOption(optionTiles, currentTile, finishTile, updateCheck =
   // NotWorking
 }
 
-function hoverStep(hoverColor) {
+function hoverStep(optionTile, hoverColor) {
     return () => {
       let swatch = document.querySelector('#hover-color');
       swatch.style['background-color'] = hoverColor;
-  
+      let arrow = optionTile.firstChild.cloneNode(true);
+      arrow.classList.add('swatch-arrow')
+      arrow.style.position = 'relative';
+      if (swatch.firstChild) {
+        swatch.removeChild(swatch.firstChild)
+      }
+      swatch.appendChild(arrow)
     }
 };
 
 
 function hoverFunction(optionTile, hoverColor) {
-  let hover = () => hoverStep(hoverColor);
+  let hover = () => hoverStep(optionTile, hoverColor);
   optionTile.addEventListener('mouseover', hover());
 }
 
@@ -154,6 +160,8 @@ export function finishStar(finishTile) {
 
 export function styleWin(selectedTiles, finishTile, color, level, lives) {
   let body = document.querySelector('body');
+  let hoverSwatch = document.querySelector('#hover-color');
+  hoverSwatch.style['background-color'] = 'black';
 
   // EXTRA TILES
   Object.values(allTiles).forEach(tile => {
@@ -179,6 +187,7 @@ export function styleWin(selectedTiles, finishTile, color, level, lives) {
   livesUpdate(lives, 'add', increment)
 
   let swatch = document.querySelector('#target-color');
+
   swatch.classList.remove('blink');
 
 

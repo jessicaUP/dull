@@ -298,10 +298,19 @@ function removeOption(optionTiles, currentTile, finishTile) {
 
 }
 
-function hoverStep(hoverColor) {
+function hoverStep(optionTile, hoverColor) {
   return function () {
     var swatch = document.querySelector('#hover-color');
     swatch.style['background-color'] = hoverColor;
+    var arrow = optionTile.firstChild.cloneNode(true);
+    arrow.classList.add('swatch-arrow');
+    arrow.style.position = 'relative';
+
+    if (swatch.firstChild) {
+      swatch.removeChild(swatch.firstChild);
+    }
+
+    swatch.appendChild(arrow);
   };
 }
 
@@ -309,7 +318,7 @@ function hoverStep(hoverColor) {
 
 function hoverFunction(optionTile, hoverColor) {
   var hover = function hover() {
-    return hoverStep(hoverColor);
+    return hoverStep(optionTile, hoverColor);
   };
 
   optionTile.addEventListener('mouseover', hover());
@@ -330,7 +339,9 @@ function finishStar(finishTile) {
   finishEle.appendChild(star);
 }
 function styleWin(selectedTiles, finishTile, color, level, lives) {
-  var body = document.querySelector('body'); // EXTRA TILES
+  var body = document.querySelector('body');
+  var hoverSwatch = document.querySelector('#hover-color');
+  hoverSwatch.style['background-color'] = 'black'; // EXTRA TILES
 
   Object.values(_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles).forEach(function (tile) {
     var coor = tile.coor,
