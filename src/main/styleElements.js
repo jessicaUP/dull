@@ -127,8 +127,8 @@ function hoverStep(optionTile, hoverColor) {
       let arrow = optionTile.firstChild.cloneNode(true);
       arrow.classList.add('swatch-arrow')
       arrow.style.position = 'relative';
-      if (swatch.firstChild) {
-        swatch.removeChild(swatch.firstChild)
+      if (swatch.lastChild) {
+        swatch.removeChild(swatch.lastChild)
       }
       swatch.appendChild(arrow)
     }
