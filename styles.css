@@ -68,7 +68,7 @@
 
 .swatches {
   position: fixed;
-  top: 37vw;
+  top: 38vw;
   right: 8vw;
   width: 100px;
   height: 100px; }
@@ -89,6 +89,7 @@
     overflow: visible; }
     .swatches .swatch h5 {
       position: absolute;
+      color: rgba(0, 0, 0, 0.7);
       font-size: 13px;
       font-family: Helvetica, sans-serif; }
   .swatches #target-color {
@@ -212,12 +213,12 @@ body {
   justify-content: center;
   position: absolute;
   width: 85px;
-  height: 128px;
-  top: -45px;
+  height: 85px;
+  top: -25px;
   left: -60px; }
   .lives-cont h4 {
     position: absolute;
-    top: 0;
+    top: -20px;
     vertical-align: bottom;
     font-family: Odibee Sans;
     font-size: 85px;
@@ -268,24 +269,14 @@ body {
     .lives-cont .bottom:hover .help {
       display: block; }
 
-.lives-heart {
-  position: fixed;
-  top: 30.5vw;
-  right: 19.5vw;
-  vertical-align: bottom;
-  font-family: Odibee Sans;
-  font-size: 50px;
-  color: black;
+.lives-amount {
+  position: absolute;
   margin: 0;
-  z-index: 5; }
-  .lives-heart .lives-amount {
-    position: absolute;
-    margin: 0;
-    color: white;
-    font-size: 15px;
-    z-index: 6;
-    top: 29px;
-    right: 18px; }
+  color: white;
+  font-size: 15px;
+  z-index: 6;
+  top: 29px;
+  right: 18px; }
 
 .no-show {
   display: none; }
@@ -358,6 +349,16 @@ body {
     left: 15px;
     color: white;
     z-index: 10; }
+  .modal .start-message {
+    color: rgba(255, 255, 255, 0.3);
+    font-family: Helvetica, sans-serif;
+    font-weight: lighter;
+    font-size: 15px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 8;
+    margin: 0; }
 
 .results-cont {
   position: relative;

@@ -15,7 +15,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-let level = 1;
+export let level = 1;
 let lives = 3;
 
 export const OPTIONS = [
@@ -97,6 +97,7 @@ function findPath() {
 
     let next = optionTiles[randomNum(optionTiles.length)];
     selectedTiles.push(next);
+
 
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1

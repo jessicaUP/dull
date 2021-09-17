@@ -1,8 +1,15 @@
-import { mixTile, allTiles } from '../mixPathGame/mixPathGame'
+import { mixTile, allTiles, level } from '../mixPathGame/mixPathGame'
 import { COLORS } from '../main/color'
+import { randomNum } from './helper';
 
 // GRID ELEMENTS
 
+let messages = [
+  '...you can do better then that',
+  '...that\'s all you got?!',
+  '...why are you taking a break',
+  '...keep going'
+]
 
 
 export function updateBackgound(targetColor) {
@@ -263,6 +270,11 @@ function modalFunc(element, type) {
       element.style.display = 'none';
     } else {
       element.style.display = 'flex';
+      if (level !== 1) {
+        let newMessage = messages[randomNum(messages.length)];
+        let current = document.querySelector('.start-message');
+        current.innerHTML = newMessage;
+      }
     }
 
   }
@@ -309,16 +321,19 @@ export function livesUpdate(currentCount, addOrSub, increment) {
     // let heartCont = document.createElement('DIV');
     // heartCont.setAttribute('class', 'lives-heart');
     // heartCont.innerHTML = '♥︎';
-    livesMemo.appendChild(livesMemo);
-    let body = document.querySelector('body');
-    body.appendChild(heartCont);
+
+    let heart = document.querySelector('.lives-cont')
+    heart.appendChild(livesMemo);
+    // let body = document.querySelector('body');
+    // body.appendChild(heartCont);
 
 
     // UPDATE OVERALL
     updateNav('lives', currentCount, increment);
 
-    // REMOVE TIMER
-    window.setTimeout(() => { heartCont.remove() }, 1000);
+    // FLASH / REMOVE TIMER
+    window.setTimeout(() => { livesMemo.style.color = 'black' }, 500);
+    window.setTimeout(() => { livesMemo.remove() }, 1000);
   }, 750)
 };
 

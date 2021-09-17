@@ -193,9 +193,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixPathGame/mixPathGame */ "./src/mixPathGame/mixPathGame.js");
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helper */ "./src/main/helper.js");
+
 
  // GRID ELEMENTS
 
+var messages = ['...you can do better then that', '...that\'s all you got?!', '...why are you taking a break', '...keep going'];
 function updateBackgound(targetColor) {
   var body = document.querySelector('body');
   var background = document.querySelector('.image-cont');
@@ -424,6 +427,12 @@ function modalFunc(element, type) {
       element.style.display = 'none';
     } else {
       element.style.display = 'flex';
+
+      if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
+        var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
+        var current = document.querySelector('.start-message');
+        current.innerHTML = newMessage;
+      }
     }
   };
 }
@@ -463,14 +472,18 @@ function livesUpdate(currentCount, addOrSub, increment) {
     // heartCont.setAttribute('class', 'lives-heart');
     // heartCont.innerHTML = '♥︎';
 
-    livesMemo.appendChild(livesMemo);
-    var body = document.querySelector('body');
-    body.appendChild(heartCont); // UPDATE OVERALL
+    var heart = document.querySelector('.lives-cont');
+    heart.appendChild(livesMemo); // let body = document.querySelector('body');
+    // body.appendChild(heartCont);
+    // UPDATE OVERALL
 
-    updateNav('lives', currentCount, increment); // REMOVE TIMER
+    updateNav('lives', currentCount, increment); // FLASH / REMOVE TIMER
 
     window.setTimeout(function () {
-      heartCont.remove();
+      livesMemo.style.color = 'black';
+    }, 500);
+    window.setTimeout(function () {
+      livesMemo.remove();
     }, 1000);
   }, 750);
 }
@@ -511,6 +524,7 @@ function updateNav(eleType, currentCount) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "allTiles": () => (/* binding */ allTiles),
+/* harmony export */   "level": () => (/* binding */ level),
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
 /* harmony export */   "mixTile": () => (/* binding */ mixTile),
