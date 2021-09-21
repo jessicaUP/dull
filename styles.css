@@ -184,6 +184,28 @@ body {
   margin: auto;
   height: auto; }
 
+.display {
+  position: absolute;
+  display: none;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: right;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0; }
+
+.buttons-cont {
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  width: 90%; }
+
 .nav-cont {
   position: absolute;
   top: 0;
@@ -206,6 +228,11 @@ body {
       .nav-cont .information .prev-star h4 {
         font-size: 100px;
         margin: 0; }
+
+.help-modal {
+  position: absolute;
+  top: 45vw;
+  left: 40px; }
 
 .lives-cont {
   display: flex;
@@ -260,12 +287,6 @@ body {
         font-family: Odibee Sans;
         font-size: 18px;
         margin: 5px; }
-    .lives-cont .bottom p {
-      font-family: Odibee Sans;
-      color: black;
-      font-size: 24px;
-      margin-left: 60px;
-      margin-top: 10px; }
     .lives-cont .bottom:hover .help {
       display: block; }
 
@@ -423,5 +444,45 @@ body {
     background-color: black;
     color: white;
     border: none; }
+
+.nav-button {
+  color: #ffffff;
+  height: 20px;
+  background-color: black;
+  z-index: 11; }
+
+.btn-text {
+  font-family: Helvetica, sans-serif;
+  text-align: right;
+  font-weight: lighter;
+  margin: 0;
+  margin-top: 5px;
+  margin-right: 3px;
+  color: rgba(255, 255, 255, 0.3); }
+
+.btn-text:hover {
+  font-size: 28px;
+  margin-top: 0;
+  color: white; }
+
+.nav-button-clicked {
+  background-color: black;
+  color: white;
+  z-index: 11; }
+  .nav-button-clicked .btn-text {
+    margin-top: 0;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.7); }
+
+#color-btn {
+  top: 45%; }
+
+#path-btn {
+  top: 50%;
+  right: 50%; }
+
+#swatch-btn {
+  top: 50%;
+  left: 50%; }
 
 /*# sourceMappingURL=styles.css.map */

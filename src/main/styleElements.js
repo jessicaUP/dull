@@ -54,6 +54,7 @@ export function styleOption(optionTiles, coor, pos, finalCheck) {
   let arrow = addArrow(pos);
   optionTile.appendChild(arrow);
   arrow.style.display = 'flex'
+  optionTile.style.cursor = ''
   
   if (finalCheck) {
     optionTile.removeChild(optionTile.firstChild)
@@ -264,12 +265,17 @@ export function addResult(level, selectedTiles) {
   prevLevel.remove();
 }
 
-function modalFunc(element, type) {
+function modalFunc(element, type, display = null) {
   return () => {
     if (type === 'close') {
       element.style.display = 'none';
+      let prevDisplay = document.querySelector('.display');
+      if (prevDisplay) prevDisplay.style.display = 'none';
     } else {
       element.style.display = 'flex';
+      display.style.display = 'flex';
+
+    
       if (level !== 1) {
         let newMessage = messages[randomNum(messages.length)];
         let current = document.querySelector('.start-message');
@@ -280,18 +286,68 @@ function modalFunc(element, type) {
   }
 }
 
+function helpClick(type) {
+  let prev = document.querySelector('.help');
+  if (prev) prev.style.display = 'none';
 
+  let infoEle;
+  switch (type) {
+    case 'color':
+      infoEle = document.querySelector('.help-colors');
+      break;
+    case 'path':
+      infoEle = document.querySelector('.help-path');
+      break;
+    case 'swatch':
+      infoEle = document.querySelector('.help-swathes');
+      break;
+  };
 
-export function createResults() {
-  let close = document.querySelector('.close-button');
-  let modal = document.querySelector('.modal');
-  let display = document.querySelector('.display-cont');
-  let starButton = document.querySelector('.result-star');
+  infoEle.style.display = 'flex';
+  
+}
 
-  starButton.addEventListener('click', modalFunc(modal, 'open'));
-  close.addEventListener('click', modalFunc(modal, 'close'));
-  modal.addEventListener('click', modalFunc(modal, 'close'));
-  display.addEventListener('click', (e) => e.stopPropagation());
+export function createHelp() {
+  let colorBtn = document.querySelector('#color-btn');
+  let pathBtn = document.querySelector('#path-btn');
+  let swatchBtn = document.querySelector('#swatch-btn');
+
+  colorBtn.addEventListener('click', () => helpClick('color'));
+  pathBtn.addEventListener('click', () => helpClick('path'));
+  swatchBtn.addEventListener('click', () => helpClick('swatch'));
+
+}
+
+export function createModal(types) {
+  let show;
+  let button;
+  let display;
+
+  types.forEach(type => {
+    switch (type) {
+      case 'help':
+        display = document.querySelector('.display-help');
+        button = document.querySelector('.help-modal')
+        break;
+      case 'results':
+        display = document.querySelector('display-results')
+        button = document.querySelector('.result-star')
+        break;
+    }
+
+    
+      let square = document.querySelector('.display-cont');
+      let close = document.querySelector('.close-button');
+      let modal = document.querySelector('.modal');
+    
+    
+      button.addEventListener('click', modalFunc(modal, 'open', display));
+      close.addEventListener('click', modalFunc(modal, 'close'));
+      modal.addEventListener('click', modalFunc(modal, 'close'));
+      square.addEventListener('click', (e) => e.stopPropagation());
+
+  })
+
 }
 
 export function createLevelDiv(level) {

@@ -149,20 +149,25 @@ function sameArray(arr1, arr2) {
 // }
 
 function optionStyle(coor) {
-  var radiusStr;
+  // let radiusStr;
+  var cursor;
 
   if (sameArray(coor, up)) {
-    radiusStr = '100% 100% 0 0'; // direction = up;
+    // radiusStr = '100% 100% 0 0';
+    cursor = 'n-resize'; // direction = up;
   } else if (sameArray(coor, right)) {
-    radiusStr = '0 100% 100% 0'; // direction = right;
+    // radiusStr = '0 100% 100% 0';
+    cursor = 'e-resize'; // direction = right;
   } else if (sameArray(coor, down)) {
-    radiusStr = '0 0 100% 100%'; // direction = down;
+    // radiusStr = '0 0 100% 100%';
+    cursor = 's-resize'; // direction = down;
   } else if (sameArray(coor, left)) {
-    radiusStr = '100% 0 0 100%'; // direction = left;
-  }
+    // radiusStr = '100% 0 0 100%';
+    cursor = 'w-resize'; // direction = left;
+  } // radiusStr = '0'
 
-  radiusStr = '0';
-  return radiusStr;
+
+  return cursor;
 }
 
 /***/ }),
@@ -186,7 +191,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "styleWin": () => (/* binding */ styleWin),
 /* harmony export */   "createNextButton": () => (/* binding */ createNextButton),
 /* harmony export */   "addResult": () => (/* binding */ addResult),
-/* harmony export */   "createResults": () => (/* binding */ createResults),
+/* harmony export */   "createHelp": () => (/* binding */ createHelp),
+/* harmony export */   "createModal": () => (/* binding */ createModal),
 /* harmony export */   "createLevelDiv": () => (/* binding */ createLevelDiv),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
 /* harmony export */   "updateNav": () => (/* binding */ updateNav)
@@ -238,6 +244,7 @@ function styleOption(optionTiles, coor, pos, finalCheck) {
   var arrow = addArrow(pos);
   optionTile.appendChild(arrow);
   arrow.style.display = 'flex';
+  optionTile.style.cursor = '';
 
   if (finalCheck) {
     optionTile.removeChild(optionTile.firstChild); // let star = optionTile.firstChild;
@@ -422,11 +429,15 @@ function addResult(level, selectedTiles) {
 }
 
 function modalFunc(element, type) {
+  var display = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
     if (type === 'close') {
       element.style.display = 'none';
+      var prevDisplay = document.querySelector('.display');
+      if (prevDisplay) prevDisplay.style.display = 'none';
     } else {
       element.style.display = 'flex';
+      display.style.display = 'flex';
 
       if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
         var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
@@ -437,16 +448,69 @@ function modalFunc(element, type) {
   };
 }
 
-function createResults() {
-  var close = document.querySelector('.close-button');
-  var modal = document.querySelector('.modal');
-  var display = document.querySelector('.display-cont');
-  var starButton = document.querySelector('.result-star');
-  starButton.addEventListener('click', modalFunc(modal, 'open'));
-  close.addEventListener('click', modalFunc(modal, 'close'));
-  modal.addEventListener('click', modalFunc(modal, 'close'));
-  display.addEventListener('click', function (e) {
-    return e.stopPropagation();
+function helpClick(type) {
+  var prev = document.querySelector('.help');
+  if (prev) prev.style.display = 'none';
+  var infoEle;
+
+  switch (type) {
+    case 'color':
+      infoEle = document.querySelector('.help-colors');
+      break;
+
+    case 'path':
+      infoEle = document.querySelector('.help-path');
+      break;
+
+    case 'swatch':
+      infoEle = document.querySelector('.help-swathes');
+      break;
+  }
+
+  ;
+  infoEle.style.display = 'flex';
+}
+
+function createHelp() {
+  var colorBtn = document.querySelector('#color-btn');
+  var pathBtn = document.querySelector('#path-btn');
+  var swatchBtn = document.querySelector('#swatch-btn');
+  colorBtn.addEventListener('click', function () {
+    return helpClick('color');
+  });
+  pathBtn.addEventListener('click', function () {
+    return helpClick('path');
+  });
+  swatchBtn.addEventListener('click', function () {
+    return helpClick('swatch');
+  });
+}
+function createModal(types) {
+  var show;
+  var button;
+  var display;
+  types.forEach(function (type) {
+    switch (type) {
+      case 'help':
+        display = document.querySelector('.display-help');
+        button = document.querySelector('.help-modal');
+        break;
+
+      case 'results':
+        display = document.querySelector('display-results');
+        button = document.querySelector('.result-star');
+        break;
+    }
+
+    var square = document.querySelector('.display-cont');
+    var close = document.querySelector('.close-button');
+    var modal = document.querySelector('.modal');
+    button.addEventListener('click', modalFunc(modal, 'open', display));
+    close.addEventListener('click', modalFunc(modal, 'close'));
+    modal.addEventListener('click', modalFunc(modal, 'close'));
+    square.addEventListener('click', function (e) {
+      return e.stopPropagation();
+    });
   });
 }
 function createLevelDiv(level) {
@@ -559,7 +623,7 @@ var path;
 var startTile;
 var finishTile;
 var targetColor;
-var level = 1;
+var level = 5;
 var lives = 3;
 var OPTIONS = [{
   dir: [-1, 0],
@@ -586,7 +650,7 @@ var hoverColor; // let direction;
 function startGame() {
   // CREATE GRID
   setNewGrid();
-  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createResults)(); // ADD RESET... for now
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results']); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
 }

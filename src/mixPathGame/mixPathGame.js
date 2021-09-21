@@ -1,6 +1,6 @@
 import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray, optionStyle, createSwatches, addArrow } from '../main/helper'
-import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover, styleFinish, finishStar, createResults } from '../main/styleElements';
+import { randomNum, posObject, colorArr, sameArray,optionStyle, createSwatches, addArrow } from '../main/helper'
+import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover, styleFinish, finishStar, createResults, createModal } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -15,7 +15,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-export let level = 1;
+export let level = 5;
 let lives = 3;
 
 export const OPTIONS = [
@@ -43,7 +43,7 @@ export function startGame() {
 
   // CREATE GRID
   setNewGrid();
-  createResults();
+  createModal(['help', 'results']);
 
   // ADD RESET... for now
   // const reset = document.querySelector('.reset');
