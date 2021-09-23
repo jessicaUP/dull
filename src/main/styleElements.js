@@ -50,6 +50,7 @@ export function styleOption(optionTiles, coor, pos, finalCheck) {
   let optionTile = allTiles[coor].ele;
   let hoverColor = optionTile.getAttribute('colorId');
   hoverFunction(optionTile, hoverColor);
+  optionTile.style.cursor = 'pointer';
   
   let arrow = addArrow(pos);
   optionTile.appendChild(arrow);
@@ -74,13 +75,12 @@ function addArrow(coor) {
   return arrow;
 }
 
-export function cloneTile() {
 
-}
 
 export function removeHover(tile) {
   // debugger
   // let newEle = tile.cloneNode(true);
+  tile.style.cursor = 'default';
   let colorId = COLORS[colorCount];
   let coor = tile.getAttribute('coor');
   let colorCount = tile.getAttribute('color-idx');
@@ -160,7 +160,6 @@ export function styleFinish(finishTile) {
 export function finishStar(finishTile, ele = false) {
   let finishEle;
   if (ele) {
-    debugger
     finishEle = finishTile;
   } else {
     finishEle = allTiles[finishTile].ele;
@@ -265,22 +264,42 @@ export function addResult(level, selectedTiles) {
   prevLevel.remove();
 }
 
-function modalFunc(element, type, display = null) {
+function modalFunc(element, type, displayType = null) {
   return () => {
+    debugger
     if (type === 'close') {
       element.style.display = 'none';
-      let prevDisplay = document.querySelector('.display');
+      let prevDisplay = document.querySelector('.display-help');
+      let prevDisplay2 = document.querySelector('.display-results');
+      // let prevHeader = document.querySelector('.buttons-cont');
       if (prevDisplay) prevDisplay.style.display = 'none';
+      if (prevDisplay2) prevDisplay2.style.display = 'none';
+      // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
-      display.style.display = 'flex';
+      let display;
+      switch (displayType) {
+        case 'help':
+          display = document.querySelector('.display-help');
+          let current = document.querySelector('.start-message');
+          current.innerHTML = '';
+          break;
+        case 'results':
+          display = document.querySelector('.display-results')
 
-    
-      if (level !== 1) {
-        let newMessage = messages[randomNum(messages.length)];
-        let current = document.querySelector('.start-message');
-        current.innerHTML = newMessage;
+
+          if (level !== 1) {
+            let newMessage = messages[randomNum(messages.length)];
+            let current = document.querySelector('.start-message');
+            current.innerHTML = newMessage;
+          }
+          break;
+
       }
+
+      display.style.display = 'flex';
+    
+
     }
 
   }
@@ -310,12 +329,44 @@ function helpClick(type) {
 export function createHelp() {
   let colorBtn = document.querySelector('#color-btn');
   let pathBtn = document.querySelector('#path-btn');
-  let swatchBtn = document.querySelector('#swatch-btn');
+  let goalBtn = document.querySelector('#goal-btn');
 
   colorBtn.addEventListener('click', () => helpClick('color'));
   pathBtn.addEventListener('click', () => helpClick('path'));
-  swatchBtn.addEventListener('click', () => helpClick('swatch'));
+  goalBtn.addEventListener('click', () => helpClick('swatch'));
 
+};
+
+function btnFunc(clickedBtn, type) {
+  return () => {
+    let display, nextBtn;
+    let currentBtn = document.querySelector('.clicked')
+    let current = document.querySelector('.nav-button-clicked');
+    current.classList.toggle('nav-button-clicked');
+    currentBtn.classList.toggle('clicked');
+    // if (current) current.style.display = 'none';
+
+    switch (type) {
+      case 'page-info':
+        display = document.querySelector('#page-intro');
+        nextBtn = document.querySelector('#goal-btn');
+        break;
+      case 'page-color':
+        display = document.querySelector('#page-color');
+        nextBtn = document.querySelector('#color-btn');
+        break;
+      case 'page-path':
+        display = document.querySelector('#page-path');
+        nextBtn = document.querySelector('#path-btn');
+        break;
+      default:
+        break;
+    }
+
+    // display.style.display = 'flex';
+    nextBtn.classList.toggle('clicked')
+    display.classList.toggle('nav-button-clicked');
+  }
 }
 
 export function createModal(types) {
@@ -327,11 +378,17 @@ export function createModal(types) {
     switch (type) {
       case 'help':
         display = document.querySelector('.display-help');
-        button = document.querySelector('.help-modal')
+        button = document.querySelector('.help-modal');
+        let goalNav = document.querySelector('#goal-btn');
+        let colorNav = document.querySelector('#color-btn');
+        let pathNav = document.querySelector('#path-btn');
+        goalNav.addEventListener('click', btnFunc(goalNav,'page-info'));
+        colorNav.addEventListener('click', btnFunc(colorNav,'page-color'));
+        pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
         break;
       case 'results':
-        display = document.querySelector('display-results')
-        button = document.querySelector('.result-star')
+        display = document.querySelector('.display-results');
+        button = document.querySelector('.result-star');
         break;
     }
 
@@ -341,7 +398,7 @@ export function createModal(types) {
       let modal = document.querySelector('.modal');
     
     
-      button.addEventListener('click', modalFunc(modal, 'open', display));
+      button.addEventListener('click', modalFunc(modal, 'open', type));
       close.addEventListener('click', modalFunc(modal, 'close'));
       modal.addEventListener('click', modalFunc(modal, 'close'));
       square.addEventListener('click', (e) => e.stopPropagation());

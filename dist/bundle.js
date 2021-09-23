@@ -183,7 +183,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "updateBackgound": () => (/* binding */ updateBackgound),
 /* harmony export */   "createTile": () => (/* binding */ createTile),
 /* harmony export */   "styleOption": () => (/* binding */ styleOption),
-/* harmony export */   "cloneTile": () => (/* binding */ cloneTile),
 /* harmony export */   "removeHover": () => (/* binding */ removeHover),
 /* harmony export */   "removeOption": () => (/* binding */ removeOption),
 /* harmony export */   "styleFinish": () => (/* binding */ styleFinish),
@@ -241,6 +240,7 @@ function styleOption(optionTiles, coor, pos, finalCheck) {
   var optionTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
   var hoverColor = optionTile.getAttribute('colorId');
   hoverFunction(optionTile, hoverColor);
+  optionTile.style.cursor = 'pointer';
   var arrow = addArrow(pos);
   optionTile.appendChild(arrow);
   arrow.style.display = 'flex';
@@ -264,10 +264,10 @@ function addArrow(coor) {
   return arrow;
 }
 
-function cloneTile() {}
 function removeHover(tile) {
   // debugger
   // let newEle = tile.cloneNode(true);
+  tile.style.cursor = 'default';
   var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
   var coor = tile.getAttribute('coor');
   var colorCount = tile.getAttribute('color-idx');
@@ -346,7 +346,6 @@ function finishStar(finishTile) {
   var finishEle;
 
   if (ele) {
-    debugger;
     finishEle = finishTile;
   } else {
     finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
@@ -429,21 +428,43 @@ function addResult(level, selectedTiles) {
 }
 
 function modalFunc(element, type) {
-  var display = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var displayType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
+    debugger;
+
     if (type === 'close') {
       element.style.display = 'none';
-      var prevDisplay = document.querySelector('.display');
+      var prevDisplay = document.querySelector('.display-help');
+      var prevDisplay2 = document.querySelector('.display-results'); // let prevHeader = document.querySelector('.buttons-cont');
+
       if (prevDisplay) prevDisplay.style.display = 'none';
+      if (prevDisplay2) prevDisplay2.style.display = 'none'; // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
-      display.style.display = 'flex';
+      var display;
 
-      if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
-        var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
-        var current = document.querySelector('.start-message');
-        current.innerHTML = newMessage;
+      switch (displayType) {
+        case 'help':
+          display = document.querySelector('.display-help');
+          var current = document.querySelector('.start-message');
+          current.innerHTML = '';
+          break;
+
+        case 'results':
+          display = document.querySelector('.display-results');
+
+          if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
+            var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
+
+            var _current = document.querySelector('.start-message');
+
+            _current.innerHTML = newMessage;
+          }
+
+          break;
       }
+
+      display.style.display = 'flex';
     }
   };
 }
@@ -474,17 +495,53 @@ function helpClick(type) {
 function createHelp() {
   var colorBtn = document.querySelector('#color-btn');
   var pathBtn = document.querySelector('#path-btn');
-  var swatchBtn = document.querySelector('#swatch-btn');
+  var goalBtn = document.querySelector('#goal-btn');
   colorBtn.addEventListener('click', function () {
     return helpClick('color');
   });
   pathBtn.addEventListener('click', function () {
     return helpClick('path');
   });
-  swatchBtn.addEventListener('click', function () {
+  goalBtn.addEventListener('click', function () {
     return helpClick('swatch');
   });
 }
+;
+
+function btnFunc(clickedBtn, type) {
+  return function () {
+    var display, nextBtn;
+    var currentBtn = document.querySelector('.clicked');
+    var current = document.querySelector('.nav-button-clicked');
+    current.classList.toggle('nav-button-clicked');
+    currentBtn.classList.toggle('clicked'); // if (current) current.style.display = 'none';
+
+    switch (type) {
+      case 'page-info':
+        display = document.querySelector('#page-intro');
+        nextBtn = document.querySelector('#goal-btn');
+        break;
+
+      case 'page-color':
+        display = document.querySelector('#page-color');
+        nextBtn = document.querySelector('#color-btn');
+        break;
+
+      case 'page-path':
+        display = document.querySelector('#page-path');
+        nextBtn = document.querySelector('#path-btn');
+        break;
+
+      default:
+        break;
+    } // display.style.display = 'flex';
+
+
+    nextBtn.classList.toggle('clicked');
+    display.classList.toggle('nav-button-clicked');
+  };
+}
+
 function createModal(types) {
   var show;
   var button;
@@ -494,10 +551,16 @@ function createModal(types) {
       case 'help':
         display = document.querySelector('.display-help');
         button = document.querySelector('.help-modal');
+        var goalNav = document.querySelector('#goal-btn');
+        var colorNav = document.querySelector('#color-btn');
+        var pathNav = document.querySelector('#path-btn');
+        goalNav.addEventListener('click', btnFunc(goalNav, 'page-info'));
+        colorNav.addEventListener('click', btnFunc(colorNav, 'page-color'));
+        pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
         break;
 
       case 'results':
-        display = document.querySelector('display-results');
+        display = document.querySelector('.display-results');
         button = document.querySelector('.result-star');
         break;
     }
@@ -505,7 +568,7 @@ function createModal(types) {
     var square = document.querySelector('.display-cont');
     var close = document.querySelector('.close-button');
     var modal = document.querySelector('.modal');
-    button.addEventListener('click', modalFunc(modal, 'open', display));
+    button.addEventListener('click', modalFunc(modal, 'open', type));
     close.addEventListener('click', modalFunc(modal, 'close'));
     modal.addEventListener('click', modalFunc(modal, 'close'));
     square.addEventListener('click', function (e) {

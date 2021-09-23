@@ -55,6 +55,15 @@ body
   // width: 100%
   // height: 100%
 
+
+
+.help-page
+  display: flex
+  flex-direction: column
+
+  .step-message
+    color: rgba(255, 255, 255, .6) 
+
 .buttons-cont
   position: absolute
   right: 20px
@@ -95,9 +104,18 @@ body
         margin: 0
         
 .help-modal
+  // display: nonle
   position: absolute
-  top: 45vw
-  left: 40px      
+  font-family: Odibee Sans
+  top: 43vw
+  left: 40px 
+  cursor: pointer 
+
+.help-page
+  display: none
+
+// #page-intro
+//   display: flex  
 
 // p
 //   position: absolute
@@ -156,6 +174,7 @@ body
   .bottom
     position: relative
     display: inline-block
+
 
 
 
@@ -339,6 +358,7 @@ body
     left: 15px
     color: white
     z-index: 10
+    cursor: pointer
   
   .start-message
     color: rgba(255, 255, 255, .3)
@@ -350,6 +370,9 @@ body
     right: 15px
     z-index: 8
     margin: 0
+
+.result-star
+  cursor: pointer
 
 .results-cont
   position: relative
@@ -454,17 +477,18 @@ body
 
 
 .btn-text:hover
-  font-size: 28px
+  font-size: 24px
   margin-top: 0
   color: white
+  cursor: pointer
 
 
-.nav-button-clicked
+.clicked
   // position: absolute
   // width: 150px
   // height: 20px
   // border: 3px double black
-  background-color: black
+  // background-color: black
   color: white
   // border-radius: 100%
   z-index: 11
@@ -474,6 +498,11 @@ body
     margin-top: 0
     font-size: 24px
     color: rgba(255, 255, 255, .7)
+
+  .btn-text:hover
+    // color: white
+    cursor: default
+
 
 
 
@@ -487,3 +516,7 @@ body
 #swatch-btn
   top: 50%
   left: 50%
+
+
+.nav-button-clicked
+  display: flex
