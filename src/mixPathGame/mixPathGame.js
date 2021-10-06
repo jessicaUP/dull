@@ -15,7 +15,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-export let level = 1;
+export let level = 3;
 let lives = 3;
 
 export const OPTIONS = [
@@ -44,6 +44,7 @@ export function startGame() {
   // CREATE GRID
   setNewGrid();
   createModal(['help', 'results']);
+  window.addEventListener('keydown', keyboardMix());
 
   // ADD RESET... for now
   // const reset = document.querySelector('.reset');
@@ -103,7 +104,6 @@ function findPath() {
     console.log(next);
 
     if (!next) {
-      debugger
       currentTile = start;
       currentColor = startColor;
       findPath();
@@ -206,7 +206,58 @@ function checkWinLose(color) {
     };
 };
 
+export function keyboardMix() {
+  // JUST HAVE TO SELECT AND CLICK TILE
+  // OPTIONS = [
+  //   { dir: [-1, 0], name: 'up' },
+  //   { dir: [1, 0], name: 'down' },
+  //   { dir: [0, -1], name: 'left' },
+  //   { dir: [0, 1], name: 'right' }
+  // ];
+  return (e) => {
+    console.log(e.keyCode);
+    let direction;
+    let keyType;
+    switch (e.keyCode) {
+      case 37:
+      direction = 'left';
+      keyType = 'direction';
+      break;
+      case 38:
+      direction = 'up';
+      keyType = 'direction';
+      break;
+      case 39:
+      direction = 'right';
+      keyType = 'direction';
+      break;
+      case 40:
+      direction = 'down';
+      keyType = 'direction';
+      break;
+    };
 
+    let nextEle;
+    if (keyType === 'direction') {
+      let tile = allTiles[currentTile.coor];
+      OPTIONS.forEach(dirObj => {
+        if (dirObj.name === direction) {
+          let newX = dirObj.dir[0] + tile.x;
+          let newY = dirObj.dir[1] + tile.y;
+          let newCoor = `${newX}-${newY}`
+    
+          nextEle = allTiles[newCoor].ele
+          return;
+        }
+      })
+      nextEle.click();
+  
+    } else {
+      nextEle = document.querySelector('.blink')
+    }
+    nextEle.click();
+  }
+}
 
 export function mixTile() {
   let clickedCoor = this.getAttribute('coor');
@@ -347,8 +398,6 @@ function nextMoveOptions(styleCheck) {
     let newY = pos.dir[1] + tile.y;
     let newCoor = `${newX}-${newY}`
 
-    // SHOULD CREATE ARROW INSTEAD
-    // let arrow = document.querySelector(`#${pos.name}`);
     
     if (newX <= 10 &&
       newX > 0 &&

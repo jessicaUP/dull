@@ -8,7 +8,8 @@ let messages = [
   '...you can do better then that',
   '...that\'s all you got?!',
   '...why are you taking a break',
-  '...keep going'
+  '...keep going',
+  '...can you handle the pressure?!'
 ]
 
 
@@ -78,7 +79,6 @@ function addArrow(coor) {
 
 
 export function removeHover(tile) {
-  // debugger
   // let newEle = tile.cloneNode(true);
   tile.style.cursor = 'default';
   let colorId = COLORS[colorCount];

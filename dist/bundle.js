@@ -204,7 +204,7 @@ __webpack_require__.r(__webpack_exports__);
 
  // GRID ELEMENTS
 
-var messages = ['...you can do better then that', '...that\'s all you got?!', '...why are you taking a break', '...keep going'];
+var messages = ['...you can do better then that', '...that\'s all you got?!', '...why are you taking a break', '...keep going', '...can you handle the pressure?!'];
 function updateBackgound(targetColor) {
   var body = document.querySelector('body');
   var background = document.querySelector('.image-cont');
@@ -266,7 +266,6 @@ function addArrow(coor) {
 }
 
 function removeHover(tile) {
-  // debugger
   // let newEle = tile.cloneNode(true);
   tile.style.cursor = 'default';
   var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
@@ -653,6 +652,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "level": () => (/* binding */ level),
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
+/* harmony export */   "keyboardMix": () => (/* binding */ keyboardMix),
 /* harmony export */   "mixTile": () => (/* binding */ mixTile),
 /* harmony export */   "resetGrid": () => (/* binding */ resetGrid)
 /* harmony export */ });
@@ -685,7 +685,7 @@ var path;
 var startTile;
 var finishTile;
 var targetColor;
-var level = 1;
+var level = 3;
 var lives = 3;
 var OPTIONS = [{
   dir: [-1, 0],
@@ -712,7 +712,8 @@ var hoverColor; // let direction;
 function startGame() {
   // CREATE GRID
   setNewGrid();
-  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results']); // ADD RESET... for now
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results']);
+  window.addEventListener('keydown', keyboardMix()); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
 }
@@ -763,7 +764,6 @@ function findPath() {
     console.log(next);
 
     if (!next) {
-      debugger;
       currentTile = start;
       currentColor = startColor;
       findPath();
@@ -858,6 +858,63 @@ function checkWinLose(color) {
 }
 
 ;
+function keyboardMix() {
+  // JUST HAVE TO SELECT AND CLICK TILE
+  // OPTIONS = [
+  //   { dir: [-1, 0], name: 'up' },
+  //   { dir: [1, 0], name: 'down' },
+  //   { dir: [0, -1], name: 'left' },
+  //   { dir: [0, 1], name: 'right' }
+  // ];
+  return function (e) {
+    console.log(e.keyCode);
+    var direction;
+    var keyType;
+
+    switch (e.keyCode) {
+      case 37:
+        direction = 'left';
+        keyType = 'direction';
+        break;
+
+      case 38:
+        direction = 'up';
+        keyType = 'direction';
+        break;
+
+      case 39:
+        direction = 'right';
+        keyType = 'direction';
+        break;
+
+      case 40:
+        direction = 'down';
+        keyType = 'direction';
+        break;
+    }
+
+    ;
+    var nextEle;
+
+    if (keyType === 'direction') {
+      var tile = allTiles[currentTile.coor];
+      OPTIONS.forEach(function (dirObj) {
+        if (dirObj.name === direction) {
+          var newX = dirObj.dir[0] + tile.x;
+          var newY = dirObj.dir[1] + tile.y;
+          var newCoor = "".concat(newX, "-").concat(newY);
+          nextEle = allTiles[newCoor].ele;
+          return;
+        }
+      });
+      nextEle.click();
+    } else {
+      nextEle = document.querySelector('.blink');
+    }
+
+    nextEle.click();
+  };
+}
 function mixTile() {
   var clickedCoor = this.getAttribute('coor');
   var check = optionTiles.some(function (coor) {
@@ -979,8 +1036,7 @@ function nextMoveOptions(styleCheck) {
   Object.values(OPTIONS).forEach(function (pos) {
     var newX = pos.dir[0] + tile.x;
     var newY = pos.dir[1] + tile.y;
-    var newCoor = "".concat(newX, "-").concat(newY); // SHOULD CREATE ARROW INSTEAD
-    // let arrow = document.querySelector(`#${pos.name}`);
+    var newCoor = "".concat(newX, "-").concat(newY);
 
     if (newX <= 10 && newX > 0 && newY <= 10 && newY > 0 && !selectedTiles.includes(newCoor)) {
       if (!styleCheck) {
