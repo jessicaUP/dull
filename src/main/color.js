@@ -11,6 +11,8 @@ export function randomColor() {
 
 function colorArr(rgbColor) {
   // 'rgb(r, g, b)'
+
+  if (typeof rgbColor !== 'string') return rgbColor;
   let step = rgbColor.split('(')[1].split(')')[0].split(', ');
 
   return step.map(num => parseInt(num));

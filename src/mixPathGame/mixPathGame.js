@@ -15,7 +15,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-export let level = 5;
+export let level = 1;
 let lives = 3;
 
 export const OPTIONS = [
@@ -91,13 +91,24 @@ function createMixGrid() {
 function findPath() {
   let mixedColor;
   currentColor = setFirstColor(currentColor);
+  let start = currentTile;
+  let startColor = currentColor;
   
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
-
     let next = optionTiles[randomNum(optionTiles.length)];
     selectedTiles.push(next);
 
+    console.log(optionTiles);
+    console.log(next);
+
+    if (!next) {
+      debugger
+      currentTile = start;
+      currentColor = startColor;
+      findPath();
+      return;
+    }
 
     let nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1
@@ -330,7 +341,7 @@ function markOptions() {
 function nextMoveOptions(styleCheck) {
   let newOptionTiles = [];
   let tile = allTiles[currentTile.coor];
-
+  
   Object.values(OPTIONS).forEach(pos => {
     let newX = pos.dir[0] + tile.x;
     let newY = pos.dir[1] + tile.y;

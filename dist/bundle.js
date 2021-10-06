@@ -35,6 +35,7 @@ function randomColor() {
 
 function colorArr(rgbColor) {
   // 'rgb(r, g, b)'
+  if (typeof rgbColor !== 'string') return rgbColor;
   var step = rgbColor.split('(')[1].split(')')[0].split(', ');
   return step.map(function (num) {
     return parseInt(num);
@@ -430,8 +431,6 @@ function addResult(level, selectedTiles) {
 function modalFunc(element, type) {
   var displayType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
-    debugger;
-
     if (type === 'close') {
       element.style.display = 'none';
       var prevDisplay = document.querySelector('.display-help');
@@ -686,7 +685,7 @@ var path;
 var startTile;
 var finishTile;
 var targetColor;
-var level = 5;
+var level = 1;
 var lives = 3;
 var OPTIONS = [{
   dir: [-1, 0],
@@ -753,11 +752,24 @@ function createMixGrid() {
 function findPath() {
   var mixedColor;
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(currentColor);
+  var start = currentTile;
+  var startColor = currentColor;
 
   while (count <= level) {
     optionTiles = nextMoveOptions(false);
     var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)];
     selectedTiles.push(next);
+    console.log(optionTiles);
+    console.log(next);
+
+    if (!next) {
+      debugger;
+      currentTile = start;
+      currentColor = startColor;
+      findPath();
+      return;
+    }
+
     var nextColor = allTiles[next].ele.getAttribute('colorId');
     count = count + 1;
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);

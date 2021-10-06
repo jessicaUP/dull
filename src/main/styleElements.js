@@ -266,7 +266,6 @@ export function addResult(level, selectedTiles) {
 
 function modalFunc(element, type, displayType = null) {
   return () => {
-    debugger
     if (type === 'close') {
       element.style.display = 'none';
       let prevDisplay = document.querySelector('.display-help');
