@@ -433,10 +433,12 @@ function modalFunc(element, type) {
     if (type === 'close') {
       element.style.display = 'none';
       var prevDisplay = document.querySelector('.display-help');
-      var prevDisplay2 = document.querySelector('.display-results'); // let prevHeader = document.querySelector('.buttons-cont');
+      var prevDisplay2 = document.querySelector('.display-results');
+      var prevDisplay3 = document.querySelector('.display-about'); // let prevHeader = document.querySelector('.buttons-cont');
 
       if (prevDisplay) prevDisplay.style.display = 'none';
-      if (prevDisplay2) prevDisplay2.style.display = 'none'; // if (prevHeader) prevHeader.style.display = 'none';
+      if (prevDisplay2) prevDisplay2.style.display = 'none';
+      if (prevDisplay3) prevDisplay3.style.display = 'none'; // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
       var display;
@@ -459,6 +461,10 @@ function modalFunc(element, type) {
             _current.innerHTML = newMessage;
           }
 
+          break;
+
+        case 'about':
+          display = document.querySelector('.display-about');
           break;
       }
 
@@ -541,9 +547,11 @@ function btnFunc(clickedBtn, type) {
 }
 
 function createModal(types) {
-  var show;
   var button;
   var display;
+  var square = document.querySelector('.display-cont');
+  var close = document.querySelector('.close-button');
+  var modal = document.querySelector('.modal');
   types.forEach(function (type) {
     switch (type) {
       case 'help':
@@ -561,11 +569,14 @@ function createModal(types) {
         display = document.querySelector('.display-results');
         button = document.querySelector('.result-star');
         break;
+
+      case 'about':
+        display = document.querySelector('.display-about');
+        button = document.querySelector('.about');
+        square.appendChild(display);
+        break;
     }
 
-    var square = document.querySelector('.display-cont');
-    var close = document.querySelector('.close-button');
-    var modal = document.querySelector('.modal');
     button.addEventListener('click', modalFunc(modal, 'open', type));
     close.addEventListener('click', modalFunc(modal, 'close'));
     modal.addEventListener('click', modalFunc(modal, 'close'));
@@ -712,7 +723,7 @@ var hoverColor; // let direction;
 function startGame() {
   // CREATE GRID
   setNewGrid();
-  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results']);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results', 'about']);
   window.addEventListener('keydown', keyboardMix()); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);

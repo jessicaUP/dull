@@ -15,72 +15,8 @@
  </head>
  <body>
   <div class='image-cont'></div>
-  <p class='help-modal'>?</p>
-  <div class='modal'>
-    <div class='display-cont'>
-      <div class='close-button'>x</div>
-
-      <div class='display display-results'>
-        <h6 class='start-message'>...um you have to beat a level first</h6>
-        <div class='results-cont'></div>
-      </div>
-      
-      <div class='display display-help'>
-        <ul>
-          <li class='help-page nav-button-clicked' id='page-intro'>
-            <h5 class='message-header'>how do I play...</h6>
-              <h6 class='step-message'>...find the path to the finish star space, everytime you click a space that tile color will be added to your mixed bucket.</h6>
-              <h6 class='step-message'>...the path will be as long as the level number (level 10 is 10 clicks away from the start position)</h6>
-              <h6 class='step-message'>...you pass a level, if you mix the correct color and land on the target space.</h6>
-              <!-- <h6 class='step-message'>...create a path to the finish star tile, each time you move you add the new color to your mixed path color.</h6> -->
-          </li>
-          <li class='help-page' id='page-color'>
-            <h5 class='message-header'>mixing colors...</h6>
-              <h6 class='step-message'>...each tile adds the same amount of color to the mixture, so the first click will be a 1:1 ratio, second 2:1, making the change more subtle as you add ;)</h6>
-              <img class='gif' src="assets/pictures/bucketGif.gif" alt="`bucket-mix-colors">
-              <h6 class='step-message'>...you can use the swatch console to compare your current mixed color to the target.
-              </h6>
-              <img class='gif' src="assets/pictures/swatch_breakdown.gif" alt="swatch_breakdown">
-              <h6 class='step-message'>...hover over your arrow options on the board to view/compare on your swatch console</h6>
-          </li>
-          <li class='help-page' id='page-path'>
-            <h5 class='message-header'>finding a path...</h6>
-              <h6 class='step-message'>...the current selected tile will display the amount of clicks you have left.</h6>
-              <h6 class='step-message'>...you can not cross over your current path</h6>
-              <h6 class='step-message'>...every incorrent try you will lose a life, but will gain lives when your complete a level.</h6>
-              <h6 class='step-message'>...press the x on the current tile to try again.</h6>
-              <!-- <h6 class='step-message'>...create a path to the finish star tile, each time you move you add the new color to your mixed path color.</h6> -->
-          </li>
-        </ul>
-
-        <div class='buttons-cont'>
-          <div class='nav-button clicked' id='goal-btn'>
-            <h3 class='btn-text'>...goal</h3>
-          </div>
-          <div class='nav-button' id='color-btn'>
-            <h3 class='btn-text'>...mixing colors</h3>
-          </div>
-          <div class='nav-button' id='path-btn'>
-            <h3 class='btn-text'>...finding a path</h3>
-          </div>
-        </div>
-
-      
-        <div class='help help-goal nav-button-clicked'>
-      
-        </div>
-        <div class='help help-colors'>
-      
-        </div>
-        <div class='help help-path'>
-      
-        </div>
-        <!-- <h6 class='help-message'>...do you even know how to play?</h6> -->
-
-      </div>
-
-    </div>
-  </div>
+  <!-- <p class='help-modal'>?</p> -->
+  
 
 
   </div>
@@ -98,14 +34,117 @@
         </h4>
       </div> -->
     <div class='information'>
+        <button class='level-button help-modal'>help</button>
+        <div class='modal'>
+          <div class='display-cont'>
+            <div class='close-button'>x</div>
+      
+            <div class='display display-results'>
+              <h6 class='start-message'>...um you have to beat a level first</h6>
+              <div class='results-cont'></div>
+            </div>
+      
+            <div class='display display-help'>
+              <ul>
+                <li class='help-page nav-button-clicked' id='page-intro'>
+                  <h5 class='message-header'>how do I play...</h6>
+                    <h6 class='step-message'>...find the path to the finish star space, everytime you click a space that tile
+                      color will be added to your mixed bucket.</h6>
+                    <h6 class='step-message'>...the path will be as long as the level number (level 10 is 10 clicks away from
+                      the start position)</h6>
+                    <img class='gif' src="assets/pictures/level10Example.png" alt="`bucket-mix-colors">
+                    <h6 class='step-message'>...you pass a level, if you mix the correct color and land on the target space.
+                    </h6>
+                    <!-- <h6 class='step-message'>...create a path to the finish star tile, each time you move you add the new color to your mixed path color.</h6> -->
+                </li>
+                <li class='help-page' id='page-color'>
+                  <h5 class='message-header'>mixing colors...</h6>
+                    <h6 class='step-message'>...each tile adds the same amount of color to the mixture, so the first click
+                      will be a 1:1 ratio, second 2:1, making the change more subtle as you add ;)</h6>
+                    <img class='gif' src="assets/pictures/bucketGif.gif" alt="`bucket-mix-colors">
+                    <h6 class='step-message'>...you can use the swatch console to compare your current mixed color to the
+                      target.
+                    </h6>
+                    <img class='gif' src="assets/pictures/swatch_breakdown.gif" alt="swatch_breakdown">
+                    <h6 class='step-message'>...hover over your arrow options on the board to view/compare on your swatch
+                      console</h6>
+                </li>
+                <li class='help-page' id='page-path'>
+                  <h5 class='message-header'>finding a path...</h6>
+                    <h6 class='step-message'>...the current selected tile will display the amount of clicks you have left.
+                    </h6>
+                    <h6 class='step-message'>...you can not cross over your current path</h6>
+                    <h6 class='step-message'>...every incorrent try you will lose a life, but will gain lives when your
+                      complete a level.</h6>
+                    <h6 class='step-message'>...press the x on the current tile to try again.</h6>
+                    <!-- <h6 class='step-message'>...create a path to the finish star tile, each time you move you add the new color to your mixed path color.</h6> -->
+                </li>
+              </ul>
+      
+              <div class='buttons-cont'>
+                <div class='nav-button clicked' id='goal-btn'>
+                  <h3 class='btn-text'>...goal</h3>
+                </div>
+                <div class='nav-button' id='color-btn'>
+                  <h3 class='btn-text'>...mixing colors</h3>
+                </div>
+                <div class='nav-button' id='path-btn'>
+                  <h3 class='btn-text'>...finding a path</h3>
+                </div>
+              </div>
+      
+      
+              <div class='help help-goal nav-button-clicked'>
+      
+              </div>
+              <div class='help help-colors'>
+      
+              </div>
+              <div class='help help-path'>
+      
+              </div>
+              <!-- <h6 class='help-message'>...do you even know how to play?</h6> -->
+      
+            </div>
+      
+          </div>
+
+
+        </div>
 
       <div class='prev-star'>
-        <h4 class='result-star'>★</h4>
-        <!-- <div class='level-button'>...previous</div> -->
+        <button class='level-button result-star'>results</button>
       </div>
-      <!-- <div class='button-cont'>
-        <div class='level-button'>...previous</div>
-      </div> -->
+
+
+      <button class='level-button about'>about</button>
+      <div class='display display-about'>
+        <h2 class='about-title'>...thanks for playing!</h2>;
+        <p id='link-message'>Checkout my links below and get in touch by email at
+          uphoff.jessica@gmail.com</p>
+        <div class='icons'>
+          <a href="https://www.jessicauphoff.com" target="_blank">
+            <i class="fas fa-user-alt fa-2x"></i>
+            <p>Personal</p>
+          </a>
+          <a href="https://www.linkedin.com/in/jessica-uphoff-b2584b69/" target="_blank">
+            <i class="fab fa-linkedin-in fa-2x"></i>
+            <p>LinkedIn</p>
+          </a>
+          <a href="https://github.com/jessicaUP/WearbyParker" target="_blank">
+            <i class="fab fa-github fa-2x"></i>
+            <p>Github</p>
+          </a>
+          <a href="https://angel.co/u/jessica-uphoff" target="_blank">
+            <i class="fab fa-angellist fa-2x"></i>
+            <p>AngelList</p>
+          </a>
+          <a href="mailto:uphoff.jessica@gmail.com?subject=Looking to connect!" target="_blank">
+            <i class="fas fa-paper-plane fa-2x"></i>
+            <p>Email</p>
+          </a>
+        </div>
+    </div>
     </div>
     <!-- <button class='reset'></button> -->
 

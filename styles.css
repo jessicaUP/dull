@@ -198,6 +198,11 @@ body {
   right: 0;
   left: 0; }
 
+.display-about {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+
 .help-page {
   display: flex;
   flex-direction: column; }
@@ -225,24 +230,31 @@ body {
   .nav-cont .information {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 300px; }
+    position: absolute;
+    top: 31vw;
+    left: 2vw; }
     .nav-cont .information .button-cont {
       top: 32vw;
       left: 50px; }
-    .nav-cont .information .prev-star {
-      position: fixed;
-      top: 25vw;
-      left: 20px; }
-      .nav-cont .information .prev-star h4 {
-        font-size: 100px;
-        margin: 0; }
+    .nav-cont .information .level-button {
+      margin: 5px;
+      background-color: rgba(0, 0, 0, 0);
+      border: 1px solid black;
+      color: black;
+      width: auto;
+      height: auto;
+      font-size: 15px;
+      padding: 2px 50px;
+      cursor: pointer; }
+    .nav-cont .information .level-button:hover {
+      border: 1px solid white;
+      color: white; }
+    .nav-cont .information h4 {
+      font-size: 100px;
+      margin: 0; }
 
 .help-modal {
-  position: absolute;
   font-family: Odibee Sans;
-  top: 43vw;
-  left: 40px;
   cursor: pointer; }
 
 .help-page {
@@ -455,13 +467,14 @@ body {
   height: 24px;
   border: 1px solid black;
   z-index: 10; }
-  .button-cont .level-button {
-    font-family: Helvetica, sans-serif;
-    width: 86px;
-    height: 20px;
-    background-color: black;
-    color: white;
-    border: none; }
+
+.level-button {
+  font-family: Helvetica, sans-serif;
+  width: 86px;
+  height: 20px;
+  background-color: black;
+  color: white;
+  border: none; }
 
 .nav-button {
   color: #ffffff;
@@ -511,5 +524,40 @@ h6 {
 
 .nav-button-clicked {
   display: flex; }
+
+.about-title {
+  color: white;
+  font-size: 20px;
+  font-family: Helvetica, sans-serif; }
+
+#link-message {
+  color: grey;
+  font-size: 12px;
+  font-family: Helvetica, sans-serif;
+  text-align: center; }
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0 40px; }
+  .icons a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; }
+  .icons a:hover i {
+    color: white; }
+  .icons a:hover p {
+    color: white; }
+  .icons i {
+    color: grey; }
+  .icons p {
+    font-size: 12px;
+    margin: 10px;
+    color: grey;
+    font-family: Helvetica, sans-serif; }
 
 /*# sourceMappingURL=styles.css.map */

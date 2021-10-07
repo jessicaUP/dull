@@ -43,7 +43,7 @@ export function startGame() {
 
   // CREATE GRID
   setNewGrid();
-  createModal(['help', 'results']);
+  createModal(['help', 'results', 'about']);
   window.addEventListener('keydown', keyboardMix());
 
   // ADD RESET... for now

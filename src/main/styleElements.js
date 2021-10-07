@@ -270,9 +270,11 @@ function modalFunc(element, type, displayType = null) {
       element.style.display = 'none';
       let prevDisplay = document.querySelector('.display-help');
       let prevDisplay2 = document.querySelector('.display-results');
+      let prevDisplay3 = document.querySelector('.display-about');
       // let prevHeader = document.querySelector('.buttons-cont');
       if (prevDisplay) prevDisplay.style.display = 'none';
       if (prevDisplay2) prevDisplay2.style.display = 'none';
+      if (prevDisplay3) prevDisplay3.style.display = 'none';
       // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
@@ -292,6 +294,9 @@ function modalFunc(element, type, displayType = null) {
             let current = document.querySelector('.start-message');
             current.innerHTML = newMessage;
           }
+          break;
+        case 'about':
+          display = document.querySelector('.display-about');
           break;
 
       }
@@ -369,9 +374,12 @@ function btnFunc(clickedBtn, type) {
 }
 
 export function createModal(types) {
-  let show;
   let button;
   let display;
+
+  let square = document.querySelector('.display-cont');
+  let close = document.querySelector('.close-button');
+  let modal = document.querySelector('.modal');
 
   types.forEach(type => {
     switch (type) {
@@ -389,12 +397,13 @@ export function createModal(types) {
         display = document.querySelector('.display-results');
         button = document.querySelector('.result-star');
         break;
+      case 'about':
+        display = document.querySelector('.display-about');
+        button = document.querySelector('.about');
+        square.appendChild(display);
+        break;
     }
 
-    
-      let square = document.querySelector('.display-cont');
-      let close = document.querySelector('.close-button');
-      let modal = document.querySelector('.modal');
     
     
       button.addEventListener('click', modalFunc(modal, 'open', type));
