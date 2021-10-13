@@ -39,6 +39,10 @@ export function createTile(colorCount, x, y, coor, parentDiv = false) {
   // tile.style.border = '1px solid black';
   tile.style['aspect-ratio'] = 1;
   tile.addEventListener('click', mixTile);
+  tile.addEventListener('mouseover', () => {
+    let swatch = document.querySelector('#hover-color');
+    swatch.style['background-color'] = 'black';
+  });
   let info = {
     ele: tile,
     coor: coor,
@@ -56,7 +60,7 @@ export function createTile(colorCount, x, y, coor, parentDiv = false) {
 export function styleOption(optionTiles, coor, pos, finalCheck) {
   let optionTile = allTiles[coor].ele;
   let hoverColor = optionTile.getAttribute('colorId');
-  hoverFunction(optionTile, hoverColor);
+  hoverFunction(optionTiles, optionTile, hoverColor);
   optionTile.style.cursor = 'pointer';
   
   let arrow = addArrow(pos);
@@ -149,9 +153,28 @@ function hoverStep(optionTile, hoverColor) {
 };
 
 
-function hoverFunction(optionTile, hoverColor) {
+function hoverFunction(optionTiles, optionTile, hoverColor) {
   let hover = () => hoverStep(optionTile, hoverColor);
   optionTile.addEventListener('mouseover', hover());
+}
+
+function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
+  return () => {
+    let swatch = document.querySelector('#hover-color');
+    if (swatch.lastChild) {
+      swatch.removeChild(swatch.lastChild)
+    }
+    debugger
+    if (optionTiles.includes(optionTile)) {
+      swatch.style['background-color'] = hoverColor;
+      let arrow = optionTile.firstChild.cloneNode(true);
+      arrow.classList.add('swatch-arrow')
+      arrow.style.position = 'relative';
+      swatch.appendChild(arrow);
+    } else {
+      swatch.style['background-color'] = 'black';
+    }
+  }
 }
 
 export function styleFinish(finishTile) {

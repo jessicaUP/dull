@@ -227,6 +227,10 @@ function createTile(colorCount, x, y, coor) {
 
   tile.style['aspect-ratio'] = 1;
   tile.addEventListener('click', _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.mixTile);
+  tile.addEventListener('mouseover', function () {
+    var swatch = document.querySelector('#hover-color');
+    swatch.style['background-color'] = 'black';
+  });
   var info = {
     ele: tile,
     coor: coor,
@@ -243,7 +247,7 @@ function createTile(colorCount, x, y, coor) {
 function styleOption(optionTiles, coor, pos, finalCheck) {
   var optionTile = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[coor].ele;
   var hoverColor = optionTile.getAttribute('colorId');
-  hoverFunction(optionTile, hoverColor);
+  hoverFunction(optionTiles, optionTile, hoverColor);
   optionTile.style.cursor = 'pointer';
   var arrow = addArrow(pos);
   optionTile.appendChild(arrow);
@@ -330,12 +334,34 @@ function hoverStep(optionTile, hoverColor) {
 
 ;
 
-function hoverFunction(optionTile, hoverColor) {
+function hoverFunction(optionTiles, optionTile, hoverColor) {
   var hover = function hover() {
     return hoverStep(optionTile, hoverColor);
   };
 
   optionTile.addEventListener('mouseover', hover());
+}
+
+function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
+  return function () {
+    var swatch = document.querySelector('#hover-color');
+
+    if (swatch.lastChild) {
+      swatch.removeChild(swatch.lastChild);
+    }
+
+    debugger;
+
+    if (optionTiles.includes(optionTile)) {
+      swatch.style['background-color'] = hoverColor;
+      var arrow = optionTile.firstChild.cloneNode(true);
+      arrow.classList.add('swatch-arrow');
+      arrow.style.position = 'relative';
+      swatch.appendChild(arrow);
+    } else {
+      swatch.style['background-color'] = 'black';
+    }
+  };
 }
 
 function styleFinish(finishTile) {
