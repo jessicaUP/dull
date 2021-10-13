@@ -5,14 +5,26 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
  
 - BOARD:  A 10 x 10 grid of 100 different color tiles.
 
-- GOAL: The goal of the game is to mix the right tiles to make the target color, creating a path to the target space. The level amount represents the distance away from the start tile (level 1 is 1 click away... level 5 is 5 clicks)
+- GOAL: The goal of the game is to mix the right tiles to make the target color, creating a path to the target space. The level amount represents the distance away from the start tile (level 1 is 1 click away...level 10 is 10 clicks...)
 
-- MOVEMENT: Players are provided with a start tile and can move to the neigboring lateral and horizontal tiles towards the target position. The current tile has a count of how many clicks there are left. The path can not cross over itself. The player may use the mouse or keyboard to navigate the grid.
+{ PICTURE }
+
+- MOVEMENT: Players are provided with a start tile and can move to the neigboring lateral and horizontal colors towards the target position. The current tile has a count of how many clicks there are left in the center circle. The path can not cross over itself and will trigger reset button when the path is incorrect or there are no neighboring options. The player may use the mouse or keyboard to navigate the grid.
+   - ARROWS: Allows the user to navigate the board one space at a time.
+   - ENTER: User can press enter to trigger a blinking button.
+   - H: Quick open help modal.
+   - SPACE: Opens the results.
+
+{ GIF OF THE PATH }
+
+{ PICTURE OF KEYBOARD CONTROLS }
 
 - SWATCHES: The swatch console (bottom right corner) is where the player can compare the following;
    - TARGET: Final color that the player is trying to mix. The background is also the target color, to bring focus to the goal and allow for easy comparison.
    - CURRENT: All of the colors that the player has mixed so far in the path. Same as the color of the current position.
    - OPTION: The player can hover their mouse over the current position options, to review in the swatch console.
+
+{ SWATCH CONSOLE DIAGRAM }
 
 - RESULTS: As the player beats levels the paths are recored in the results modal. This also acts as the popup when the player loses.
 
@@ -40,15 +52,16 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
 
 - /src
  - /styles
-    - scss
+    - sass
  - /assets
     - logo.png
     - buttons...
  - index.js
  - /js
     - gridTile.js
-    - colors.js
-    - game.js
+    - color.js
+    - mixPthGame.js
+    - styleElements.js
     - utils.js
 
 
@@ -58,5 +71,13 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
 -	HTML
 -	Sass
 -	Webpack
-- JQuery & JQuery Color
+-  JQuery & JQuery Color (I DO NOT USE ANYMORE -- DOUBLE CHECK)
 
+
+## Future Changes
+
+- Button lthat allows user to mix up the colors, so they are not in rainbow order.
+- Add hints:
+   1. Highlight mid point of the path.
+   2. Provide a preview of the mixed color for hover swatch.
+   3. Reveal the next tile. 

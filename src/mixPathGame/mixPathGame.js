@@ -1,6 +1,6 @@
-import { COLORS, rgbCMYK, cmykRGB, cmykMax, setFirstColor, addColor, C, M, Y, K } from '../main/color'
-import { randomNum, posObject, colorArr, sameArray,optionStyle, createSwatches, addArrow } from '../main/helper'
-import { addResult, createLevelCount, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, clearStyle, styleOption, removeHover, styleFinish, finishStar, createResults, createModal } from '../main/styleElements';
+import { setFirstColor, addColor} from '../main/color'
+import { randomNum, posObject } from '../main/helper'
+import { addResult, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, styleOption, styleFinish, finishStar, createModal } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
@@ -15,7 +15,7 @@ let path;
 let startTile;
 let finishTile;
 let targetColor;
-export let level = 3;
+export let level = 1;
 let lives = 3;
 
 export const OPTIONS = [
@@ -97,7 +97,7 @@ function findPath() {
   
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
-    let next = optionTiles[randomNum(optionTiles.length)];
+    let next = optionTiles[randomNum(optionTiles.length - 1)];
     selectedTiles.push(next);
 
     console.log(optionTiles);
@@ -106,7 +106,7 @@ function findPath() {
     if (!next) {
       currentTile = start;
       currentColor = startColor;
-      findPath();
+      setPath();
       return;
     }
 
@@ -207,54 +207,67 @@ function checkWinLose(color) {
 };
 
 export function keyboardMix() {
-  // JUST HAVE TO SELECT AND CLICK TILE
-  // OPTIONS = [
-  //   { dir: [-1, 0], name: 'up' },
-  //   { dir: [1, 0], name: 'down' },
-  //   { dir: [0, -1], name: 'left' },
-  //   { dir: [0, 1], name: 'right' }
-  // ];
   return (e) => {
     console.log(e.keyCode);
-    let direction;
-    let keyType;
-    switch (e.keyCode) {
-      case 37:
-      direction = 'left';
-      keyType = 'direction';
-      break;
-      case 38:
-      direction = 'up';
-      keyType = 'direction';
-      break;
-      case 39:
-      direction = 'right';
-      keyType = 'direction';
-      break;
-      case 40:
-      direction = 'down';
-      keyType = 'direction';
-      break;
-    };
-
-    let nextEle;
-    if (keyType === 'direction') {
-      let tile = allTiles[currentTile.coor];
-      OPTIONS.forEach(dirObj => {
-        if (dirObj.name === direction) {
-          let newX = dirObj.dir[0] + tile.x;
-          let newY = dirObj.dir[1] + tile.y;
-          let newCoor = `${newX}-${newY}`
-    
-          nextEle = allTiles[newCoor].ele
-          return;
-        }
-      })
-      nextEle.click();
-  
+    let nextEle, direction, keyType;
+    // let modalCheck = document.querySelector('.display-cont');
+    let modal = document.querySelector('.modal');
+    if (modal.style.display !== 'none') {
+      nextEle = modal
     } else {
-      nextEle = document.querySelector('.blink')
+      switch (e.keyCode) {
+        case 37:
+          direction = 'left';
+          keyType = 'direction';
+          break;
+        case 38:
+          direction = 'up';
+          keyType = 'direction';
+          break;
+        case 39:
+          direction = 'right';
+          keyType = 'direction';
+          break;
+        case 40:
+          direction = 'down';
+          keyType = 'direction';
+          break;
+        case 13:
+          // ENTER
+          nextEle = document.querySelector('.blink');
+          keyType = 'enter';
+          break;
+        case 72:
+          // H - help
+          nextEle = document.querySelector('.help-modal');
+          keyType = 'help';
+          break;
+        case 82:
+          // R - results
+          nextEle = document.querySelector('.result-star');
+          keyType = 'results';
+          break;
+        case 65:
+          // A - about
+          nextEle = document.querySelector('.about');
+          keyType = 'about';
+          break;
+      };
+
+      if (keyType === 'direction') {
+        let tile = allTiles[currentTile.coor];
+        OPTIONS.forEach(dirObj => {
+          if (dirObj.name === direction) {
+            let newX = dirObj.dir[0] + tile.x;
+            let newY = dirObj.dir[1] + tile.y;
+            let newCoor = `${newX}-${newY}`
+      
+            nextEle = allTiles[newCoor].ele
+          }
+        })
+      }
     }
+
     nextEle.click();
   }
 }

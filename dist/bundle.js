@@ -191,7 +191,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "styleWin": () => (/* binding */ styleWin),
 /* harmony export */   "createNextButton": () => (/* binding */ createNextButton),
 /* harmony export */   "addResult": () => (/* binding */ addResult),
-/* harmony export */   "createHelp": () => (/* binding */ createHelp),
 /* harmony export */   "createModal": () => (/* binding */ createModal),
 /* harmony export */   "createLevelDiv": () => (/* binding */ createLevelDiv),
 /* harmony export */   "livesUpdate": () => (/* binding */ livesUpdate),
@@ -204,6 +203,7 @@ __webpack_require__.r(__webpack_exports__);
 
  // GRID ELEMENTS
 
+var mixClick = false;
 var messages = ['...you can do better then that', '...that\'s all you got?!', '...why are you taking a break', '...keep going', '...can you handle the pressure?!'];
 function updateBackgound(targetColor) {
   var body = document.querySelector('body');
@@ -213,6 +213,9 @@ function updateBackgound(targetColor) {
 }
 function createTile(colorCount, x, y, coor) {
   var parentDiv = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  // if (mixCLick) {
+  //   // WHERE I CAN MIX UP BOARD IF THEY DO NOT WANT IT IN COLOR ORDER.
+  // }
   var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
   var tile = document.createElement('div');
   tile.setAttribute('id', "tile-".concat(colorCount));
@@ -339,6 +342,8 @@ function styleFinish(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
+  var swatch = document.querySelector('.blink');
+  swatch.classList.remove('blink');
   finishEle.classList.add('blink');
 }
 function finishStar(finishTile) {
@@ -441,24 +446,23 @@ function modalFunc(element, type) {
       if (prevDisplay3) prevDisplay3.style.display = 'none'; // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
-      var display;
+      var display, current;
 
       switch (displayType) {
         case 'help':
           display = document.querySelector('.display-help');
-          var current = document.querySelector('.start-message');
+          current = document.querySelector('.start-message');
           current.innerHTML = '';
           break;
 
         case 'results':
           display = document.querySelector('.display-results');
+          current = document.querySelector('.start-message');
+          current.innerHTML = '...um you have to beat a level first!';
 
           if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
             var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
-
-            var _current = document.querySelector('.start-message');
-
-            _current.innerHTML = newMessage;
+            current.innerHTML = newMessage;
           }
 
           break;
@@ -471,46 +475,38 @@ function modalFunc(element, type) {
       display.style.display = 'flex';
     }
   };
-}
+} // function helpClick(type) {
+//   let prev = document.querySelector('.help');
+//   if (prev) prev.style.display = 'none';
+//   let infoEle;
+//   switch (type) {
+//     case 'color':
+//       infoEle = document.querySelector('.page-info');
+//       break;
+//     case 'path':
+//       infoEle = document.querySelector('.page-path');
+//       break;
+//     case 'swatch':
+//       infoEle = document.querySelector('.page-swathes');
+//       break;
+//     case 'console':
+//       debugger
+//       infoEle = document.querySelector('.page-console');
+//       break;
+//   };
+//   infoEle.style.display = 'flex';
+// }
+// export function createHelp() {
+//   let colorBtn = document.querySelector('#color-btn');
+//   let pathBtn = document.querySelector('#path-btn');
+//   let goalBtn = document.querySelector('#goal-btn');
+//   let consoleBtn = document.querySelector('#console-btn');
+//   colorBtn.addEventListener('click', () => helpClick('color'));
+//   pathBtn.addEventListener('click', () => helpClick('path'));
+//   goalBtn.addEventListener('click', () => helpClick('swatch'));
+//   consoleBtn.addEventListener('click', () => helpClick('console'));
+// };
 
-function helpClick(type) {
-  var prev = document.querySelector('.help');
-  if (prev) prev.style.display = 'none';
-  var infoEle;
-
-  switch (type) {
-    case 'color':
-      infoEle = document.querySelector('.help-colors');
-      break;
-
-    case 'path':
-      infoEle = document.querySelector('.help-path');
-      break;
-
-    case 'swatch':
-      infoEle = document.querySelector('.help-swathes');
-      break;
-  }
-
-  ;
-  infoEle.style.display = 'flex';
-}
-
-function createHelp() {
-  var colorBtn = document.querySelector('#color-btn');
-  var pathBtn = document.querySelector('#path-btn');
-  var goalBtn = document.querySelector('#goal-btn');
-  colorBtn.addEventListener('click', function () {
-    return helpClick('color');
-  });
-  pathBtn.addEventListener('click', function () {
-    return helpClick('path');
-  });
-  goalBtn.addEventListener('click', function () {
-    return helpClick('swatch');
-  });
-}
-;
 
 function btnFunc(clickedBtn, type) {
   return function () {
@@ -534,6 +530,11 @@ function btnFunc(clickedBtn, type) {
       case 'page-path':
         display = document.querySelector('#page-path');
         nextBtn = document.querySelector('#path-btn');
+        break;
+
+      case 'page-console':
+        display = document.querySelector('#page-console');
+        nextBtn = document.querySelector('#console-btn');
         break;
 
       default:
@@ -560,9 +561,11 @@ function createModal(types) {
         var goalNav = document.querySelector('#goal-btn');
         var colorNav = document.querySelector('#color-btn');
         var pathNav = document.querySelector('#path-btn');
+        var consoleNav = document.querySelector('#console-btn');
         goalNav.addEventListener('click', btnFunc(goalNav, 'page-info'));
         colorNav.addEventListener('click', btnFunc(colorNav, 'page-color'));
         pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
+        consoleNav.addEventListener('click', btnFunc(consoleNav, 'page-console'));
         break;
 
       case 'results':
@@ -696,7 +699,7 @@ var path;
 var startTile;
 var finishTile;
 var targetColor;
-var level = 3;
+var level = 1;
 var lives = 3;
 var OPTIONS = [{
   dir: [-1, 0],
@@ -769,7 +772,7 @@ function findPath() {
 
   while (count <= level) {
     optionTiles = nextMoveOptions(false);
-    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)];
+    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length - 1)];
     selectedTiles.push(next);
     console.log(optionTiles);
     console.log(next);
@@ -777,7 +780,7 @@ function findPath() {
     if (!next) {
       currentTile = start;
       currentColor = startColor;
-      findPath();
+      setPath();
       return;
     }
 
@@ -870,57 +873,74 @@ function checkWinLose(color) {
 
 ;
 function keyboardMix() {
-  // JUST HAVE TO SELECT AND CLICK TILE
-  // OPTIONS = [
-  //   { dir: [-1, 0], name: 'up' },
-  //   { dir: [1, 0], name: 'down' },
-  //   { dir: [0, -1], name: 'left' },
-  //   { dir: [0, 1], name: 'right' }
-  // ];
   return function (e) {
     console.log(e.keyCode);
-    var direction;
-    var keyType;
+    var nextEle, direction, keyType; // let modalCheck = document.querySelector('.display-cont');
 
-    switch (e.keyCode) {
-      case 37:
-        direction = 'left';
-        keyType = 'direction';
-        break;
+    var modal = document.querySelector('.modal');
 
-      case 38:
-        direction = 'up';
-        keyType = 'direction';
-        break;
-
-      case 39:
-        direction = 'right';
-        keyType = 'direction';
-        break;
-
-      case 40:
-        direction = 'down';
-        keyType = 'direction';
-        break;
-    }
-
-    ;
-    var nextEle;
-
-    if (keyType === 'direction') {
-      var tile = allTiles[currentTile.coor];
-      OPTIONS.forEach(function (dirObj) {
-        if (dirObj.name === direction) {
-          var newX = dirObj.dir[0] + tile.x;
-          var newY = dirObj.dir[1] + tile.y;
-          var newCoor = "".concat(newX, "-").concat(newY);
-          nextEle = allTiles[newCoor].ele;
-          return;
-        }
-      });
-      nextEle.click();
+    if (modal.style.display !== 'none') {
+      nextEle = modal;
     } else {
-      nextEle = document.querySelector('.blink');
+      switch (e.keyCode) {
+        case 37:
+          direction = 'left';
+          keyType = 'direction';
+          break;
+
+        case 38:
+          direction = 'up';
+          keyType = 'direction';
+          break;
+
+        case 39:
+          direction = 'right';
+          keyType = 'direction';
+          break;
+
+        case 40:
+          direction = 'down';
+          keyType = 'direction';
+          break;
+
+        case 13:
+          // ENTER
+          nextEle = document.querySelector('.blink');
+          keyType = 'enter';
+          break;
+
+        case 72:
+          // H - help
+          nextEle = document.querySelector('.help-modal');
+          keyType = 'help';
+          break;
+
+        case 82:
+          // R - results
+          nextEle = document.querySelector('.result-star');
+          keyType = 'results';
+          break;
+
+        case 65:
+          // A - about
+          nextEle = document.querySelector('.about');
+          keyType = 'about';
+          break;
+      }
+
+      ;
+
+      if (keyType === 'direction') {
+        var tile = allTiles[currentTile.coor];
+        OPTIONS.forEach(function (dirObj) {
+          if (dirObj.name === direction) {
+            var newX = dirObj.dir[0] + tile.x;
+            var newY = dirObj.dir[1] + tile.y;
+            var newCoor = "".concat(newX, "-").concat(newY);
+            nextEle = allTiles[newCoor].ele;
+          }
+        });
+      }
     }
 
     nextEle.click();

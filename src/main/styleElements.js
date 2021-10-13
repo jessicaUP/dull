@@ -4,6 +4,8 @@ import { randomNum } from './helper';
 
 // GRID ELEMENTS
 
+let mixClick = false;
+
 let messages = [
   '...you can do better then that',
   '...that\'s all you got?!',
@@ -21,7 +23,11 @@ export function updateBackgound(targetColor) {
 }
 
 export function createTile(colorCount, x, y, coor, parentDiv = false) {
+  // if (mixCLick) {
+  //   // WHERE I CAN MIX UP BOARD IF THEY DO NOT WANT IT IN COLOR ORDER.
+  // }
   let colorId = COLORS[colorCount];
+
 
   const tile = document.createElement('div');
   tile.setAttribute('id', `tile-${colorCount}`);
@@ -153,7 +159,10 @@ export function styleFinish(finishTile) {
   finishEle.style.border = '1px solid transparent';
   finishEle.style['border-radius'] = '100%';
 
-  finishEle.classList.add('blink')
+  let swatch = document.querySelector('.blink');
+  swatch.classList.remove('blink');
+
+  finishEle.classList.add('blink');
 
 }
 
@@ -278,20 +287,21 @@ function modalFunc(element, type, displayType = null) {
       // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
-      let display;
+      let display, current;
       switch (displayType) {
         case 'help':
           display = document.querySelector('.display-help');
-          let current = document.querySelector('.start-message');
+          current = document.querySelector('.start-message');
           current.innerHTML = '';
           break;
-        case 'results':
+        case 'results':                                                                                   
           display = document.querySelector('.display-results')
+          current = document.querySelector('.start-message');
+          current.innerHTML = '...um you have to beat a level first!';
 
 
           if (level !== 1) {
             let newMessage = messages[randomNum(messages.length)];
-            let current = document.querySelector('.start-message');
             current.innerHTML = newMessage;
           }
           break;
@@ -309,37 +319,43 @@ function modalFunc(element, type, displayType = null) {
   }
 }
 
-function helpClick(type) {
-  let prev = document.querySelector('.help');
-  if (prev) prev.style.display = 'none';
+// function helpClick(type) {
+//   let prev = document.querySelector('.help');
+//   if (prev) prev.style.display = 'none';
 
-  let infoEle;
-  switch (type) {
-    case 'color':
-      infoEle = document.querySelector('.help-colors');
-      break;
-    case 'path':
-      infoEle = document.querySelector('.help-path');
-      break;
-    case 'swatch':
-      infoEle = document.querySelector('.help-swathes');
-      break;
-  };
+//   let infoEle;
+//   switch (type) {
+//     case 'color':
+//       infoEle = document.querySelector('.page-info');
+//       break;
+//     case 'path':
+//       infoEle = document.querySelector('.page-path');
+//       break;
+//     case 'swatch':
+//       infoEle = document.querySelector('.page-swathes');
+//       break;
+//     case 'console':
+//       debugger
+//       infoEle = document.querySelector('.page-console');
+//       break;
+//   };
 
-  infoEle.style.display = 'flex';
+//   infoEle.style.display = 'flex';
   
-}
+// }
 
-export function createHelp() {
-  let colorBtn = document.querySelector('#color-btn');
-  let pathBtn = document.querySelector('#path-btn');
-  let goalBtn = document.querySelector('#goal-btn');
+// export function createHelp() {
+//   let colorBtn = document.querySelector('#color-btn');
+//   let pathBtn = document.querySelector('#path-btn');
+//   let goalBtn = document.querySelector('#goal-btn');
+//   let consoleBtn = document.querySelector('#console-btn');
 
-  colorBtn.addEventListener('click', () => helpClick('color'));
-  pathBtn.addEventListener('click', () => helpClick('path'));
-  goalBtn.addEventListener('click', () => helpClick('swatch'));
+//   colorBtn.addEventListener('click', () => helpClick('color'));
+//   pathBtn.addEventListener('click', () => helpClick('path'));
+//   goalBtn.addEventListener('click', () => helpClick('swatch'));
+//   consoleBtn.addEventListener('click', () => helpClick('console'));
 
-};
+// };
 
 function btnFunc(clickedBtn, type) {
   return () => {
@@ -362,6 +378,10 @@ function btnFunc(clickedBtn, type) {
       case 'page-path':
         display = document.querySelector('#page-path');
         nextBtn = document.querySelector('#path-btn');
+        break;
+      case 'page-console':
+        display = document.querySelector('#page-console');
+        nextBtn = document.querySelector('#console-btn');
         break;
       default:
         break;
@@ -389,9 +409,11 @@ export function createModal(types) {
         let goalNav = document.querySelector('#goal-btn');
         let colorNav = document.querySelector('#color-btn');
         let pathNav = document.querySelector('#path-btn');
+        let consoleNav = document.querySelector('#console-btn');
         goalNav.addEventListener('click', btnFunc(goalNav,'page-info'));
         colorNav.addEventListener('click', btnFunc(colorNav,'page-color'));
         pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
+        consoleNav.addEventListener('click', btnFunc(consoleNav, 'page-console'));
         break;
       case 'results':
         display = document.querySelector('.display-results');
