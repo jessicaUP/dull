@@ -291,11 +291,11 @@ body {
   font-family: Odibee Sans;
   border-radius: 100%;
   background-color: rgba(0, 0, 0, 0.85);
-  width: 6vw;
-  height: 6vw;
+  width: 50px;
+  height: 50px;
   color: #a7a7a7;
   margin: 2.5px;
-  font-size: 1.75vw;
+  font-size: 15px;
   cursor: pointer; }
 
 .modal-btn:hover {
@@ -313,8 +313,8 @@ body {
   position: fixed;
   width: auto;
   height: auto;
-  top: 26vw;
-  left: 2vw; }
+  top: 26.5vw;
+  left: 2.5vw; }
   .lives-cont h4 {
     vertical-align: bottom;
     font-family: Odibee Sans;
@@ -516,7 +516,7 @@ body {
   justify-content: center;
   align-items: center;
   top: 32vw;
-  right: 10vw;
+  right: 7vw;
   width: 90px;
   height: 24px;
   border: 1px solid black;

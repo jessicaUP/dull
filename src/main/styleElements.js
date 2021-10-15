@@ -313,14 +313,6 @@ function modalFunc(element, type, displayType = null) {
     if (type === 'close') {
       element.style.display = 'none';
 
-      // let prevDisplay2 = document.querySelector('.display-results');
-      // let prevDisplay3 = document.querySelector('.display-about');
-      // let prevDisplay4 = document.querySelector('.display-controls');
-      // let prevHeader = document.querySelector('.buttons-cont');
-      // if (prevDisplay2) prevDisplay2.style.display = 'none';
-      // if (prevDisplay3) prevDisplay3.style.display = 'none';
-      // if (prevDisplay4) prevDisplay3.style.display = 'none';
-      // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
       let display, current;
