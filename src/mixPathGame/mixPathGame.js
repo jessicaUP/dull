@@ -100,18 +100,16 @@ function findPath() {
     let next = optionTiles[randomNum(optionTiles.length)];
     selectedTiles.push(next);
 
-    console.log(optionTiles);
-    console.log(next);
-
     if (!next) {
       currentTile = start;
       currentColor = startColor;
+      selectedTiles = [];
       setPath();
       return;
     }
 
     let nextColor = allTiles[next].ele.getAttribute('colorId');
-    count = count + 1
+    count++
 
     mixedColor = addColor(nextColor, count);
     currentTile = posObject(next);

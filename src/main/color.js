@@ -27,14 +27,9 @@ export function rgbCMYK(rgb) {
   let green = (rgb[1] / 255);
   let blue = (rgb[2] / 255);
 
-  // let k = (1 - Math.max(red, green, blue));
-  // let c = (1 - (red - k)) / (1 - k);
-  // let m = (1 - (green - k)) / (1 - k);
-  // let y = (1 - (blue - k)) / (1 - k);
-  // let k = (1 - Math.max(red, green, blue));
-  let c = (1 - (red)) / 1;
-  let m = (1 - (green)) / 1;
-  let y = (1 - (blue)) / 1;
+  let c = (1 - (red));
+  let m = (1 - (green));
+  let y = (1 - (blue));
   return [c, m, y, 0]
 }
 
@@ -54,8 +49,6 @@ export function cmykMax() {
 
 
 export function setFirstColor(rgbColor) {
-  // let step = $.Color(hex1).rgba();
-  // MAKE INTO ARRAY OF VALUES R-G-B
   let step = colorArr(rgbColor);
   let color = rgbCMYK(step);
   C = color[0];
@@ -63,8 +56,6 @@ export function setFirstColor(rgbColor) {
   Y = color[2];
   let currentSwatch = document.querySelector('#current-color');
   currentSwatch.style['background-color'] = rgbColor;
-  // let body = document.querySelector('body');
-  // body.style['background-color'] = rgbColor;
   return step;
 }
 

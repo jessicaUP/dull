@@ -153,7 +153,10 @@ div {
 
 .summary {
   margin: 40px;
-  font-size: 15px; }
+  font-size: 15px;
+  color: grey;
+  font-family: Helvetica, sans-serif;
+  text-align: center; }
 
 .logos {
   position: fixed;
@@ -336,7 +339,8 @@ body {
   .lives-cont .lives {
     position: absolute;
     top: 4vw;
-    left: 4.2vw;
+    left: 0;
+    right: 0;
     margin: 0;
     margin-top: 2vw;
     font-family: Helvetica, sans-serif;
@@ -480,7 +484,8 @@ body {
   bottom: 0;
   right: 0;
   left: 0;
-  z-index: 7; }
+  z-index: 7;
+  overflow: scroll; }
   .results-cont .star {
     display: flex; }
   .results-cont .level-display {
@@ -594,16 +599,17 @@ h6 {
 
 .about-title {
   color: white;
-  font-size: 20px;
-  font-family: Helvetica, sans-serif;
-  margin: 0; }
+  font-size: 28px;
+  font-family: Odibee Sans, Helvetica, sans-serif;
+  margin: 0;
+  margin-top: 3vw; }
 
 #link-message {
   color: grey;
   font-size: 12px;
   font-family: Helvetica, sans-serif;
   text-align: center;
-  margin-bottom: 50px; }
+  margin-bottom: 25px; }
 
 .icons {
   display: flex;
@@ -628,5 +634,8 @@ h6 {
     margin: 10px;
     color: grey;
     font-family: Helvetica, sans-serif; }
+
+.link-message {
+  margin-bottom: 25px; }
 
 /*# sourceMappingURL=styles.css.map */

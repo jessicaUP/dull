@@ -48,15 +48,10 @@ function colorArr(rgbColor) {
 function rgbCMYK(rgb) {
   var red = rgb[0] / 255;
   var green = rgb[1] / 255;
-  var blue = rgb[2] / 255; // let k = (1 - Math.max(red, green, blue));
-  // let c = (1 - (red - k)) / (1 - k);
-  // let m = (1 - (green - k)) / (1 - k);
-  // let y = (1 - (blue - k)) / (1 - k);
-  // let k = (1 - Math.max(red, green, blue));
-
-  var c = (1 - red) / 1;
-  var m = (1 - green) / 1;
-  var y = (1 - blue) / 1;
+  var blue = rgb[2] / 255;
+  var c = 1 - red;
+  var m = 1 - green;
+  var y = 1 - blue;
   return [c, m, y, 0];
 }
 function cmykRGB(cmyk) {
@@ -71,17 +66,13 @@ function cmykMax() {
   if (Y > 1) Y = 1;
 }
 function setFirstColor(rgbColor) {
-  // let step = $.Color(hex1).rgba();
-  // MAKE INTO ARRAY OF VALUES R-G-B
   var step = colorArr(rgbColor);
   var color = rgbCMYK(step);
   C = color[0];
   M = color[1];
   Y = color[2];
   var currentSwatch = document.querySelector('#current-color');
-  currentSwatch.style['background-color'] = rgbColor; // let body = document.querySelector('body');
-  // body.style['background-color'] = rgbColor;
-
+  currentSwatch.style['background-color'] = rgbColor;
   return step;
 }
 function addColor(rgbColor, count) {
@@ -826,18 +817,17 @@ function findPath() {
     optionTiles = nextMoveOptions(false);
     var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)];
     selectedTiles.push(next);
-    console.log(optionTiles);
-    console.log(next);
 
     if (!next) {
       currentTile = start;
       currentColor = startColor;
+      selectedTiles = [];
       setPath();
       return;
     }
 
     var nextColor = allTiles[next].ele.getAttribute('colorId');
-    count = count + 1;
+    count++;
     mixedColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(nextColor, count);
     currentTile = (0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.posObject)(next);
   }
