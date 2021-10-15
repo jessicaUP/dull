@@ -1,6 +1,8 @@
 # dull...
 ###### by jessica uphoff
 
+![level5_example](https://user-images.githubusercontent.com/79214086/137543334-6e217dfc-ea5d-43a3-ba4e-b52f8bd09b69.gif)
+
 ## BACKGROUND & OVERVIEW
 Dull is a color-mixing game that allows you to explore the art of color-mixing. One of the beauties of subtractive color mixing is that the more you mix, the more the color turns dull… Many painters will tell you, don’t over mix your colors, but with dull that is the point of the game!
 
@@ -11,6 +13,8 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
 - GOAL: The goal of the game is to mix the right tiles to make the target color, creating a path to the target space. The level amount represents the distance away from the start tile (level 1 is 1 click away...level 10 is 10 clicks...)
 
 <img width="356" alt="level10Example" src="https://user-images.githubusercontent.com/79214086/137531377-7f6c8fbc-24f2-4c1d-bc2d-d3d26f1b9f88.png">
+
+
 
 - DYNAMIC LEVELS: each level is auto generated each round, allowing for a different gameplay every refresh and optimized level count capabilities. 
 
