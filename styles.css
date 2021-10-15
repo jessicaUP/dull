@@ -296,10 +296,18 @@ body {
   color: #a7a7a7;
   margin: 2.5px;
   font-size: 15px;
-  cursor: pointer; }
+  cursor: pointer;
+  border-style: outset; }
 
 .modal-btn:hover {
   color: white;
+  border-style: outset; }
+
+.nav-clicked {
+  color: white;
+  border-style: inset; }
+
+.nav-clicked:hover {
   border-style: inset; }
 
 .help-page {

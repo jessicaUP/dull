@@ -307,6 +307,9 @@ function clearModal() {
 
 function modalFunc(element, type, displayType = null) {
   return () => {
+    let clickedCheck = document.querySelector('.nav-clicked');
+    if (clickedCheck) clickedCheck.classList.toggle('nav-clicked');
+
     // let prevDisplay = document.querySelector('.display');
     // if (prevDisplay) prevDisplay.style.display = 'none';
     clearModal();
@@ -315,17 +318,19 @@ function modalFunc(element, type, displayType = null) {
 
     } else {
       element.style.display = 'flex';
-      let display, current;
+      let display, current, button;
       switch (displayType) {
         case 'help':
           display = document.querySelector('.display-help');
           current = document.querySelector('.start-message');
           current.innerHTML = '';
+          button = document.querySelector('.help-modal');
           break;
         case 'results':                                                                                   
           display = document.querySelector('.display-results')
           current = document.querySelector('.start-message');
           current.innerHTML = '...um you have to beat a level first!';
+          button = document.querySelector('.result-star');
 
 
           if (level !== 1) {
@@ -335,10 +340,17 @@ function modalFunc(element, type, displayType = null) {
           break;
         case 'about':
           display = document.querySelector('.display-about');
+          button = document.querySelector('.about');
           break;
 
-      }
+      };
+      
+      if (clickedCheck === button) {
+        element.click();
+        button.classList.toggle('nav-clicked');
+      } 
 
+      button.classList.toggle('nav-clicked');
       display.style.display = 'flex';
     
 

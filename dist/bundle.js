@@ -469,27 +469,31 @@ function clearModal() {
 function modalFunc(element, type) {
   var displayType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
-    // let prevDisplay = document.querySelector('.display');
+    var clickedCheck = document.querySelector('.nav-clicked');
+    if (clickedCheck) clickedCheck.classList.toggle('nav-clicked'); // let prevDisplay = document.querySelector('.display');
     // if (prevDisplay) prevDisplay.style.display = 'none';
+
     clearModal();
 
     if (type === 'close') {
       element.style.display = 'none';
     } else {
       element.style.display = 'flex';
-      var display, current;
+      var display, current, button;
 
       switch (displayType) {
         case 'help':
           display = document.querySelector('.display-help');
           current = document.querySelector('.start-message');
           current.innerHTML = '';
+          button = document.querySelector('.help-modal');
           break;
 
         case 'results':
           display = document.querySelector('.display-results');
           current = document.querySelector('.start-message');
           current.innerHTML = '...um you have to beat a level first!';
+          button = document.querySelector('.result-star');
 
           if (_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.level !== 1) {
             var newMessage = messages[(0,_helper__WEBPACK_IMPORTED_MODULE_2__.randomNum)(messages.length)];
@@ -500,9 +504,18 @@ function modalFunc(element, type) {
 
         case 'about':
           display = document.querySelector('.display-about');
+          button = document.querySelector('.about');
           break;
       }
 
+      ;
+
+      if (clickedCheck === button) {
+        element.click();
+        button.classList.toggle('nav-clicked');
+      }
+
+      button.classList.toggle('nav-clicked');
       display.style.display = 'flex';
     }
   };
