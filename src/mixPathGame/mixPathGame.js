@@ -97,7 +97,7 @@ function findPath() {
   
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
-    let next = optionTiles[randomNum(optionTiles.length - 1)];
+    let next = optionTiles[randomNum(optionTiles.length)];
     selectedTiles.push(next);
 
     console.log(optionTiles);
@@ -295,19 +295,6 @@ export function mixTile() {
     let rgb = addColor(colorTwo, count);
     let rgbStr = `rgb(${parseInt(rgb[0])}, ${parseInt(rgb[1])}, ${parseInt(rgb[2])})`
     
-    
-    // SET NEW COLOR & MARK NEXT OPTIONS
-    
-    
-    // CHECK WIN or LOSE
-    // optionTiles.forEach(coor => {
-      //   let oldOption = allTiles[coor].ele;
-      //   if (coor !== currentTile) {
-        //     // oldOption.style.border = '1px solid black'
-        //   } else {
-          //     oldOption.style.border = '1px solid black'
-          //   }
-          // })
     currentTile = allTiles[clickedCoor];
     currentTile.ele.style['background-color'] = rgbStr;
 
@@ -329,6 +316,12 @@ export function mixTile() {
         blink.classList.add('blink');
         let removeBlink = document.querySelector('#target-color');
         removeBlink.classList.remove('blink');
+        let nope = document.createElement('DIV');
+        let body = document.querySelector('body');
+        nope.setAttribute('class', 'success');
+        nope.classList.add('nope')
+        nope.innerHTML = '...nope';
+        body.appendChild(nope);
         
       }
       
@@ -360,6 +353,9 @@ export function resetGrid() {
   // body.style['background-color'] = targetColor;
   // background.style['background-color'] = targetColor;
   // tiles.style['background-color'] = targetColor;
+  let message = document.querySelector('.success');
+  if (message) message.remove();
+
   resetVariables();
   finishStar(finishTile)
   optionTiles = markOptions();

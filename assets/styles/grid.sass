@@ -6,8 +6,9 @@ div
   display: grid
   position: fixed
   top: 50px
-  left: 27.25%
+  left: 26%
   width: 45%
+  z-index: -1
 
   margin: 20px
   // margin-left: 40px
@@ -16,7 +17,7 @@ div
   // height: 100%
   grid-gap: 2px
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr
-  z-index: 6
+  // z-index: 1
   
 
 .mix-tile
@@ -52,7 +53,7 @@ div
   // max-height: 100%
   // background-position: center
 
-  background-image: url('assets/pictures/dull_background.jpg')
+  background-image: url('assets/pictures/background.jpg')
   background-blend-mode: multiply
   background-size: cover
   background-repeat: no-repeat
@@ -61,29 +62,30 @@ div
  
 .level-text
   position: fixed
-  top: 10px
-  right: 50px
-  font-size: 15vw
+  top: -.5vw
+  right: 3vw
+  font-size: 14vw
   font-family: Helvetica, sans-serif
   color: white
 
 // .level-cont
-//   width: 100%
-//   // display: flex
-//   position: fixed
-//   top: 0
-//   // right: 0
-//   padding-top: 59.15%
-//   // left: 0
-//   // width: 100%
-//   height: 1vh
-//   // padding: 20px
-//   margin-top: 40px
-//   margin-left: 10px
-//   align-items: center
-//   justify-content: center
-//   z-index: 5
-//   overflow: hidden
+// //   width: 100%
+// //   // display: flex
+//   position: relative
+
+// //   top: 0
+// //   // right: 0
+// //   padding-top: 59.15%
+// //   // left: 0
+// //   // width: 100%
+// //   height: 1vh
+// //   // padding: 20px
+// //   margin-top: 40px
+// //   margin-left: 10px
+// //   align-items: center
+// //   justify-content: center
+//   // z-index: 2
+// //   overflow: hidden
 
 
 
@@ -193,7 +195,7 @@ div
     background-color: black
     color: white
     border-radius: 100%
-    font-size: 14px
+    font-size: 13px
     text-align: center
     justify-self: center
     

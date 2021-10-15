@@ -458,18 +458,30 @@ function addResult(level, selectedTiles) {
   prevLevel.remove();
 }
 
+function clearModal() {
+  var displays = ['.display-results', '.display-about', '.display-controls', '.display-help'];
+  displays.forEach(function (classString) {
+    var displayCont = document.querySelector(classString);
+    if (displayCont) displayCont.style.display = 'none';
+  });
+}
+
 function modalFunc(element, type) {
   var displayType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
-    if (type === 'close') {
-      element.style.display = 'none';
-      var prevDisplay = document.querySelector('.display-help');
-      var prevDisplay2 = document.querySelector('.display-results');
-      var prevDisplay3 = document.querySelector('.display-about'); // let prevHeader = document.querySelector('.buttons-cont');
+    // let prevDisplay = document.querySelector('.display');
+    // if (prevDisplay) prevDisplay.style.display = 'none';
+    clearModal();
 
-      if (prevDisplay) prevDisplay.style.display = 'none';
-      if (prevDisplay2) prevDisplay2.style.display = 'none';
-      if (prevDisplay3) prevDisplay3.style.display = 'none'; // if (prevHeader) prevHeader.style.display = 'none';
+    if (type === 'close') {
+      element.style.display = 'none'; // let prevDisplay2 = document.querySelector('.display-results');
+      // let prevDisplay3 = document.querySelector('.display-about');
+      // let prevDisplay4 = document.querySelector('.display-controls');
+      // let prevHeader = document.querySelector('.buttons-cont');
+      // if (prevDisplay2) prevDisplay2.style.display = 'none';
+      // if (prevDisplay3) prevDisplay3.style.display = 'none';
+      // if (prevDisplay4) prevDisplay3.style.display = 'none';
+      // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
       var display, current;
@@ -563,6 +575,11 @@ function btnFunc(clickedBtn, type) {
         nextBtn = document.querySelector('#console-btn');
         break;
 
+      case 'page-controls':
+        display = document.querySelector('#page-controls');
+        nextBtn = document.querySelector('#controls-btn');
+        break;
+
       default:
         break;
     } // display.style.display = 'flex';
@@ -588,10 +605,12 @@ function createModal(types) {
         var colorNav = document.querySelector('#color-btn');
         var pathNav = document.querySelector('#path-btn');
         var consoleNav = document.querySelector('#console-btn');
+        var controlsNav = document.querySelector('#controls-btn');
         goalNav.addEventListener('click', btnFunc(goalNav, 'page-info'));
         colorNav.addEventListener('click', btnFunc(colorNav, 'page-color'));
         pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
         consoleNav.addEventListener('click', btnFunc(consoleNav, 'page-console'));
+        controlsNav.addEventListener('click', btnFunc(controlsNav, 'page-controls'));
         break;
 
       case 'results':
@@ -621,6 +640,7 @@ function createLevelDiv(level) {
   cont1.classList.add("tile-grid");
   cont1.classList.add("level-cont");
   cont1.setAttribute('id', "level-".concat(level));
+  cont1.style['z-index'] = '2';
   cont1.style.display = 'tile-grid'; // cont2.style['grid-gap'] = '4px';
 
   cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
@@ -798,7 +818,7 @@ function findPath() {
 
   while (count <= level) {
     optionTiles = nextMoveOptions(false);
-    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length - 1)];
+    var next = optionTiles[(0,_main_helper__WEBPACK_IMPORTED_MODULE_1__.randomNum)(optionTiles.length)];
     selectedTiles.push(next);
     console.log(optionTiles);
     console.log(next);
@@ -996,17 +1016,7 @@ function mixTile() {
 
     count = count + 1;
     var rgb = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.addColor)(colorTwo, count);
-    var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")"); // SET NEW COLOR & MARK NEXT OPTIONS
-    // CHECK WIN or LOSE
-    // optionTiles.forEach(coor => {
-    //   let oldOption = allTiles[coor].ele;
-    //   if (coor !== currentTile) {
-    //     // oldOption.style.border = '1px solid black'
-    //   } else {
-    //     oldOption.style.border = '1px solid black'
-    //   }
-    // })
-
+    var rgbStr = "rgb(".concat(parseInt(rgb[0]), ", ").concat(parseInt(rgb[1]), ", ").concat(parseInt(rgb[2]), ")");
     currentTile = allTiles[clickedCoor];
     currentTile.ele.style['background-color'] = rgbStr;
     var swatch = document.querySelector('#current-color');
@@ -1028,6 +1038,15 @@ function mixTile() {
         blink.classList.add('blink');
         var removeBlink = document.querySelector('#target-color');
         removeBlink.classList.remove('blink');
+        var nope = document.createElement('DIV');
+
+        var _body = document.querySelector('body');
+
+        nope.setAttribute('class', 'success');
+        nope.classList.add('nope');
+        nope.innerHTML = '...nope';
+
+        _body.appendChild(nope);
       }
     } else {
       // WIN
@@ -1053,6 +1072,8 @@ function resetGrid() {
   // background.style['background-color'] = targetColor;
   // tiles.style['background-color'] = targetColor;
 
+  var message = document.querySelector('.success');
+  if (message) message.remove();
   resetVariables();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.finishStar)(finishTile);
   optionTiles = markOptions(); // console.log('clicked')

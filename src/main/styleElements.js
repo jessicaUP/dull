@@ -296,17 +296,30 @@ export function addResult(level, selectedTiles) {
   prevLevel.remove();
 }
 
+function clearModal() {
+  let displays = ['.display-results', '.display-about', '.display-controls', '.display-help'];
+
+  displays.forEach(classString => {
+    let displayCont = document.querySelector(classString);
+    if (displayCont) displayCont.style.display = 'none'
+  })
+}
+
 function modalFunc(element, type, displayType = null) {
   return () => {
+    // let prevDisplay = document.querySelector('.display');
+    // if (prevDisplay) prevDisplay.style.display = 'none';
+    clearModal();
     if (type === 'close') {
       element.style.display = 'none';
-      let prevDisplay = document.querySelector('.display-help');
-      let prevDisplay2 = document.querySelector('.display-results');
-      let prevDisplay3 = document.querySelector('.display-about');
+
+      // let prevDisplay2 = document.querySelector('.display-results');
+      // let prevDisplay3 = document.querySelector('.display-about');
+      // let prevDisplay4 = document.querySelector('.display-controls');
       // let prevHeader = document.querySelector('.buttons-cont');
-      if (prevDisplay) prevDisplay.style.display = 'none';
-      if (prevDisplay2) prevDisplay2.style.display = 'none';
-      if (prevDisplay3) prevDisplay3.style.display = 'none';
+      // if (prevDisplay2) prevDisplay2.style.display = 'none';
+      // if (prevDisplay3) prevDisplay3.style.display = 'none';
+      // if (prevDisplay4) prevDisplay3.style.display = 'none';
       // if (prevHeader) prevHeader.style.display = 'none';
     } else {
       element.style.display = 'flex';
@@ -406,6 +419,10 @@ function btnFunc(clickedBtn, type) {
         display = document.querySelector('#page-console');
         nextBtn = document.querySelector('#console-btn');
         break;
+      case 'page-controls':
+        display = document.querySelector('#page-controls');
+        nextBtn = document.querySelector('#controls-btn');
+        break;
       default:
         break;
     }
@@ -433,10 +450,12 @@ export function createModal(types) {
         let colorNav = document.querySelector('#color-btn');
         let pathNav = document.querySelector('#path-btn');
         let consoleNav = document.querySelector('#console-btn');
+        let controlsNav = document.querySelector('#controls-btn');
         goalNav.addEventListener('click', btnFunc(goalNav,'page-info'));
         colorNav.addEventListener('click', btnFunc(colorNav,'page-color'));
         pathNav.addEventListener('click', btnFunc(pathNav, 'page-path'));
         consoleNav.addEventListener('click', btnFunc(consoleNav, 'page-console'));
+        controlsNav.addEventListener('click', btnFunc(controlsNav, 'page-controls'));
         break;
       case 'results':
         display = document.querySelector('.display-results');
@@ -468,6 +487,7 @@ export function createLevelDiv(level) {
   cont1.classList.add(`level-cont`);
   cont1.setAttribute('id', `level-${level}`);
 
+  cont1.style['z-index'] = '2';
   cont1.style.display = 'tile-grid';
   // cont2.style['grid-gap'] = '4px';
   cont1.style['grid-template-columns'] = '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr';
