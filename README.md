@@ -12,6 +12,31 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
 
 <img width="356" alt="level10Example" src="https://user-images.githubusercontent.com/79214086/137531377-7f6c8fbc-24f2-4c1d-bc2d-d3d26f1b9f88.png">
 
+- DYNAMIC LEVELS: each level is auto generated each round, allowing for a different gameplay every refresh and optimized level count capabilities. 
+
+```javascript
+  while ((count) <= level) {
+    optionTiles = nextMoveOptions(false);
+    let next = optionTiles[randomNum(optionTiles.length)];
+    selectedTiles.push(next);
+
+    if (!next) {
+      currentTile = start;
+      currentColor = startColor;
+      selectedTiles = [];
+      setPath();
+      return;
+    }
+
+    let nextColor = allTiles[next].ele.getAttribute('colorId');
+    count++
+
+    mixedColor = addColor(nextColor, count);
+    currentTile = posObject(next);
+
+  };
+```
+
 - MOVEMENT: Players are provided with a start tile and can move to the neigboring lateral and horizontal colors towards the target position. The current tile has a count of how many clicks there are left in the center circle. The path can not cross over itself and will trigger reset button when the path is incorrect or there are no neighboring options.
 
 ![pathGif](https://user-images.githubusercontent.com/79214086/137531518-5c838dcf-8847-4223-8c6e-836d74cfb77d.gif)
@@ -20,10 +45,28 @@ Dull is a color-mixing game that allows you to explore the art of color-mixing. 
 The player may use the mouse or keyboard to navigate the grid.
    - ARROWS: Allows the user to navigate the board one space at a time.
    - ENTER: User can press enter to trigger a blinking button.
-   - H: Quick open help modal.
-   - SPACE: Opens the results.
+   - H: Help 
+   - R: results
+   - A: about
 
 ![KEYBOARD (1)](https://user-images.githubusercontent.com/79214086/137531589-2f38cb27-b727-4fc6-a831-749d629942ab.jpg)
+
+- COLOR MIXING: Subtractive mixing (values add to black) is used to mix the current color with the selected option. RGB codes are converted to CMYK, proportionality averaged together, then converted back to RGB for css styling.
+
+![wheelGif](https://user-images.githubusercontent.com/79214086/137533552-8056b8f0-87ff-4816-9e1b-adab98b37764.gif)
+
+```javascript
+export function addColor(rgbColor, count) {
+  let cmykColor = rgbCMYK(colorArr(rgbColor));
+
+  C = ((C * (count - 1)) + cmykColor[0]) / count
+  Y = ((Y * (count - 1)) + cmykColor[2]) / count
+  M = ((M * (count - 1)) + cmykColor[1]) / count
+  cmykMax();
+
+  return cmykRGB([C, M, Y, K])
+}
+```
 
 - SWATCHES: The swatch console (bottom right corner) is where the player can compare the following;
    - TARGET: Final color that the player is trying to mix. The background is also the target color, to bring focus to the goal and allow for easy comparison.
@@ -34,15 +77,17 @@ The player may use the mouse or keyboard to navigate the grid.
 
 - RESULTS: As the player beats levels the paths are recored in the results modal. This also acts as the popup when the player loses.
 
+<img width="277" alt="results" src="https://user-images.githubusercontent.com/79214086/137532250-13dcc777-03e5-4f38-87b0-73c56d5a3342.png">
+
 - HELP: Modal explaining how the game works with gif animations.
 
 
-## Functionality and MVPs
+<!-- ## Functionality and MVPs
 
 - Single-page web application, with popup modals for additional information.
-- Players will start on level 1 presented with a start position, target tile and a target mixed color.
-- Each level they will mix colors creating a path of combinations. 
-- Once the level amount of colors have been added, the current color and the target color are compared.
+- Each level, players are presented with a start position, target tile and a target mixed color.
+- Each level they will mix colors creating a path of combinations, trying to land on the target space. 
+- Once the player runs out of spaces, the current color and the target color are compared.
    CORRECT:
       - Success message and next level button are added to view.
       - The winning path is added to the results modal for review at anytime.
@@ -50,9 +95,10 @@ The player may use the mouse or keyboard to navigate the grid.
    INCORRECT:
       - User can reset board by clicking the 'x' on the current tile or pressing enter.
       - 1 life is removed from total.
-- Subtractive color mixing will be used, same as paint mixing. Each of the tiles represents the same amount of paint being added to the mixtures, making the color changes more subtle the more you add.
-
-
+- Subtractive color mixing will be used, by converting to RGB to CMYK taking color average.
+- 
+ -->
+<!-- 
 ## Wireframes
 <img src='./wireframe.png' />
 
@@ -69,7 +115,7 @@ The player may use the mouse or keyboard to navigate the grid.
     - mixPthGame.js
     - styleElements.js
     - utils.js
-
+ -->
 
 ## Architecture & Technology
 
@@ -82,7 +128,7 @@ The player may use the mouse or keyboard to navigate the grid.
 
 ## Future Changes
 
-- Button lthat allows user to mix up the colors, so they are not in rainbow order.
+- Button that allows user to mix up the colors, so they are not in rainbow order.
 - Add hints:
    1. Highlight mid point of the path.
    2. Provide a preview of the mixed color for hover swatch.
