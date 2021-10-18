@@ -1016,45 +1016,26 @@ function gameOver() {
     var results = document.querySelector('#final-cont'); // let modal = document.querySelector('.modal');
 
     var x = document.querySelector('.dot');
-    x.innerHTML = ''; // OPEN RESULTS
-    // modalFunc(modal, 'open', 'results');
+    x.innerHTML = ''; // PUT UP MESSAGE 
+
+    var gameoverMessage = document.querySelector('.gameover-message');
+    gameoverMessage.style.display = 'flex'; // ADD RESULTS
 
     window.setTimeout(function () {
       results.style.display = 'flex';
+      window.setTimeout(function () {
+        results.style.display = 'flex';
+      }, 1000);
+      var gameover = document.querySelector('.gameover');
+      gameover.style.display = 'flex';
+      var button = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)('try again');
+      button.setAttribute('id', 'new-game');
+      button.addEventListener('click', function () {
+        // RESET ENTIRE GAME
+        window.location.href = window.location.pathname + "?false";
+      });
     }, 2000); // let message = document.querySelector('.start-message');
     // message.innerHTML = '';
-
-    var gameover = document.querySelector('.gameover');
-    gameover.style.display = 'flex';
-    var gameoverMessage = document.querySelector('.gameover-message');
-    gameoverMessage.style.display = 'flex';
-    var button = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)('try again');
-    button.setAttribute('id', 'new-game');
-    button.addEventListener('click', function () {
-      // RESET ENTIRE GAME
-      window.location.href = window.location.pathname + "?false";
-      // location.reload(); // let currentGrid = document.querySelector('.tile-grid');
-      // currentGrid.remove();
-      // let modalResults = document.querySelector('.results-cont');
-      // let nope = document.querySelector('.nope');
-      // nope.remove();      
-      // let step = modalResults.firstChild;
-      // debugger
-      // while (results.firstElementChild) {
-      //   step.removeChild(step.firstChild);
-      //   results.removeChild(results.firstChild);
-      // };
-      // // results.removeChild(results.firstChild);
-      // button.remove();
-      // gameover.style.display = 'none';
-      // gameoverMessage.style.display = 'none';
-      // results.style.display = 'none';
-      // level = 1;
-      // lives = 3;
-      // allTiles = {};
-      // // checkColor = true;
-      // setNewGrid();
-    });
   }
 }
 
