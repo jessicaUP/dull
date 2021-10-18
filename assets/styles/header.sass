@@ -425,6 +425,9 @@ body
 //   left: -4px
 //   z-index: -1
 
+.information
+  z-index: 20
+
 .modal
   display: none
   position: fixed
@@ -436,41 +439,59 @@ body
   backdrop-filter: blur(5px)
   z-index: 8
 
-  .display-cont
-    position: fixed
-    // top: 38px
-    left: 22%
-    width: 55vw
-    height: 55vw
-    min-width: 425px
-    min-height: 425px
-    // height: auto
-    background-color: black
-    margin: 24px
-    margin-left: 19px
-    border: 4px double white
-  
-  .close-button
-    font-family: Helvetica, sans-serif
-    position: absolute
-    width: 25px
-    height: 25px
-    top: 15px
-    left: 15px
-    color: white
-    z-index: 10
-    cursor: pointer
-  
-  .start-message
-    color: rgba(255, 255, 255, .4)
-    font-family: Helvetica, sans-serif
-    font-weight: lighter
-    font-size: 15px
-    position: absolute
-    bottom: 15px
-    right: 15px
-    z-index: 10
-    margin: 0
+.end-cont 
+  position: fixed
+  display: none
+  left: 22%
+  width: 55vw
+  height: 55vw
+  min-width: 425px
+  min-height: 425px
+  // height: auto
+  background-color: black
+  margin: 24px
+  margin-left: 19px
+  border: 4px double white
+  z-index: 22
+
+
+.display-cont 
+  position: fixed
+  display: none
+  left: 22%
+  width: 55vw
+  height: 55vw
+  min-width: 425px
+  min-height: 425px
+  // height: auto
+  background-color: black
+  margin: 24px
+  margin-left: 19px
+  border: 4px double white
+  z-index: 20
+
+
+.close-button
+  font-family: Helvetica, sans-serif
+  position: absolute
+  width: 25px
+  height: 25px
+  top: 15px
+  left: 15px
+  color: white
+  z-index: 10
+  cursor: pointer
+
+.start-message
+  color: rgba(255, 255, 255, .4)
+  font-family: Helvetica, sans-serif
+  font-weight: lighter
+  font-size: 15px
+  position: absolute
+  bottom: 15px
+  right: 15px
+  z-index: 10
+  margin: 0
 
 .result-star
   cursor: pointer
@@ -488,11 +509,7 @@ body
   bottom: 0
   right: 0
   left: 0
-  z-index: 7
   overflow: scroll
-  
-
-
 
   .star
     display: flex
@@ -649,7 +666,7 @@ h6
   font-size: 12px
   font-family: Helvetica, sans-serif
   text-align: center
-  margin-bottom: 25px
+  margin: 10px 25px
 
 
 .icons 
@@ -684,3 +701,33 @@ h6
 
 .link-message 
   margin-bottom: 25px
+
+
+.gameover
+  display: none
+  position: fixed
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  background-color: rgba(0, 0, 0, .75)
+  backdrop-filter: blur(5px)
+  z-index: 13
+
+.gameover-message
+  display: none
+  font-family: Odibee Sans
+  color: white
+  font-size:  5vw
+  position: fixed
+  bottom: 4vw
+  right: 2vw
+  margin: 0
+  z-index: 22
+
+#new-game
+  position: fixed
+  z-index: 22
+  top: unset
+  bottom: 2vw
+  right: 2vw

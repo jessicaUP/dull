@@ -1,12 +1,13 @@
 import { setFirstColor, addColor} from '../main/color'
 import { randomNum, posObject } from '../main/helper'
-import { addResult, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, styleOption, styleFinish, finishStar, createModal } from '../main/styleElements';
+import { addResult, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, styleOption, styleFinish, finishStar, createModal, modalFunc } from '../main/styleElements';
 
 // BOARD
 let tileGrid;
 let body;
 export let allTiles = {};
 let checkColor = true;
+let helpCheck = true;
 
 // GAMEPLAY
 
@@ -44,6 +45,14 @@ export function startGame() {
   // CREATE GRID
   setNewGrid();
   createModal(['help', 'results', 'about']);
+  let firstTry = window.location.href.split('/')[-1];
+  debugger
+  if (helpCheck && !firstTry) {
+    window.setTimeout(() => {
+      let helpModal = document.querySelector('.help-modal');
+      helpModal.click();
+    }, 1000)
+  }
   window.addEventListener('keydown', keyboardMix());
 
   // ADD RESET... for now
@@ -94,6 +103,8 @@ function findPath() {
   currentColor = setFirstColor(currentColor);
   let start = currentTile;
   let startColor = currentColor;
+
+  count = 1;
   
   while ((count) <= level) {
     optionTiles = nextMoveOptions(false);
@@ -115,7 +126,6 @@ function findPath() {
     currentTile = posObject(next);
 
   };
-
   targetColor = `rgb(${parseInt(mixedColor[0])}, ${parseInt(mixedColor[1])}, ${parseInt(mixedColor[2])})`;
   finishTile = currentTile.coor;
 
@@ -169,7 +179,7 @@ function checkWinLose(color) {
     
     // NEXT LEVEL BUTTON
     window.setTimeout(() => {
-      let buttonDiv = createNextButton();
+      let buttonDiv = createNextButton('next level...');
       buttonDiv.addEventListener('click', () => {
         addResult(level, selectedTiles);
 
@@ -195,6 +205,8 @@ function checkWinLose(color) {
       livesUpdate(lives, 'sub', -1)
       lives = lives - 1;
       final.addEventListener('click', resetGrid);
+
+      gameOver()
   
       return false;
     } else {
@@ -207,6 +219,7 @@ function checkWinLose(color) {
 export function keyboardMix() {
   return (e) => {
     console.log(e.keyCode);
+    if (gameOver(true)) return
     let nextEle, direction, keyType;
     // let modalCheck = document.querySelector('.display-cont');
     let modal = document.querySelector('.modal');
@@ -267,6 +280,66 @@ export function keyboardMix() {
     }
 
     nextEle.click();
+  }
+}
+
+
+function gameOver(check = false) {
+  // FUNCTION TO TAKE ACTION
+  if (lives === 0) {
+    if (check) return true
+    let results = document.querySelector('#final-cont');
+    // let modal = document.querySelector('.modal');
+    let x = document.querySelector('.dot');
+    x.innerHTML = '';
+
+    // OPEN RESULTS
+    // modalFunc(modal, 'open', 'results');
+    window.setTimeout(() => {
+      results.style.display = 'flex';
+    }, 2000);
+
+    // let message = document.querySelector('.start-message');
+    // message.innerHTML = '';
+
+    let gameover = document.querySelector('.gameover');
+    gameover.style.display = 'flex';
+
+    let gameoverMessage = document.querySelector('.gameover-message');
+    gameoverMessage.style.display = 'flex';
+    
+    let button = createNextButton('try again');
+    button.setAttribute('id', 'new-game');
+    button.addEventListener('click', () => {
+      // RESET ENTIRE GAME
+      window.location.href = window.location.pathname + "?false"
+      location.reload();
+      // let currentGrid = document.querySelector('.tile-grid');
+      // currentGrid.remove();
+      // let modalResults = document.querySelector('.results-cont');
+      // let nope = document.querySelector('.nope');
+      // nope.remove();      
+
+      // let step = modalResults.firstChild;
+      // debugger
+      // while (results.firstElementChild) {
+      //   step.removeChild(step.firstChild);
+      //   results.removeChild(results.firstChild);
+      // };
+      // // results.removeChild(results.firstChild);
+
+      // button.remove();
+      // gameover.style.display = 'none';
+      // gameoverMessage.style.display = 'none';
+      // results.style.display = 'none';
+      // level = 1;
+      // lives = 3;
+      // allTiles = {};
+      // // checkColor = true;
+
+      // setNewGrid();
+
+    })
   }
 }
 
@@ -399,7 +472,6 @@ function markOptions() {
 function nextMoveOptions(styleCheck) {
   let newOptionTiles = [];
   let tile = allTiles[currentTile.coor];
-  
   Object.values(OPTIONS).forEach(pos => {
     let newX = pos.dir[0] + tile.x;
     let newY = pos.dir[1] + tile.y;

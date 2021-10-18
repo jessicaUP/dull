@@ -341,8 +341,6 @@ function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
       swatch.removeChild(swatch.lastChild);
     }
 
-    debugger;
-
     if (optionTiles.includes(optionTile)) {
       swatch.style['background-color'] = hoverColor;
       var arrow = optionTile.firstChild.cloneNode(true);
@@ -410,12 +408,12 @@ function styleWin(selectedTiles, finishTile, color, level, lives) {
   var swatch = document.querySelector('#target-color');
   swatch.classList.remove('blink');
 }
-function createNextButton() {
+function createNextButton(text) {
   var body = document.querySelector('body');
   var buttonDiv = document.createElement('DIV');
   buttonDiv.classList.add('button-cont', 'blink');
   var levelButton = document.createElement('BUTTON');
-  levelButton.innerHTML = 'next level...';
+  levelButton.innerHTML = text;
   levelButton.setAttribute('class', 'level-button');
   buttonDiv.appendChild(levelButton);
   body.appendChild(buttonDiv);
@@ -439,11 +437,13 @@ function addResult(level, selectedTiles) {
   last.style['border-radius'] = '0';
   var levelText = document.createElement('DIV');
   levelText.setAttribute('class', 'level-num');
-  levelCont.appendChild(levelText);
-  levelCont.appendChild(levelText);
+  levelCont.appendChild(levelText); // levelCont.appendChild(levelText)  
+
   levelText.innerHTML = level;
-  var results = document.querySelector('.results-cont');
-  results.appendChild(levelCont); // DELETE GRID
+  var results = document.querySelector('#mid-results');
+  var finalResults = document.querySelector('#final-results');
+  results.appendChild(levelCont);
+  finalResults.appendChild(levelCont.cloneNode(true)); // DELETE GRID
 
   var prevLevel = document.querySelector("#level-".concat(level));
   prevLevel.remove();
@@ -461,16 +461,20 @@ function modalFunc(element, type) {
   var displayType = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
   return function () {
     var clickedCheck = document.querySelector('.nav-clicked');
-    if (clickedCheck) clickedCheck.classList.toggle('nav-clicked'); // let prevDisplay = document.querySelector('.display');
+    if (clickedCheck) clickedCheck.classList.toggle('nav-clicked');
+    var displayCont = document.querySelector('.display-cont');
+    displayCont.style.display = 'flex'; // let prevDisplay = document.querySelector('.display');
     // if (prevDisplay) prevDisplay.style.display = 'none';
 
     clearModal();
 
     if (type === 'close') {
       element.style.display = 'none';
+      displayCont.style.display = 'none';
     } else {
       element.style.display = 'flex';
       var display, current, button;
+      displayCont.style.display = 'flex';
 
       switch (displayType) {
         case 'help':
@@ -735,7 +739,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var tileGrid;
 var body;
 var allTiles = {};
-var checkColor = true; // GAMEPLAY
+var checkColor = true;
+var helpCheck = true; // GAMEPLAY
 
 var selectedTiles = [];
 var path;
@@ -770,6 +775,16 @@ function startGame() {
   // CREATE GRID
   setNewGrid();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results', 'about']);
+  var firstTry = window.location.href.split('?')[1];
+  debugger;
+
+  if (helpCheck && !firstTry) {
+    window.setTimeout(function () {
+      var helpModal = document.querySelector('.help-modal');
+      helpModal.click();
+    }, 1000);
+  }
+
   window.addEventListener('keydown', keyboardMix()); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
@@ -812,6 +827,7 @@ function findPath() {
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(currentColor);
   var start = currentTile;
   var startColor = currentColor;
+  count = 1;
 
   while (count <= level) {
     optionTiles = nextMoveOptions(false);
@@ -879,7 +895,7 @@ function checkWinLose(color) {
     (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.styleWin)(selectedTiles, finishTile, color, level, lives); // NEXT LEVEL BUTTON
 
     window.setTimeout(function () {
-      var buttonDiv = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)();
+      var buttonDiv = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)('next level...');
       buttonDiv.addEventListener('click', function () {
         (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.addResult)(level, selectedTiles);
         lives = lives + Math.ceil(level / 2);
@@ -903,6 +919,7 @@ function checkWinLose(color) {
 
     _final.addEventListener('click', resetGrid);
 
+    gameOver();
     return false;
   } else {
     // NEXT MOVE
@@ -917,6 +934,7 @@ function checkWinLose(color) {
 function keyboardMix() {
   return function (e) {
     console.log(e.keyCode);
+    if (gameOver(true)) return;
     var nextEle, direction, keyType; // let modalCheck = document.querySelector('.display-cont');
 
     var modal = document.querySelector('.modal');
@@ -988,6 +1006,58 @@ function keyboardMix() {
     nextEle.click();
   };
 }
+
+function gameOver() {
+  var check = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+  // FUNCTION TO TAKE ACTION
+  if (lives === 0) {
+    if (check) return true;
+    var results = document.querySelector('#final-cont'); // let modal = document.querySelector('.modal');
+
+    var x = document.querySelector('.dot');
+    x.innerHTML = ''; // OPEN RESULTS
+    // modalFunc(modal, 'open', 'results');
+
+    window.setTimeout(function () {
+      results.style.display = 'flex';
+    }, 2000); // let message = document.querySelector('.start-message');
+    // message.innerHTML = '';
+
+    var gameover = document.querySelector('.gameover');
+    gameover.style.display = 'flex';
+    var gameoverMessage = document.querySelector('.gameover-message');
+    gameoverMessage.style.display = 'flex';
+    var button = (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createNextButton)('try again');
+    button.setAttribute('id', 'new-game');
+    button.addEventListener('click', function () {
+      // RESET ENTIRE GAME
+      window.location.href = window.location.pathname + "?false";
+      // location.reload(); // let currentGrid = document.querySelector('.tile-grid');
+      // currentGrid.remove();
+      // let modalResults = document.querySelector('.results-cont');
+      // let nope = document.querySelector('.nope');
+      // nope.remove();      
+      // let step = modalResults.firstChild;
+      // debugger
+      // while (results.firstElementChild) {
+      //   step.removeChild(step.firstChild);
+      //   results.removeChild(results.firstChild);
+      // };
+      // // results.removeChild(results.firstChild);
+      // button.remove();
+      // gameover.style.display = 'none';
+      // gameoverMessage.style.display = 'none';
+      // results.style.display = 'none';
+      // level = 1;
+      // lives = 3;
+      // allTiles = {};
+      // // checkColor = true;
+      // setNewGrid();
+    });
+  }
+}
+
 function mixTile() {
   var clickedCoor = this.getAttribute('coor');
   var check = optionTiles.some(function (coor) {

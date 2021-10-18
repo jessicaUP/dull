@@ -164,7 +164,6 @@ function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
     if (swatch.lastChild) {
       swatch.removeChild(swatch.lastChild)
     }
-    debugger
     if (optionTiles.includes(optionTile)) {
       swatch.style['background-color'] = hoverColor;
       let arrow = optionTile.firstChild.cloneNode(true);
@@ -241,12 +240,12 @@ export function styleWin(selectedTiles, finishTile, color, level, lives) {
 
 }
 
-export function createNextButton() {
+export function createNextButton(text) {
   let body = document.querySelector('body');
   let buttonDiv = document.createElement('DIV');
   buttonDiv.classList.add('button-cont', 'blink');
   let levelButton = document.createElement('BUTTON');
-  levelButton.innerHTML = 'next level...';
+  levelButton.innerHTML = text;
   levelButton.setAttribute('class', 'level-button');
   buttonDiv.appendChild(levelButton);
   body.appendChild(buttonDiv);
@@ -282,11 +281,13 @@ export function addResult(level, selectedTiles) {
   let levelText = document.createElement('DIV');
   levelText.setAttribute('class', 'level-num');
   levelCont.appendChild(levelText)  
-  levelCont.appendChild(levelText)  
+  // levelCont.appendChild(levelText)  
   levelText.innerHTML = level;
 
-  let results = document.querySelector('.results-cont');
+  let results = document.querySelector('#mid-results');
+  let finalResults = document.querySelector('#final-results');
   results.appendChild(levelCont);
+  finalResults.appendChild(levelCont.cloneNode(true));
 
 
 
@@ -310,15 +311,20 @@ function modalFunc(element, type, displayType = null) {
     let clickedCheck = document.querySelector('.nav-clicked');
     if (clickedCheck) clickedCheck.classList.toggle('nav-clicked');
 
+    let displayCont = document.querySelector('.display-cont');
+    displayCont.style.display = 'flex';
+
     // let prevDisplay = document.querySelector('.display');
     // if (prevDisplay) prevDisplay.style.display = 'none';
     clearModal();
     if (type === 'close') {
       element.style.display = 'none';
+      displayCont.style.display = 'none';
 
     } else {
       element.style.display = 'flex';
       let display, current, button;
+      displayCont.style.display = 'flex'
       switch (displayType) {
         case 'help':
           display = document.querySelector('.display-help');
