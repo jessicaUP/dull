@@ -219,7 +219,11 @@ function checkWinLose(color) {
 export function keyboardMix() {
   return (e) => {
     console.log(e.keyCode);
-    if (gameOver(true)) return
+    if (gameOver(true)) {
+      nextEle = document.querySelector('#new-game');
+      nextEle.click();
+      return
+    }
     let nextEle, direction, keyType;
     // let modalCheck = document.querySelector('.display-cont');
     let modal = document.querySelector('.modal');

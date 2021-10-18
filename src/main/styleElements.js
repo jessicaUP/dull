@@ -70,10 +70,6 @@ export function styleOption(optionTiles, coor, pos, finalCheck) {
   
   if (finalCheck) {
     optionTile.removeChild(optionTile.firstChild)
-    // let star = optionTile.firstChild;
-    // star.style['font-size'] = '1vw';
-    // arrow.style['font-size']
-    // star.style['margin-bottom'] = '5px';
   }
   
   return arrow
@@ -179,7 +175,7 @@ function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
 export function styleFinish(finishTile) {
   let finishEle = allTiles[finishTile].ele;
   finishEle.style.border = '1px solid transparent';
-  finishEle.style['border-radius'] = '100%';
+  // finishEle.style['border-radius'] = '100%';
 
   let swatch = document.querySelector('.blink');
   swatch.classList.remove('blink');

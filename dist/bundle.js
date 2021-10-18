@@ -246,10 +246,7 @@ function styleOption(optionTiles, coor, pos, finalCheck) {
   optionTile.style.cursor = '';
 
   if (finalCheck) {
-    optionTile.removeChild(optionTile.firstChild); // let star = optionTile.firstChild;
-    // star.style['font-size'] = '1vw';
-    // arrow.style['font-size']
-    // star.style['margin-bottom'] = '5px';
+    optionTile.removeChild(optionTile.firstChild);
   }
 
   return arrow;
@@ -355,8 +352,8 @@ function hoverSwatchFunc(optionTiles, optionTile, hoverColor) {
 
 function styleFinish(finishTile) {
   var finishEle = _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.allTiles[finishTile].ele;
-  finishEle.style.border = '1px solid transparent';
-  finishEle.style['border-radius'] = '100%';
+  finishEle.style.border = '1px solid transparent'; // finishEle.style['border-radius'] = '100%';
+
   var swatch = document.querySelector('.blink');
   swatch.classList.remove('blink');
   finishEle.classList.add('blink');
@@ -934,7 +931,13 @@ function checkWinLose(color) {
 function keyboardMix() {
   return function (e) {
     console.log(e.keyCode);
-    if (gameOver(true)) return;
+
+    if (gameOver(true)) {
+      nextEle = document.querySelector('#new-game');
+      nextEle.click();
+      return;
+    }
+
     var nextEle, direction, keyType; // let modalCheck = document.querySelector('.display-cont');
 
     var modal = document.querySelector('.modal');
