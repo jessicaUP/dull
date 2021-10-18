@@ -83,7 +83,7 @@ export function addColor(rgbColor, count) {
 
 <img width="277" alt="results" src="https://user-images.githubusercontent.com/79214086/137532250-13dcc777-03e5-4f38-87b0-73c56d5a3342.png">
 
-- HELP: Modal explaining how the game works with gif animations.
+- HELP: Modal explaining how the game works with gif animations. Opens automatically.
 
 
 <!-- ## Functionality and MVPs
