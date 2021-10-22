@@ -1,4 +1,4 @@
-import { setFirstColor, addColor} from '../main/color'
+import { setFirstColor, addColor, mixColorTiles} from '../main/color'
 import { randomNum, posObject } from '../main/helper'
 import { addResult, createLevelDiv, createNextButton, createTile, livesUpdate, removeOption, styleWin, updateBackgound, updateNav, styleOption, styleFinish, finishStar, createModal, modalFunc } from '../main/styleElements';
 
@@ -46,7 +46,6 @@ export function startGame() {
   setNewGrid();
   createModal(['help', 'results', 'about']);
   let firstTry = window.location.href.split('?')[1];
-  debugger
   if (helpCheck && !firstTry) {
     window.setTimeout(() => {
       let helpModal = document.querySelector('.help-modal');
@@ -55,6 +54,10 @@ export function startGame() {
   }
   window.addEventListener('keydown', keyboardMix());
 
+  // MIX COLORS
+  let mixButton = document.querySelector('#mix-button');
+  mixButton.addEventListener('click', mixColorTiles())
+
   // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
@@ -62,7 +65,7 @@ export function startGame() {
 
 }
 
-function setNewGrid() {
+export function setNewGrid() {
   let step = createMixGrid();
   setPath();
 
@@ -398,40 +401,28 @@ export function mixTile() {
 
 
 export function resetGrid() {
+  debugger
   let prev = document.querySelector(`#level-${level}`);
   prev.remove();
   createMixGrid();
   let blink = document.querySelector('#target-color');
   blink.classList.add('blink');
-  // document.querySelector('body');
-  // let tiles = document.querySelector('.tile-grid');
-  // let background = document.querySelector('.image-cont');
-  // body.style['background-color'] = targetColor;
-  // background.style['background-color'] = targetColor;
-  // tiles.style['background-color'] = targetColor;
   let message = document.querySelector('.success');
   if (message) message.remove();
 
   resetVariables();
   finishStar(finishTile)
   optionTiles = markOptions();
-  // console.log('clicked')
   
 }
 
 function resetVariables() {
   currentTile = startTile;
   count = 1
-  // path = selectedTiles;
-  // selectedTiles = [startTile];
   selectedTiles = [currentTile.coor];
   let color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = setFirstColor(color);
-
-
   updateBackgound(targetColor);
-  
-  // finishStar(finishTile);
 }
 
 
@@ -454,7 +445,7 @@ function markOptions() {
 
 
 
-function nextMoveOptions(styleCheck) {
+export function nextMoveOptions(styleCheck) {
   let newOptionTiles = [];
   let tile = allTiles[currentTile.coor];
   Object.values(OPTIONS).forEach(pos => {

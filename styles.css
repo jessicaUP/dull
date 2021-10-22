@@ -701,4 +701,18 @@ h6 {
   bottom: 2vw;
   right: 2vw; }
 
+#mix-button {
+  display: flex;
+  position: fixed;
+  right: 3.5vw;
+  top: 22.5vw;
+  width: 3vw;
+  height: 3vw;
+  border-radius: 100%;
+  background-color: unset;
+  border: none; }
+
+#mix-button:hover {
+  background-color: rgba(255, 255, 255, 0.25); }
+
 /*# sourceMappingURL=styles.css.map */

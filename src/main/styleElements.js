@@ -23,9 +23,7 @@ export function updateBackgound(targetColor) {
 }
 
 export function createTile(colorCount, x, y, coor, parentDiv = false) {
-  // if (mixCLick) {
-  //   // WHERE I CAN MIX UP BOARD IF THEY DO NOT WANT IT IN COLOR ORDER.
-  // }
+
   let colorId = COLORS[colorCount];
 
 
@@ -361,43 +359,7 @@ function modalFunc(element, type, displayType = null) {
   }
 }
 
-// function helpClick(type) {
-//   let prev = document.querySelector('.help');
-//   if (prev) prev.style.display = 'none';
 
-//   let infoEle;
-//   switch (type) {
-//     case 'color':
-//       infoEle = document.querySelector('.page-info');
-//       break;
-//     case 'path':
-//       infoEle = document.querySelector('.page-path');
-//       break;
-//     case 'swatch':
-//       infoEle = document.querySelector('.page-swathes');
-//       break;
-//     case 'console':
-//       debugger
-//       infoEle = document.querySelector('.page-console');
-//       break;
-//   };
-
-//   infoEle.style.display = 'flex';
-  
-// }
-
-// export function createHelp() {
-//   let colorBtn = document.querySelector('#color-btn');
-//   let pathBtn = document.querySelector('#path-btn');
-//   let goalBtn = document.querySelector('#goal-btn');
-//   let consoleBtn = document.querySelector('#console-btn');
-
-//   colorBtn.addEventListener('click', () => helpClick('color'));
-//   pathBtn.addEventListener('click', () => helpClick('path'));
-//   goalBtn.addEventListener('click', () => helpClick('swatch'));
-//   consoleBtn.addEventListener('click', () => helpClick('console'));
-
-// };
 
 function btnFunc(clickedBtn, type) {
   return () => {
@@ -406,7 +368,6 @@ function btnFunc(clickedBtn, type) {
     let current = document.querySelector('.nav-button-clicked');
     current.classList.toggle('nav-button-clicked');
     currentBtn.classList.toggle('clicked');
-    // if (current) current.style.display = 'none';
 
     switch (type) {
       case 'page-info':

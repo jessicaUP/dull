@@ -16,12 +16,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Y": () => (/* binding */ Y),
 /* harmony export */   "K": () => (/* binding */ K),
 /* harmony export */   "randomColor": () => (/* binding */ randomColor),
+/* harmony export */   "mixColorTiles": () => (/* binding */ mixColorTiles),
 /* harmony export */   "rgbCMYK": () => (/* binding */ rgbCMYK),
 /* harmony export */   "cmykRGB": () => (/* binding */ cmykRGB),
 /* harmony export */   "cmykMax": () => (/* binding */ cmykMax),
 /* harmony export */   "setFirstColor": () => (/* binding */ setFirstColor),
 /* harmony export */   "addColor": () => (/* binding */ addColor)
 /* harmony export */ });
+/* harmony import */ var _mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../mixPathGame/mixPathGame */ "./src/mixPathGame/mixPathGame.js");
+
 var COLORS = ['rgb(153, 0, 51)', 'rgb(153, 51, 51)', 'rgb(179, 0, 0)', 'rgb(255, 0, 0)', 'rgb(204, 41, 0)', 'rgb(179, 89, 0)', 'rgb(204, 163, 0)', 'rgb(204, 204, 0)', 'rgb(153, 153, 0)', 'rgb(85, 128, 0)', 'rgb(179, 0, 89)', 'rgb(179, 0, 0)', 'rgb(255, 119, 51)', 'rgb(255, 102, 0)', 'rgb(255, 153, 51)', 'rgb(255, 214, 51)', 'rgb(255, 204, 0)', 'rgb(230, 230, 0)', 'rgb(153, 204, 0)', 'rgb(102, 102, 51)', 'rgb(204, 0, 102)', 'rgb(255, 51, 51)', 'rgb(255, 148, 77)', 'rgb(255, 153, 51)', 'rgb(255, 204, 0)', 'rgb(255, 255, 0)', 'rgb(255, 255, 102)', 'rgb(204, 255, 51)', 'rgb(102, 153, 0)', 'rgb(51, 102, 0)', 'rgb(255, 0, 102)', 'rgb(255, 80, 80)', 'rgb(255, 102, 102)', 'rgb(255, 153, 102)', 'rgb(255, 204, 102)', 'rgb(255, 255, 153)', 'rgb(204, 255, 102)', 'rgb(153, 255, 102)', 'rgb(51, 204, 51)', 'rgb(51, 153, 51)', 'rgb(204, 51, 153)', 'rgb(255, 51, 153)', 'rgb(255, 102, 153)', 'rgb(255, 153, 153)', 'rgb(255, 204, 153)', 'rgb(255, 255, 204)', 'rgb(204, 255, 153)', 'rgb(153, 255, 153)', 'rgb(102, 255, 102)', 'rgb(0, 204, 102)', 'rgb(204, 0, 204)', 'rgb(255, 102, 255)', 'rgb(255, 153, 255)', 'rgb(255, 179, 209)', 'rgb(255, 230, 240)', 'rgb(255, 255, 255)', 'rgb(204, 255, 204)', 'rgb(153, 255, 204)', 'rgb(0, 255, 153)', 'rgb(51, 153, 102)', 'rgb(153, 51, 153)', 'rgb(179, 0, 179)', 'rgb(217, 102, 255)', 'rgb(230, 204, 255)', 'rgb(242, 230, 255)', 'rgb(230, 242, 255)', 'rgb(230, 255, 255)', 'rgb(102, 255, 255)', 'rgb(0, 204, 153)', 'rgb(0, 153, 153)', 'rgb(153, 0, 204)', 'rgb(204, 51, 255)', 'rgb(204, 102, 255)', 'rgb(204, 153, 255)', 'rgb(230, 204, 255)', 'rgb(179, 215, 255)', 'rgb(179, 255, 255)', 'rgb(0, 230, 230)', 'rgb(0, 179, 179)', 'rgb(51, 102, 153)', 'rgb(102, 0, 204)', 'rgb(153, 51, 255)', 'rgb(153, 102, 255)', 'rgb(153, 153, 255)', 'rgb(179, 179, 255)', 'rgb(144, 192, 240)', 'rgb(128, 204, 255)', 'rgb(115, 180, 250)', 'rgb(77, 77, 255)', 'rgb(0, 61, 153)', 'rgb(77, 0, 153)', 'rgb(122, 0, 204)', 'rgb(163, 102, 255)', 'rgb(102, 102, 255)', 'rgb(128, 128, 255)', 'rgb(0, 123, 255)', 'rgb(0, 153, 255)', 'rgb(0, 122, 204)', 'rgb(0, 0, 204)', 'rgb(0, 0, 128)'];
 var C,
     M,
@@ -31,6 +34,24 @@ function randomColor() {
   var num = Math.floor(Math.random() * 100);
   var color = COLORS[num];
   return color;
+}
+
+function mixArray(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var step = arr[i];
+    arr[i] = arr[j];
+    arr[j] = step;
+  }
+}
+
+function mixColorTiles() {
+  return function () {
+    mixArray(COLORS);
+    var oldGrid = document.querySelector('.tile-grid');
+    oldGrid.remove();
+    (0,_mixPathGame_mixPathGame__WEBPACK_IMPORTED_MODULE_0__.setNewGrid)();
+  };
 }
 
 function colorArr(rgbColor) {
@@ -204,9 +225,6 @@ function updateBackgound(targetColor) {
 }
 function createTile(colorCount, x, y, coor) {
   var parentDiv = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-  // if (mixCLick) {
-  //   // WHERE I CAN MIX UP BOARD IF THEY DO NOT WANT IT IN COLOR ORDER.
-  // }
   var colorId = _main_color__WEBPACK_IMPORTED_MODULE_1__.COLORS[colorCount];
   var tile = document.createElement('div');
   tile.setAttribute('id', "tile-".concat(colorCount));
@@ -511,38 +529,7 @@ function modalFunc(element, type) {
       display.style.display = 'flex';
     }
   };
-} // function helpClick(type) {
-//   let prev = document.querySelector('.help');
-//   if (prev) prev.style.display = 'none';
-//   let infoEle;
-//   switch (type) {
-//     case 'color':
-//       infoEle = document.querySelector('.page-info');
-//       break;
-//     case 'path':
-//       infoEle = document.querySelector('.page-path');
-//       break;
-//     case 'swatch':
-//       infoEle = document.querySelector('.page-swathes');
-//       break;
-//     case 'console':
-//       debugger
-//       infoEle = document.querySelector('.page-console');
-//       break;
-//   };
-//   infoEle.style.display = 'flex';
-// }
-// export function createHelp() {
-//   let colorBtn = document.querySelector('#color-btn');
-//   let pathBtn = document.querySelector('#path-btn');
-//   let goalBtn = document.querySelector('#goal-btn');
-//   let consoleBtn = document.querySelector('#console-btn');
-//   colorBtn.addEventListener('click', () => helpClick('color'));
-//   pathBtn.addEventListener('click', () => helpClick('path'));
-//   goalBtn.addEventListener('click', () => helpClick('swatch'));
-//   consoleBtn.addEventListener('click', () => helpClick('console'));
-// };
-
+}
 
 function btnFunc(clickedBtn, type) {
   return function () {
@@ -550,7 +537,7 @@ function btnFunc(clickedBtn, type) {
     var currentBtn = document.querySelector('.clicked');
     var current = document.querySelector('.nav-button-clicked');
     current.classList.toggle('nav-button-clicked');
-    currentBtn.classList.toggle('clicked'); // if (current) current.style.display = 'none';
+    currentBtn.classList.toggle('clicked');
 
     switch (type) {
       case 'page-info':
@@ -710,9 +697,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "level": () => (/* binding */ level),
 /* harmony export */   "OPTIONS": () => (/* binding */ OPTIONS),
 /* harmony export */   "startGame": () => (/* binding */ startGame),
+/* harmony export */   "setNewGrid": () => (/* binding */ setNewGrid),
 /* harmony export */   "keyboardMix": () => (/* binding */ keyboardMix),
 /* harmony export */   "mixTile": () => (/* binding */ mixTile),
-/* harmony export */   "resetGrid": () => (/* binding */ resetGrid)
+/* harmony export */   "resetGrid": () => (/* binding */ resetGrid),
+/* harmony export */   "nextMoveOptions": () => (/* binding */ nextMoveOptions)
 /* harmony export */ });
 /* harmony import */ var _main_color__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../main/color */ "./src/main/color.js");
 /* harmony import */ var _main_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../main/helper */ "./src/main/helper.js");
@@ -773,7 +762,6 @@ function startGame() {
   setNewGrid();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.createModal)(['help', 'results', 'about']);
   var firstTry = window.location.href.split('?')[1];
-  debugger;
 
   if (helpCheck && !firstTry) {
     window.setTimeout(function () {
@@ -782,11 +770,13 @@ function startGame() {
     }, 1000);
   }
 
-  window.addEventListener('keydown', keyboardMix()); // ADD RESET... for now
+  window.addEventListener('keydown', keyboardMix()); // MIX COLORS
+
+  var mixButton = document.querySelector('#mix-button');
+  mixButton.addEventListener('click', (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.mixColorTiles)()); // ADD RESET... for now
   // const reset = document.querySelector('.reset');
   // reset.addEventListener('click', resetGrid);
 }
-
 function setNewGrid() {
   var step = createMixGrid();
   setPath();
@@ -798,7 +788,6 @@ function setNewGrid() {
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateNav)('level', level);
   optionTiles = markOptions();
 }
-
 ;
 
 function createMixGrid() {
@@ -1112,33 +1101,26 @@ function mixTile() {
   }
 }
 function resetGrid() {
+  debugger;
   var prev = document.querySelector("#level-".concat(level));
   prev.remove();
   createMixGrid();
   var blink = document.querySelector('#target-color');
-  blink.classList.add('blink'); // document.querySelector('body');
-  // let tiles = document.querySelector('.tile-grid');
-  // let background = document.querySelector('.image-cont');
-  // body.style['background-color'] = targetColor;
-  // background.style['background-color'] = targetColor;
-  // tiles.style['background-color'] = targetColor;
-
+  blink.classList.add('blink');
   var message = document.querySelector('.success');
   if (message) message.remove();
   resetVariables();
   (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.finishStar)(finishTile);
-  optionTiles = markOptions(); // console.log('clicked')
+  optionTiles = markOptions();
 }
 
 function resetVariables() {
   currentTile = startTile;
-  count = 1; // path = selectedTiles;
-  // selectedTiles = [startTile];
-
+  count = 1;
   selectedTiles = [currentTile.coor];
   var color = allTiles[currentTile.coor].ele.getAttribute('colorId');
   currentColor = (0,_main_color__WEBPACK_IMPORTED_MODULE_0__.setFirstColor)(color);
-  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor); // finishStar(finishTile);
+  (0,_main_styleElements__WEBPACK_IMPORTED_MODULE_2__.updateBackgound)(targetColor);
 }
 
 function markOptions() {

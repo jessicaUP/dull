@@ -13,6 +13,8 @@ export function randomNum(num) {
   return Math.floor(Math.random() * num)
 }
 
+
+
 export function posObject(coor) {
   let coorArr = coor.split('-');
   return {
