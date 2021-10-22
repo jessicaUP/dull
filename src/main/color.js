@@ -28,6 +28,7 @@ export function mixColorTiles() {
     oldGrid.remove();
     setNewGrid();
 
+
   }
 }
 
