@@ -1095,6 +1095,7 @@ function mixTile() {
         nope.setAttribute('class', 'success');
         nope.classList.add('nope');
         nope.innerHTML = '...nope';
+        if (gameOver(true)) nope.innerHTML = '';
 
         _body.appendChild(nope);
       }

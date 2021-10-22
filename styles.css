@@ -49,10 +49,11 @@ div {
 .level-text {
   position: fixed;
   top: -0.5vw;
-  right: 3vw;
-  font-size: 14vw;
+  right: 1.75vw;
+  font-size: 13vw;
   font-family: Helvetica, sans-serif;
-  color: white; }
+  color: white;
+  text-align: center; }
 
 .wrong {
   display: flex;
@@ -491,7 +492,7 @@ body {
   height: 25px;
   top: 15px;
   left: 15px;
-  color: white;
+  color: grey;
   z-index: 10;
   cursor: pointer; }
 
@@ -513,7 +514,7 @@ body {
   position: absolute;
   display: flex;
   flex-direction: column;
-  margin: 23px 0;
+  margin: 22px 0;
   top: 0;
   bottom: 0;
   right: 0;
@@ -528,21 +529,21 @@ body {
     align-items: right;
     position: relative;
     height: 20px;
-    margin: 5px; }
+    margin: 3px; }
     .results-cont .level-display .level-num {
       color: white;
       font-family: Helvetica, sans-serif;
       margin: 0;
-      width: 25px;
-      height: 25px;
+      width: 20px;
+      height: 20px;
       text-align: center;
-      padding-top: 8px;
+      padding-top: 4px;
       margin-right: 5px; }
     .results-cont .level-display .dot-outline {
       display: none; }
     .results-cont .level-display .mix-tile {
-      width: 25px;
-      height: 25px;
+      width: 20px;
+      height: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
