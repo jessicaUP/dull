@@ -176,7 +176,7 @@ export function styleFinish(finishTile) {
   // finishEle.style['border-radius'] = '100%';
 
   let swatch = document.querySelector('.blink');
-  swatch.classList.remove('blink');
+  if (swatch) swatch.classList.remove('blink');
 
   finishEle.classList.add('blink');
 
