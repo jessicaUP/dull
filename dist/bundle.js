@@ -62,6 +62,8 @@ function mixColorTiles() {
   return function () {
     var oldGrid = document.querySelector('.tile-grid');
     oldGrid.remove();
+    var button = document.querySelector('#mix-button');
+    button.classList.toggle('mix-active');
 
     if (colorReset) {
       debugger;

@@ -24,6 +24,9 @@ export function mixColorTiles() {
   return () => {
     let oldGrid = document.querySelector('.tile-grid');
     oldGrid.remove();
+
+    let button = document.querySelector('#mix-button');
+    button.classList.toggle('mix-active')
     if (colorReset) {
       debugger
       COLORS = colorReset;
