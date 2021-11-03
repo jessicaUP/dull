@@ -286,7 +286,7 @@ export function keyboardMix() {
       }
     }
 
-    nextEle.click();
+    if (nextEle) nextEle.click();
   }
 }
 
