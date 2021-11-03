@@ -221,7 +221,6 @@ function checkWinLose(color) {
 
 export function keyboardMix() {
   return (e) => {
-    console.log(e.keyCode);
     if (gameOver(true)) {
       nextEle = document.querySelector('#new-game');
       nextEle.click();
@@ -401,7 +400,6 @@ export function mixTile() {
 
 
 export function resetGrid() {
-  debugger
   let prev = document.querySelector(`#level-${level}`);
   prev.remove();
   createMixGrid();

@@ -28,7 +28,6 @@ export function mixColorTiles() {
     let button = document.querySelector('#mix-button');
     button.classList.toggle('mix-active')
     if (colorReset) {
-      debugger
       COLORS = colorReset;
       colorReset = false;
     } else {
