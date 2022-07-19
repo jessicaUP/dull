@@ -127,8 +127,6 @@ export function addColor(rgbColor, count) {
 -	HTML
 -	Sass
 -	Webpack
--  JQuery & JQuery Color (I DO NOT USE ANYMORE -- DOUBLE CHECK)
-
 
 ## Future Changes
 
